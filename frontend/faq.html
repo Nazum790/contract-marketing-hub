@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en" class="notranslate">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FAQs | Contract Marketing Hub</title>
+
+    <meta name="theme-color" content="#0B2C5F" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: '#0B2C5F',
+                        brandDark: '#081A33',
+                        accent: '#F59E0B'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        html,
+        body {
+            background: #f5f7fb;
+            overflow-x: hidden;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+        }
+
+        /* GOOGLE TRANSLATE — FULL NEUTRALIZATION */
+        .skiptranslate,
+        .goog-te-banner-frame,
+        .goog-te-balloon-frame,
+        .goog-te-balloon-frame *,
+        .goog-te-gadget,
+        .goog-logo-link,
+        #goog-gt-tt,
+        .goog-te-spinner-pos {
+            display: none !important;
+            visibility: hidden !important;
+        }
+    </style>
+</head>
+
+<body class="text-gray-800 notranslate">
+
+    <!-- NAVBAR -->
+    <header class="fixed top-0 left-0 w-full z-50 bg-brand shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between text-white">
+
+            <h1 class="font-extrabold text-lg">
+                Contract Marketing Hub
+            </h1>
+
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
+                <a href="/" class="hover:text-accent">Home</a>
+                <a href="/faq.html" class="text-accent">FAQs</a>
+                <a href="/auth/login.html" class="hover:text-accent">Login</a>
+                <a href="/auth/register.html" class="px-5 py-2 bg-accent text-brand rounded-lg font-semibold">
+                    Get Started
+                </a>
+
+                <!-- DESKTOP LANGUAGE -->
+                <select id="langDesktop" class="bg-brandDark text-white text-sm rounded-lg px-3 py-1.5
+                    border border-white/20 cursor-pointer">
+                    <option selected>Select Language</option>
+                    <option value="en">English</option>
+                    <option value="pt">Portuguese</option>
+                    <option value="de">German</option>
+                    <option value="fr">French</option>
+                    <option value="es">Spanish</option>
+                    <option value="da">Danish</option>
+                </select>
+            </nav>
+
+            <!-- Hamburger -->
+            <button id="menuBtn" class="md:hidden flex flex-col gap-1.5">
+                <span class="w-6 h-0.5 bg-accent"></span>
+                <span class="w-6 h-0.5 bg-accent"></span>
+                <span class="w-6 h-0.5 bg-accent"></span>
+            </button>
+        </div>
+
+        <!-- MOBILE LANGUAGE -->
+        <div class="md:hidden px-4 pb-2">
+            <select id="langMobile" class="bg-brandDark text-white text-xs rounded px-2 py-1
+                border border-white/20 max-w-[150px]">
+                <option selected>Select Language</option>
+                <option value="en">English</option>
+                <option value="pt">Portuguese</option>
+                <option value="de">German</option>
+                <option value="fr">French</option>
+                <option value="es">Spanish</option>
+                <option value="da">Danish</option>
+            </select>
+        </div>
+    </header>
+
+    <!-- MOBILE MENU -->
+    <div id="menuOverlay" class="fixed inset-0 bg-black/50 hidden z-40"></div>
+
+    <div id="mobileMenu" class="fixed top-0 right-0 h-full w-72 bg-brandDark text-white
+            translate-x-full transition-transform duration-300 z-50">
+
+        <div class="p-6 space-y-6 text-sm">
+            <button id="closeMenu" class="text-right w-full text-xl text-accent">✕</button>
+            <a href="/" class="block menu-link">Home</a>
+            <a href="/faq.html" class="block text-accent font-semibold menu-link">FAQs</a>
+            <a href="/auth/login.html" class="block menu-link">Login</a>
+            <a href="/auth/register.html"
+                class="block mt-6 px-4 py-3 bg-accent text-brand rounded-lg text-center font-semibold menu-link">
+                Get Started
+            </a>
+        </div>
+    </div>
+
+    <!-- HERO STRIP -->
+    <section class="pt-28 pb-16 bg-brand text-white text-center">
+        <div class="max-w-3xl mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-extrabold mb-4">
+                Frequently Asked Questions
+            </h2>
+            <p class="text-white/80">
+                Clear answers to help you understand how Contract Marketing Hub works.
+            </p>
+        </div>
+    </section>
+
+    <!-- FAQ CONTENT -->
+    <section class="max-w-4xl mx-auto px-4 py-20">
+        <div class="space-y-4">
+
+            <div class="bg-white rounded-xl shadow">
+                <button class="faq-btn w-full text-left px-6 py-5 font-semibold flex justify-between items-center">
+                    What is Contract Marketing Hub?
+                    <span class="text-xl">+</span>
+                </button>
+                <div class="faq-content hidden px-6 pb-5 text-gray-600">
+                    Contract Marketing Hub is an admin-controlled contract investment platform
+                    where users request contract plans and earn returns after approval and completion.
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow">
+                <button class="faq-btn w-full text-left px-6 py-5 font-semibold flex justify-between items-center">
+                    How do contracts work?
+                    <span class="text-xl">+</span>
+                </button>
+                <div class="faq-content hidden px-6 pb-5 text-gray-600">
+                    Users request a contract plan. Once approved and activated by the admin,
+                    the contract runs for a fixed duration. After completion, earnings are credited
+                    to your wallet.
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow">
+                <button class="faq-btn w-full text-left px-6 py-5 font-semibold flex justify-between items-center">
+                    Who approves contracts and withdrawals?
+                    <span class="text-xl">+</span>
+                </button>
+                <div class="faq-content hidden px-6 pb-5 text-gray-600">
+                    All contracts, withdrawals, and sensitive actions are manually reviewed
+                    and approved by the platform administrator.
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow">
+                <button class="faq-btn w-full text-left px-6 py-5 font-semibold flex justify-between items-center">
+                    Can I have more than one active contract?
+                    <span class="text-xl">+</span>
+                </button>
+                <div class="faq-content hidden px-6 pb-5 text-gray-600">
+                    No. Each user can only have one active contract at a time.
+                    This ensures proper tracking and fair management.
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow">
+                <button class="faq-btn w-full text-left px-6 py-5 font-semibold flex justify-between items-center">
+                    How do withdrawals work?
+                    <span class="text-xl">+</span>
+                </button>
+                <div class="faq-content hidden px-6 pb-5 text-gray-600">
+                    Withdrawals are requested from your wallet balance.
+                    Each request is reviewed by the admin before being approved or rejected.
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow">
+                <button class="faq-btn w-full text-left px-6 py-5 font-semibold flex justify-between items-center">
+                    Is my money safe?
+                    <span class="text-xl">+</span>
+                </button>
+                <div class="faq-content hidden px-6 pb-5 text-gray-600">
+                    The platform is designed with transparency and admin oversight.
+                    All actions are tracked and visible in your transaction history.
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow">
+                <button class="faq-btn w-full text-left px-6 py-5 font-semibold flex justify-between items-center">
+                    Is email verification required?
+                    <span class="text-xl">+</span>
+                </button>
+                <div class="faq-content hidden px-6 pb-5 text-gray-600">
+                    Yes. Users must request email verification, which is manually approved
+                    by the admin before full access is granted.
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow">
+                <button class="faq-btn w-full text-left px-6 py-5 font-semibold flex justify-between items-center">
+                    How can I contact support?
+                    <span class="text-xl">+</span>
+                </button>
+                <div class="faq-content hidden px-6 pb-5 text-gray-600">
+                    Support contact details are provided inside your dashboard
+                    or during withdrawal communication with the admin.
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-brandDark text-white text-center py-6 text-sm">
+        © <span id="year"></span> Contract Marketing Hub ·
+        <a href="/terms.html" class="underline ml-1">Terms</a> ·
+        <a href="/privacy.html" class="underline ml-1">Privacy</a>
+    </footer>
+
+    <!-- GOOGLE TRANSLATE -->
+    <div id="google_translate_element" style="display:none"></div>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        /* MOBILE MENU */
+        const menuBtn = document.getElementById('menuBtn');
+        const closeMenu = document.getElementById('closeMenu');
+        const menu = document.getElementById('mobileMenu');
+        const overlay = document.getElementById('menuOverlay');
+        const links = document.querySelectorAll('.menu-link');
+
+        function openMenu() {
+            menu.classList.remove('translate-x-full');
+            overlay.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMenuFn() {
+            menu.classList.add('translate-x-full');
+            overlay.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        menuBtn.onclick = openMenu;
+        closeMenu.onclick = closeMenuFn;
+        overlay.onclick = closeMenuFn;
+        links.forEach(l => l.onclick = closeMenuFn);
+
+        /* FAQ ACCORDION */
+        document.querySelectorAll('.faq-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const content = btn.nextElementSibling;
+                const icon = btn.querySelector('span');
+
+                document.querySelectorAll('.faq-content').forEach(c => {
+                    if (c !== content) c.classList.add('hidden');
+                });
+                document.querySelectorAll('.faq-btn span').forEach(i => {
+                    if (i !== icon) i.textContent = '+';
+                });
+
+                content.classList.toggle('hidden');
+                icon.textContent = content.classList.contains('hidden') ? '+' : '–';
+            });
+        });
+
+        /* GOOGLE TRANSLATE */
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement(
+                { pageLanguage: 'en', includedLanguages: 'en,pt,de,fr,es,da', autoDisplay: false },
+                'google_translate_element'
+            );
+        }
+
+        function setLanguage(lang) {
+            if (!lang || lang === 'Select Language') return;
+            if (lang === 'en') {
+                document.cookie = 'googtrans=;path=/;';
+                location.reload();
+                return;
+            }
+            document.cookie = `googtrans=/en/${lang};path=/;`;
+            location.reload();
+        }
+
+        langDesktop.onchange = e => setLanguage(e.target.value);
+        langMobile.onchange = e => setLanguage(e.target.value);
+    </script>
+
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+</body>
+
+</html>is

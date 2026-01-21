@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contracts | Contract Marketing Hub</title>
+
+    <meta name="theme-color" content="#0B2C5F" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0B2C5F',
+                        darkbg: '#081A33',
+                        accent: '#F59E0B'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        .goog-logo-link,
+        .goog-te-banner-frame,
+        .goog-te-gadget,
+        #goog-gt-tt,
+        body>.skiptranslate {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-gradient-to-b from-[#06162d] via-[#0a2550] to-[#0B2C5F] text-gray-100">
+
+    <!-- ================= NAVBAR ================= -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-darkbg/95 backdrop-blur border-b border-white/10">
+
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            <h1 class="font-bold text-lg">Contract Marketing Hub</h1>
+
+            <!-- DESKTOP NAV -->
+            <nav class="hidden md:flex gap-6 text-sm items-center">
+                <a href="./dashboard.html">Dashboard</a>
+                <a href="./contracts.html" class="text-accent">Contracts</a>
+                <a href="./transactions.html">Transactions</a>
+                <a href="./profile.html">Profile</a>
+
+                <select id="langSelect" class="bg-darkbg border border-white/20 text-sm rounded px-2 py-1">
+                    <option value="">Select Language</option>
+                    <option value="en">English</option>
+                    <option value="pt">Portuguese</option>
+                    <option value="de">German</option>
+                    <option value="fr">French</option>
+                    <option value="es">Spanish</option>
+                    <option value="da">Danish</option>
+                </select>
+            </nav>
+
+            <!-- MOBILE TOGGLE -->
+            <button id="menuBtn" class="md:hidden text-2xl">☰</button>
+        </div>
+
+        <!-- MOBILE TRANSLATOR -->
+        <div class="md:hidden px-4 pb-3">
+            <select id="langSelectMobile"
+                class="bg-darkbg border border-white/20 text-sm rounded px-3 py-2 w-full max-w-[200px]">
+                <option value="">Select language</option>
+                <option value="en">English</option>
+                <option value="pt">Portuguese</option>
+                <option value="de">German</option>
+                <option value="fr">French</option>
+                <option value="es">Spanish</option>
+                <option value="da">Danish</option>
+            </select>
+        </div>
+    </header>
+
+    <!-- ================= MOBILE MENU (MATCHES DASHBOARD) ================= -->
+    <div id="mobileMenu" class="fixed top-0 right-0 h-full w-72 bg-darkbg/95 backdrop-blur
+        translate-x-full transition-transform duration-300
+        md:hidden border-l border-white/10 z-50">
+
+        <div class="p-6 space-y-6 text-sm">
+
+            <div class="flex justify-end">
+                <button id="closeMenu" class="text-xl text-gray-300">✕</button>
+            </div>
+
+            <a href="./dashboard.html" class="block">Dashboard</a>
+            <a href="./contracts.html" class="block text-accent">Contracts</a>
+            <a href="./transactions.html" class="block">Transactions</a>
+            <a href="./profile.html" class="block">Profile</a>
+        </div>
+    </div>
+
+    <!-- ================= MAIN ================= -->
+    <main class="max-w-7xl mx-auto px-4 pt-28 pb-16">
+
+        <section class="mb-8">
+            <h2 class="text-2xl font-semibold">Available Contracts</h2>
+            <p class="text-sm text-gray-300">
+                Select a contract that aligns with your investment goals.
+            </p>
+        </section>
+
+        <section id="contractsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        </section>
+    </main>
+
+    <footer class="mt-12 border-t border-white/10 text-center py-6 text-sm text-gray-300">
+        © <span id="year"></span> Contract Marketing Hub
+    </footer>
+
+    <!-- GOOGLE TRANSLATE -->
+    <div id="google_translate_element" style="display:none"></div>
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <!-- ================= LOGIC ================= -->
+    <script>
+        const token = localStorage.getItem('token');
+        if (!token) location.href = '../auth/login.html';
+
+        const authHeaders = { Authorization: 'Bearer ' + token };
+
+        // MENU ELEMENTS
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const closeMenu = document.getElementById('closeMenu');
+
+        // MENU LOGIC (IDENTICAL TO DASHBOARD)
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('translate-x-full');
+            document.body.classList.toggle('overflow-hidden');
+        });
+
+        closeMenu.addEventListener('click', () => {
+            mobileMenu.classList.add('translate-x-full');
+            document.body.classList.remove('overflow-hidden');
+        });
+
+        // GOOGLE TRANSLATE
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement(
+                { pageLanguage: 'en', includedLanguages: 'en,pt,de,fr,es,da', autoDisplay: false },
+                'google_translate_element'
+            );
+        }
+
+        function setLang(lang) {
+            if (!lang) return;
+            const val = lang === 'en' ? '' : `/en/${lang}`;
+            document.cookie = `googtrans=${val};path=/;`;
+            document.cookie = `googtrans=${val};path=/;domain=${location.hostname}`;
+            location.reload();
+        }
+
+        langSelect?.addEventListener('change', e => setLang(e.target.value));
+        langSelectMobile?.addEventListener('change', e => setLang(e.target.value));
+
+        // LOAD CONTRACTS
+        async function loadContracts() {
+            const res = await fetch('http://localhost:5000/api/contracts', {
+                headers: authHeaders
+            });
+
+            const { contracts = [] } = await res.json();
+            const grid = document.getElementById('contractsGrid');
+
+            grid.innerHTML = contracts.map(plan => {
+                const gross = plan.entryAmount * plan.multiplier;
+                const fee = gross * (plan.platformFeePercent / 100);
+                const roi = gross - fee;
+
+                return `
+                    <div class="rounded-2xl p-6 shadow-xl border border-white/10
+                        bg-gradient-to-br from-[#1a355e] to-[#13274a]">
+                        <h3 class="font-semibold text-lg mb-1">${plan.name}</h3>
+                        <p class="text-sm text-gray-300 mb-4">${plan.description}</p>
+
+                        <p><strong>Entry:</strong> €${plan.entryAmount.toLocaleString()}</p>
+                        <p><strong>Duration:</strong> ${plan.durationDays} days</p>
+                        <p><strong>Expected ROI:</strong>
+                            €${roi.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        </p>
+
+                        <a href="./contract-details.html?id=${plan._id}"
+                            class="mt-4 block text-center bg-white text-darkbg py-2 rounded-xl
+                            text-sm font-medium hover:bg-gray-100 transition">
+                            View Details
+                        </a>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        document.getElementById('year').textContent = new Date().getFullYear();
+        loadContracts();
+    </script>
+</body>
+
+</html>

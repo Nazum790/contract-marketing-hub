@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Admin · Completed Contracts</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0B2C5F',
+                        darkbg: '#081A33',
+                        accent: '#F59E0B'
+                    }
+                }
+            }
+        };
+    </script>
+
+    <style>
+        html,
+        body {
+            overflow-x: hidden;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-gradient-to-b from-darkbg to-primary text-gray-100">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-darkbg/90 backdrop-blur border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <h1 class="font-bold text-lg">Admin · Completed Contracts</h1>
+            <a href="./dashboard.html" class="text-sm text-accent">← Back to Dashboard</a>
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+        <div class="bg-white text-gray-800 rounded-xl shadow p-6">
+            <h2 class="text-xl font-semibold mb-4">Completed Contracts</h2>
+
+            <div id="messageBox" class="hidden mb-4 p-3 rounded text-sm"></div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm border">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="p-2 border">User</th>
+                            <th class="p-2 border">Email</th>
+                            <th class="p-2 border">Contract</th>
+                            <th class="p-2 border">Entry</th>
+                            <th class="p-2 border">Payout</th>
+                            <th class="p-2 border">Completed</th>
+                            <th class="p-2 border">Status</th>
+                            <th class="p-2 border">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="contractsBody">
+                        <tr>
+                            <td colspan="8" class="p-4 text-center text-gray-500">
+                                Loading completed contracts…
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="mt-12 border-t border-white/10 text-center py-6 text-sm text-gray-300">
+        © <span id="year"></span> Contract Marketing Hub
+    </footer>
+
+    <!-- LOGIC -->
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        const token = localStorage.getItem('token');
+        if (!token) {
+            localStorage.clear();
+            window.location.href = '../auth/login.html';
+        }
+
+        const tbody = document.getElementById('contractsBody');
+        const messageBox = document.getElementById('messageBox');
+
+        function showMessage(text, type = 'success') {
+            messageBox.textContent = text;
+            messageBox.className = 'mb-4 p-3 rounded text-sm';
+            messageBox.classList.remove('hidden');
+
+            if (type === 'success') {
+                messageBox.classList.add('bg-green-100', 'text-green-700');
+            } else {
+                messageBox.classList.add('bg-red-100', 'text-red-700');
+            }
+        }
+
+        async function loadCompletedContracts() {
+            try {
+                const res = await fetch(
+                    'http://localhost:5000/api/admin/contracts/completed',
+                    {
+                        headers: {
+                            Authorization: 'Bearer ' + token
+                        }
+                    }
+                );
+
+                if (!res.ok) {
+                    throw new Error('Request failed');
+                }
+
+                const data = await res.json();
+                const contracts = data.contracts || [];
+
+                tbody.innerHTML = '';
+
+                if (!contracts.length) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="8" class="p-4 text-center text-gray-500">
+                                No completed contracts
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                contracts.forEach(c => {
+                    const symbol = c.user?.currencySymbol || '';
+                    const planName = c.contractPlan?.name || '—';
+                    const completedDate = c.completedAt
+                        ? new Date(c.completedAt).toLocaleDateString()
+                        : '—';
+                    const credited = !!c.credited;
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="p-2 border">${c.user?.name || '—'}</td>
+                        <td class="p-2 border">${c.user?.email || '—'}</td>
+                        <td class="p-2 border">${planName}</td>
+                        <td class="p-2 border">${symbol}${Number(c.entryAmount || 0).toLocaleString()}</td>
+                        <td class="p-2 border">${symbol}${Number(c.expectedPayout || 0).toLocaleString()}</td>
+                        <td class="p-2 border">${completedDate}</td>
+                        <td class="p-2 border">
+                            ${credited
+                            ? '<span class="text-green-600 font-medium">Credited</span>'
+                            : '<span class="text-yellow-600 font-medium">Pending Credit</span>'
+                        }
+                        </td>
+                        <td class="p-2 border">
+                            ${credited
+                            ? '—'
+                            : `<button
+                                    onclick="creditContract('${c._id}')"
+                                    class="bg-primary text-white px-3 py-1 rounded text-xs">
+                                    Credit
+                                   </button>`
+                        }
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+            } catch (err) {
+                console.error(err);
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="p-4 text-center text-red-500">
+                            Failed to load completed contracts
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        async function creditContract(id) {
+            if (!confirm('Credit this contract payout to user balance?')) return;
+
+            try {
+                const res = await fetch(
+                    `http://localhost:5000/api/admin/contracts/${id}/credit`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            Authorization: 'Bearer ' + token
+                        }
+                    }
+                );
+
+                if (!res.ok) {
+                    throw new Error('Failed');
+                }
+
+                showMessage('User balance credited successfully');
+                loadCompletedContracts();
+
+            } catch {
+                showMessage('Failed to credit contract', 'error');
+            }
+        }
+
+        loadCompletedContracts();
+    </script>
+
+</body>
+
+</html>

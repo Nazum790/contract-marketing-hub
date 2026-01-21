@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register | Contract Marketing Hub</title>
+
+    <meta name="theme-color" content="#0B2C5F" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: '#0B2C5F',
+                        brandDark: '#081A33',
+                        accent: '#F59E0B'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        html,
+        body {
+            min-height: 100%;
+            background: linear-gradient(to bottom, #081A33, #0B2C5F);
+            overflow-x: hidden;
+        }
+
+        /* Hide Google Translate UI junk */
+        .skiptranslate,
+        .goog-te-banner-frame,
+        .goog-te-balloon-frame,
+        .goog-te-balloon-frame *,
+        .goog-te-gadget,
+        .goog-logo-link,
+        #goog-gt-tt {
+            display: none !important;
+            visibility: hidden !important;
+        }
+    </style>
+</head>
+
+<body class="text-gray-100">
+
+    <!-- ================= HEADER ================= -->
+    <header class="sticky top-0 z-50 bg-brand shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+
+                <h1 class="font-extrabold text-lg text-white">
+                    Contract Marketing Hub
+                </h1>
+
+                <!-- DESKTOP NAV -->
+                <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
+                    <a href="/" class="hover:text-accent">Home</a>
+                    <a href="/faq.html" class="hover:text-accent">FAQs</a>
+                    <a href="./login.html" class="hover:text-accent">Login</a>
+
+                    <select id="langDesktop" class="bg-brandDark text-white text-sm rounded-lg px-3 py-1.5
+                 border border-white/20 cursor-pointer">
+                        <option selected>Select Language</option>
+                        <option value="en">English</option>
+                        <option value="pt">Portuguese</option>
+                        <option value="de">German</option>
+                        <option value="fr">French</option>
+                        <option value="es">Spanish</option>
+                        <option value="da">Danish</option>
+                    </select>
+                </nav>
+
+                <!-- MOBILE TOGGLE -->
+                <button id="menuBtn" class="md:hidden flex flex-col gap-1.5">
+                    <span class="w-6 h-0.5 bg-accent"></span>
+                    <span class="w-6 h-0.5 bg-accent"></span>
+                    <span class="w-6 h-0.5 bg-accent"></span>
+                </button>
+            </div>
+
+            <!-- MOBILE LANGUAGE -->
+            <div class="md:hidden mt-2">
+                <select id="langMobile" class="bg-brandDark text-white text-xs rounded px-2 py-1
+               border border-white/20 max-w-[160px]">
+                    <option selected>Select Language</option>
+                    <option value="en">English</option>
+                    <option value="pt">Portuguese</option>
+                    <option value="de">German</option>
+                    <option value="fr">French</option>
+                    <option value="es">Spanish</option>
+                    <option value="da">Danish</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <!-- ================= MOBILE MENU ================= -->
+    <div id="menuOverlay" class="fixed inset-0 bg-black/50 hidden z-40"></div>
+
+    <div id="mobileMenu" class="fixed top-0 right-0 h-full w-72 bg-brandDark text-white
+         translate-x-full transition-transform duration-300 z-50">
+        <div class="p-6 space-y-6 text-sm">
+            <button id="closeMenu" class="text-right w-full text-xl text-accent">✕</button>
+            <a href="/" class="block">Home</a>
+            <a href="/faq.html" class="block">FAQs</a>
+            <a href="./login.html" class="block">Login</a>
+        </div>
+    </div>
+
+    <!-- ================= MAIN ================= -->
+    <main class="min-h-[calc(100vh-80px)] flex items-center justify-center px-4 py-12">
+
+        <div class="w-full max-w-md bg-white text-gray-800 rounded-2xl shadow-xl p-6">
+
+            <h2 class="text-2xl font-bold text-center text-brand mb-2">
+                Create Account
+            </h2>
+            <p class="text-center text-gray-500 text-sm mb-6">
+                Register to start investing
+            </p>
+
+            <div id="errorBox" class="hidden mb-4 p-3 rounded text-sm"></div>
+
+            <form id="registerForm" class="space-y-4">
+
+                <div>
+                    <label class="block text-sm font-medium mb-1">Full Name</label>
+                    <input id="name" required
+                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand" />
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-1">Email</label>
+                    <input id="email" type="email" required
+                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand" />
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-1">Country</label>
+                    <select id="country" required
+                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand">
+                        <option value="">Select your country</option>
+
+                        <option>Belgium</option>
+                        <option>Denmark</option>
+                        <option>Germany</option>
+                        <option>Italy</option>
+                        <option>Portugal</option>
+                        <option>Spain</option>
+                        <option>United Kingdom</option>
+                        <option>Canada</option>
+                        <option>Mexico</option>
+                        <option>United States</option>
+                        <option>Brazil</option>
+                        <option>Ecuador</option>
+                        <option>South Africa</option>
+                        <option>Papua New Guinea</option>
+                    </select>
+                </div>
+
+                <!-- PASSWORD -->
+                <div>
+                    <label class="block text-sm font-medium mb-1">Password</label>
+                    <div class="relative">
+                        <input id="password" type="password" minlength="8" required
+                            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-brand pr-12" />
+                        <button type="button" id="togglePassword"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-500">
+                            Show
+                        </button>
+                    </div>
+                    <p class="text-xs text-gray-500 mt-1">Minimum 8 characters</p>
+                </div>
+
+                <!-- CTA -->
+                <button id="submitBtn" type="submit" class="w-full bg-accent text-brand py-2 rounded-lg font-semibold
+             hover:opacity-90 transition">
+                    Create Account
+                </button>
+
+            </form>
+
+            <p class="mt-5 text-center text-sm text-gray-500">
+                Already have an account?
+                <a href="./login.html" class="text-brand font-medium">Login</a>
+            </p>
+        </div>
+
+    </main>
+
+    <!-- ================= GOOGLE TRANSLATE ================= -->
+    <div id="google_translate_element" style="display:none"></div>
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <script>
+        /* MOBILE MENU */
+        const menuBtn = document.getElementById('menuBtn');
+        const closeMenu = document.getElementById('closeMenu');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const menuOverlay = document.getElementById('menuOverlay');
+
+        menuBtn.onclick = () => {
+            mobileMenu.classList.remove('translate-x-full');
+            menuOverlay.classList.remove('hidden');
+        };
+        closeMenu.onclick = menuOverlay.onclick = () => {
+            mobileMenu.classList.add('translate-x-full');
+            menuOverlay.classList.add('hidden');
+        };
+
+        /* GOOGLE TRANSLATE */
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement(
+                { pageLanguage: 'en', includedLanguages: 'en,pt,de,fr,es,da', autoDisplay: false },
+                'google_translate_element'
+            );
+        }
+        function setLanguage(lang) {
+            if (!lang || lang === 'Select Language') return;
+            if (lang === 'en') {
+                document.cookie = 'googtrans=;path=/;';
+                location.reload();
+                return;
+            }
+            document.cookie = `googtrans=/en/${lang};path=/;`;
+            location.reload();
+        }
+        langDesktop.onchange = e => setLanguage(e.target.value);
+        langMobile.onchange = e => setLanguage(e.target.value);
+    </script>
+
+    <script>
+        /* REGISTRATION LOGIC */
+        const form = document.getElementById('registerForm');
+        const errorBox = document.getElementById('errorBox');
+        const submitBtn = document.getElementById('submitBtn');
+
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const countryInput = document.getElementById('country');
+
+        /* PASSWORD TOGGLE */
+        document.getElementById('togglePassword').onclick = () => {
+            passwordInput.type =
+                passwordInput.type === 'password' ? 'text' : 'password';
+        };
+
+        /* SUBMIT */
+        form.addEventListener('submit', async e => {
+            e.preventDefault();
+            errorBox.className = 'hidden';
+
+            const payload = {
+                name: nameInput.value.trim(),
+                email: emailInput.value.trim(),
+                password: passwordInput.value,
+                country: countryInput.value
+            };
+
+            if (!payload.country) {
+                showError('Please select your country');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Creating account...';
+
+            try {
+                const res = await fetch('http://localhost:5000/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.message || 'Registration failed');
+
+                showSuccess('Account created successfully. Redirecting...');
+                setTimeout(() => location.href = './login.html', 1500);
+
+            } catch (err) {
+                showError(err.message || 'Network error');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Create Account';
+            }
+        });
+
+        function showError(msg) {
+            errorBox.textContent = msg;
+            errorBox.className = 'mb-4 p-3 rounded text-sm bg-red-100 text-red-700';
+        }
+        function showSuccess(msg) {
+            errorBox.textContent = msg;
+            errorBox.className = 'mb-4 p-3 rounded text-sm bg-green-100 text-green-700';
+        }
+    </script>
+
+</body>
+
+</html>

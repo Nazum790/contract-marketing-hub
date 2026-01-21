@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard | Contract Marketing Hub</title>
+
+    <meta name="theme-color" content="#0B2C5F" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0B2C5F',
+                        darkbg: '#081A33',
+                        accent: '#F59E0B'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        .goog-logo-link,
+        .goog-te-banner-frame,
+        .goog-te-gadget,
+        #goog-gt-tt,
+        body>.skiptranslate {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-gradient-to-b from-[#06162d] via-[#0a2550] to-[#0B2C5F] text-gray-100">
+
+    <header class="fixed top-0 left-0 right-0 z-50 bg-darkbg/95 backdrop-blur border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+            <h1 class="font-bold text-lg">Contract Marketing Hub</h1>
+
+            <nav class="hidden md:flex gap-6 text-sm items-center">
+                <a href="./dashboard.html" class="text-accent">Dashboard</a>
+                <a href="./contracts.html">Contracts</a>
+                <a href="./transactions.html">Transactions</a>
+                <a href="./profile.html">Profile</a>
+                <button id="logoutDesktop" class="text-red-400">Logout</button>
+
+                <select id="langSelect" class="bg-darkbg border border-white/20 text-sm rounded px-2 py-1">
+                    <option value="">Select Language</option>
+                    <option value="en">English</option>
+                    <option value="pt">Portuguese</option>
+                    <option value="de">German</option>
+                    <option value="fr">French</option>
+                    <option value="es">Spanish</option>
+                    <option value="da">Danish</option>
+                </select>
+            </nav>
+
+            <button id="menuBtn" class="md:hidden text-2xl">☰</button>
+        </div>
+
+        <div class="md:hidden px-4 pb-3">
+            <select id="langSelectMobile"
+                class="bg-darkbg border border-white/20 text-sm rounded px-3 py-2 w-full max-w-[200px]">
+                <option value="">Select language</option>
+                <option value="en">English</option>
+                <option value="pt">Portuguese</option>
+                <option value="de">German</option>
+                <option value="fr">French</option>
+                <option value="es">Spanish</option>
+                <option value="da">Danish</option>
+            </select>
+        </div>
+    </header>
+    <!-- ================= MOBILE MENU ================= -->
+    <div id="mobileMenu" class="fixed top-0 right-0 h-full w-72 bg-darkbg/95 backdrop-blur
+            translate-x-full transition-transform duration-300
+            md:hidden border-l border-white/10 z-50">
+
+        <div class="p-6 space-y-6 text-sm">
+
+            <!-- CLOSE BUTTON -->
+            <div class="flex justify-end">
+                <button id="closeMenu" class="text-xl text-gray-300">✕</button>
+            </div>
+
+            <a href="./dashboard.html" class="block text-accent">Dashboard</a>
+            <a href="./contracts.html" class="block">Contracts</a>
+            <a href="./transactions.html" class="block">Transactions</a>
+            <a href="./profile.html" class="block">Profile</a>
+
+            <button id="logoutMobile" class="block text-red-400 pt-4">
+                Logout
+            </button>
+        </div>
+    </div>
+    <main class="max-w-7xl mx-auto px-4 pt-28 pb-24">
+
+        <section class="mb-8">
+            <h2 class="text-2xl font-semibold">
+                Good day, <span id="userName">User</span>
+            </h2>
+            <p class="text-sm text-gray-300">Your financial overview</p>
+        </section>
+
+        <!-- BALANCE CARD -->
+        <section class="mb-10">
+            <div class="rounded-2xl p-6 shadow-2xl border border-white/15
+            bg-gradient-to-br from-[#1b3b6f] via-[#1f447d] to-[#152c54]">
+
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <p class="text-sm text-gray-300">Total Balance</p>
+                        <div class="flex items-center gap-3 mt-1">
+                            <span class="text-3xl font-bold">
+                                <span id="currencySymbol"></span>
+                                <span id="userBalance" data-visible="true">0</span>
+                            </span>
+                            <button id="toggleBalance" class="opacity-70 hover:opacity-100 transition">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button onclick="location.href='./withdraw.html'"
+                        class="bg-accent text-black px-5 py-2 rounded-xl font-medium hover:opacity-90">
+                        Withdraw
+                    </button>
+                </div>
+
+                <div class="border-t border-white/20 pt-4 grid grid-cols-2 gap-6 text-sm">
+                    <div>
+                        <p class="text-gray-300">Contract Entry Cost</p>
+                        <p class="mt-1 text-lg font-semibold">
+                            <span id="currencySymbolEntry"></span>
+                            <span id="entryCost">0</span>
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-gray-300">Expected Earnings</p>
+                        <p class="mt-1 text-lg font-semibold">
+                            <span id="currencySymbolEarnings"></span>
+                            <span id="expectedEarnings">0</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- STATS -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+            <div class="rounded-2xl p-5 shadow-lg border border-white/10 bg-gradient-to-br from-[#1a355e] to-[#13274a]">
+                <p class="text-sm text-gray-300">Active Contracts</p>
+                <p class="text-3xl font-bold mt-2" id="activeCount">0</p>
+            </div>
+
+            <div class="rounded-2xl p-5 shadow-lg border border-white/10 bg-gradient-to-br from-[#1a355e] to-[#13274a]">
+                <p class="text-sm text-gray-300">Pending Activation</p>
+                <p class="mt-2" id="pendingActivation">—</p>
+            </div>
+
+            <div class="rounded-2xl p-5 shadow-lg border border-white/10 bg-gradient-to-br from-[#1a355e] to-[#13274a]">
+                <p class="text-sm text-gray-300">Contract Countdown</p>
+                <p class="mt-2 font-medium notranslate" id="countdown">—</p>
+            </div>
+
+            <div class="rounded-2xl p-5 shadow-lg border border-white/10 bg-gradient-to-br from-[#1a355e] to-[#13274a]">
+                <p class="text-sm text-gray-300">Account Status</p>
+                <span id="accountStatus" class="inline-block mt-3 px-3 py-1 text-xs rounded-full bg-white/20">
+                    —
+                </span>
+            </div>
+        </section>
+
+        <!-- ACTIONS -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div
+                class="lg:col-span-2 rounded-2xl p-6 shadow-lg border border-white/10 bg-gradient-to-br from-[#152f57] to-[#102444]">
+                <h3 class="font-semibold mb-2">My Contracts</h3>
+                <p class="text-sm text-gray-300 mb-4">View and manage your contracts</p>
+                <a href="./contracts.html" class="inline-block px-5 py-2 bg-primary rounded-xl text-sm">
+                    View Contracts
+                </a>
+            </div>
+
+            <div class="rounded-2xl p-6 shadow-lg border border-white/10 bg-gradient-to-br from-[#152f57] to-[#102444]">
+                <h3 class="font-semibold mb-2">Profile</h3>
+                <p class="text-sm text-gray-300 mb-3" id="userEmail">—</p>
+                <a href="./profile.html" class="text-accent text-sm font-medium">
+                    Manage profile →
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="mt-12 border-t border-white/10 text-center py-6 text-sm text-gray-300">
+        © <span id="year"></span> Contract Marketing Hub
+    </footer>
+    <!-- GOOGLE TRANSLATE -->
+    <div id="google_translate_element" style="display:none"></div>
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <script>
+        const token = localStorage.getItem('token');
+        if (!token) location.href = '../auth/login.html';
+
+        const authHeaders = { Authorization: 'Bearer ' + token };
+
+        // NAV ELEMENTS
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const closeMenu = document.getElementById('closeMenu');
+        const logoutDesktop = document.getElementById('logoutDesktop');
+        const logoutMobile = document.getElementById('logoutMobile');
+
+        // FINANCIAL ELEMENTS
+        const entryCost = document.getElementById('entryCost');
+        const expectedEarnings = document.getElementById('expectedEarnings');
+        const currencySymbolEntry = document.getElementById('currencySymbolEntry');
+        const currencySymbolEarnings = document.getElementById('currencySymbolEarnings');
+
+        const toggleBtn = document.getElementById('toggleBalance');
+        const balanceEl = document.getElementById('userBalance');
+
+        let realBalance = '';
+
+        // MOBILE MENU
+        menuBtn?.addEventListener('click', () => {
+            mobileMenu.classList.toggle('translate-x-full');
+            document.body.classList.toggle('overflow-hidden');
+        });
+
+        closeMenu?.addEventListener('click', () => {
+            mobileMenu.classList.add('translate-x-full');
+            document.body.classList.remove('overflow-hidden');
+        });
+
+        // LOGOUT
+        const logout = () => {
+            localStorage.clear();
+            location.href = '../auth/login.html';
+        };
+
+        logoutDesktop?.addEventListener('click', logout);
+        logoutMobile?.addEventListener('click', logout);
+
+        // DASHBOARD LOAD
+        async function loadDashboard() {
+            const userRes = await fetch('http://localhost:5000/api/users/me', { headers: authHeaders });
+            const { user } = await userRes.json();
+
+            userName.textContent = user.name;
+            userEmail.textContent = user.email;
+            currencySymbol.textContent = user.currencySymbol || '';
+
+            realBalance = Number(user.balance || 0).toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+
+            userBalance.textContent = realBalance;
+            userBalance.dataset.visible = 'true';
+            accountStatus.textContent = user.emailVerified ? 'Verified' : 'Verification pending';
+
+            const contractsRes = await fetch('http://localhost:5000/api/contracts/my', { headers: authHeaders });
+            const { contracts = [] } = await contractsRes.json();
+
+            const activeContract = contracts.find(c => c.status === 'active');
+
+            currencySymbolEntry.textContent = user.currencySymbol || '';
+            currencySymbolEarnings.textContent = user.currencySymbol || '';
+
+            if (activeContract) {
+                entryCost.textContent = Number(activeContract.entryAmount || 0).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+
+                expectedEarnings.textContent = Number(activeContract.expectedPayout || 0).toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+            } else {
+                entryCost.textContent = '0.00';
+                expectedEarnings.textContent = '0.00';
+            }
+
+            const pending = contracts.filter(c => c.status === 'pending');
+            const active = contracts.filter(c => c.status === 'active');
+
+            activeCount.textContent = active.length;
+            pendingActivation.textContent =
+                pending.length ? `${pending.length} awaiting activation` : 'No pending activation';
+
+            if (active.length && active[0].endDate) {
+                const end = new Date(active[0].endDate);
+
+                setInterval(() => {
+                    const diff = end - new Date();
+                    if (diff <= 0) {
+                        countdown.textContent = 'Completed';
+                        return;
+                    }
+
+                    const d = Math.floor(diff / 86400000);
+                    const h = Math.floor(diff / 3600000) % 24;
+                    const m = Math.floor(diff / 60000) % 60;
+                    const s = Math.floor(diff / 1000) % 60;
+
+                    countdown.textContent = `${d}d ${h}h ${m}m ${s}s`;
+                }, 1000);
+            } else {
+                countdown.textContent = 'No active contract';
+            }
+        }
+
+        // BALANCE VISIBILITY
+        toggleBtn?.addEventListener('click', () => {
+            const isVisible = balanceEl.dataset.visible === 'true';
+
+            if (isVisible) {
+                realBalance = balanceEl.textContent;
+                balanceEl.textContent = '•••••';
+                balanceEl.dataset.visible = 'false';
+            } else {
+                balanceEl.textContent = realBalance;
+                balanceEl.dataset.visible = 'true';
+            }
+        });
+
+        // GOOGLE TRANSLATE
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement(
+                { pageLanguage: 'en', includedLanguages: 'en,pt,de,fr,es,da', autoDisplay: false },
+                'google_translate_element'
+            );
+        }
+
+        function setLang(lang) {
+            if (!lang) return;
+            const val = lang === 'en' ? '' : `/en/${lang}`;
+            document.cookie = `googtrans=${val};path=/;`;
+            document.cookie = `googtrans=${val};path=/;domain=${location.hostname}`;
+            location.reload();
+        }
+
+        langSelect?.addEventListener('change', e => setLang(e.target.value));
+        langSelectMobile?.addEventListener('change', e => setLang(e.target.value));
+
+        document.getElementById('year').textContent = new Date().getFullYear();
+        loadDashboard();
+    </script>
+</body>
+
+</html>

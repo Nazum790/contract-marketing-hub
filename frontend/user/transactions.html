@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Theme -->
+    <meta name="theme-color" content="#0B2C5F" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <title>Transactions | Contract Marketing Hub</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0B2C5F',
+                        darkbg: '#081A33',
+                        accent: '#F59E0B'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        .notranslate {
+            translate: no;
+        }
+
+        .goog-logo-link,
+        .goog-te-banner-frame,
+        .goog-te-gadget,
+        #goog-gt-tt,
+        body>.skiptranslate {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col bg-gradient-to-b from-darkbg to-primary text-gray-100">
+
+    <!-- FIXED NAV -->
+    <header class="fixed top-0 left-0 right-0 z-50
+        h-[72px]
+        bg-darkbg/95 backdrop-blur
+        border-b border-white/10
+        overflow-hidden
+        notranslate">
+
+        <div class="max-w-7xl mx-auto px-4 h-full flex items-center justify-between">
+
+            <h1 class="font-bold text-lg whitespace-nowrap">
+                Contract Marketing Hub
+            </h1>
+
+            <div class="flex items-center gap-4">
+                <nav class="hidden md:flex gap-6 text-sm">
+                    <a href="./dashboard.html">Dashboard</a>
+                    <a href="./contracts.html">Contracts</a>
+                    <a href="./transactions.html" class="text-accent">Transactions</a>
+                    <a href="./profile.html">Profile</a>
+                </nav>
+
+                <!-- DESKTOP TRANSLATOR -->
+                <select id="langSelect"
+                    class="hidden md:block bg-darkbg border border-white/20 text-sm rounded px-2 py-1">
+                    <option value="">Select Language</option>
+                    <option value="en">English</option>
+                    <option value="pt">Portuguese</option>
+                    <option value="de">German</option>
+                    <option value="fr">French</option>
+                    <option value="es">Spanish</option>
+                    <option value="da">Danish</option>
+                </select>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- MOBILE TRANSLATOR (OUTSIDE HEADER HEIGHT) -->
+    <div class="fixed top-[72px] left-0 right-0 z-40 md:hidden bg-darkbg/95 backdrop-blur px-4 py-2 notranslate">
+        <select id="langSelectMobile"
+            class="bg-darkbg border border-white/20 text-sm rounded px-3 py-2 w-full max-w-[240px]">
+            <option value="">Select language</option>
+            <option value="en">English</option>
+            <option value="pt">Portuguese</option>
+            <option value="de">German</option>
+            <option value="fr">French</option>
+            <option value="es">Spanish</option>
+            <option value="da">Danish</option>
+        </select>
+    </div>
+
+    <!-- MAIN -->
+    <main class="flex-1 max-w-6xl mx-auto px-4 pt-[120px] pb-8 w-full">
+
+        <!-- Header -->
+        <section class="mb-6">
+            <h2 class="text-2xl font-semibold mb-1">Transaction History</h2>
+            <p class="text-sm text-gray-300">
+                All activities on your account
+            </p>
+        </section>
+
+        <!-- Transactions Card -->
+        <div class="bg-white text-gray-800 rounded-xl shadow p-6">
+
+            <!-- Empty State -->
+            <div id="emptyState" class="hidden text-center py-12">
+                <div class="text-4xl mb-4">📄</div>
+                <h3 class="text-lg font-semibold mb-2">
+                    No transactions yet
+                </h3>
+                <p class="text-sm text-gray-600 mb-6">
+                    Once you perform any activity (contracts, withdrawals, verification),
+                    it will appear here.
+                </p>
+
+                <a href="./dashboard.html"
+                    class="inline-block px-5 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:opacity-90">
+                    ← Back to Dashboard
+                </a>
+            </div>
+
+            <!-- Transactions Table -->
+            <div id="tableWrapper" class="hidden overflow-x-auto">
+                <table class="min-w-full text-sm">
+                    <thead>
+                        <tr class="border-b text-gray-500">
+                            <th class="text-left py-2">Title</th>
+                            <th class="text-left py-2">Description</th>
+                            <th class="text-left py-2">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionsBody" class="divide-y"></tbody>
+                </table>
+
+                <div class="mt-6">
+                    <a href="./dashboard.html"
+                        class="inline-block px-5 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:opacity-90">
+                        ← Back to Dashboard
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-white/10 text-center py-4 text-sm text-gray-300">
+        © <span id="year"></span> Contract Marketing Hub
+    </footer>
+
+    <!-- GOOGLE TRANSLATE -->
+    <div id="google_translate_element" style="display:none"></div>
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <!-- LOGIC -->
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        const token = localStorage.getItem('token');
+        if (!token) {
+            localStorage.clear();
+            location.href = '../auth/login.html';
+        }
+
+        const emptyState = document.getElementById('emptyState');
+        const tableWrapper = document.getElementById('tableWrapper');
+        const tbody = document.getElementById('transactionsBody');
+
+        async function loadTransactions() {
+            try {
+                const res = await fetch('http://localhost:5000/api/transactions/my', {
+                    headers: { Authorization: 'Bearer ' + token }
+                });
+
+                if (!res.ok) throw new Error();
+
+                const data = await res.json();
+                const transactions = data.transactions || [];
+
+                if (transactions.length === 0) {
+                    emptyState.classList.remove('hidden');
+                    return;
+                }
+
+                tableWrapper.classList.remove('hidden');
+
+                transactions.forEach(tx => {
+                    const tr = document.createElement('tr');
+
+                    tr.innerHTML = `
+                        <td class="py-3 font-medium">${tx.title || '—'}</td>
+                        <td class="py-3 text-gray-600">${tx.description || '—'}</td>
+                        <td class="py-3 text-gray-500">
+                            ${tx.date ? new Date(tx.date).toLocaleString() : '—'}
+                        </td>
+                    `;
+
+                    tbody.appendChild(tr);
+                });
+
+            } catch {
+                localStorage.clear();
+                location.href = '../auth/login.html';
+            }
+        }
+
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement(
+                { pageLanguage: 'en', includedLanguages: 'en,pt,de,fr,es,da', autoDisplay: false },
+                'google_translate_element'
+            );
+        }
+
+        function setLang(lang) {
+            if (!lang) return;
+            const val = lang === 'en' ? '' : `/en/${lang}`;
+            document.cookie = `googtrans=${val};path=/;`;
+            document.cookie = `googtrans=${val};path=/;domain=${location.hostname}`;
+            location.reload();
+        }
+
+        langSelect?.addEventListener('change', e => setLang(e.target.value));
+        langSelectMobile?.addEventListener('change', e => setLang(e.target.value));
+
+        loadTransactions();
+    </script>
+
+</body>
+
+</html>

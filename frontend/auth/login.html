@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login | Contract Marketing Hub</title>
+
+    <meta name="theme-color" content="#0B2C5F" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0B2C5F',
+                        darkbg: '#081A33',
+                        accent: '#F59E0B'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* ===== STABILITY FIX ===== */
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            background: linear-gradient(to bottom, #081A33, #0B2C5F);
+            overflow-x: hidden;
+        }
+
+        /* Prevent Google Translate layout shift */
+        body>.skiptranslate {
+            display: none !important;
+        }
+
+        /* Hide Google UI */
+        .goog-logo-link,
+        .goog-te-banner-frame,
+        .goog-te-gadget,
+        #goog-gt-tt {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- TRANSLATABLE CONTAINER (IMPORTANT) -->
+    <div id="page-root" class="min-h-screen flex items-center justify-center px-4 text-gray-100">
+
+        <!-- LOGIN CARD -->
+        <div class="w-full max-w-md bg-white text-gray-800 rounded-2xl shadow-xl p-6">
+
+            <div class="text-center mb-4">
+                <h1 class="text-2xl font-bold text-primary">Contract Marketing Hub</h1>
+                <p class="text-sm text-gray-500 mt-1">Sign in to your account</p>
+            </div>
+
+            <!-- LANGUAGE SELECT -->
+            <div class="mb-4 flex justify-center">
+                <select id="langSelect" class="bg-gray-100 text-sm rounded px-3 py-1 border border-gray-300">
+                    <option value="">Select Language</option>
+                    <option value="en">English</option>
+                    <option value="pt">Portuguese</option>
+                    <option value="de">German</option>
+                    <option value="fr">French</option>
+                    <option value="es">Spanish</option>
+                    <option value="da">Danish</option>
+                </select>
+            </div>
+
+            <div id="errorBox" class="hidden mb-4 p-3 rounded-lg bg-red-100 text-red-700 text-sm"></div>
+
+            <form id="loginForm" class="space-y-4">
+
+                <div>
+                    <label class="block text-sm font-medium mb-1">Email</label>
+                    <input id="email" type="email" required
+                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary" />
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-1">Password</label>
+                    <div class="relative">
+                        <input id="password" type="password" required
+                            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary pr-12" />
+                        <button type="button" id="togglePassword"
+                            class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-500">
+                            Show
+                        </button>
+                    </div>
+                </div>
+
+                <button id="loginBtn" type="submit" class="w-full bg-accent text-darkbg py-2 rounded-lg font-semibold">
+                    Login
+                </button>
+            </form>
+
+            <div class="mt-6 text-center text-sm text-gray-500 space-y-2">
+                <a href="./forgot-password.html" class="text-primary font-medium">
+                    Forgot password?
+                </a>
+                <div>
+                    Don’t have an account?
+                    <a href="./register.html" class="text-primary font-medium">Register</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GOOGLE TRANSLATE ENGINE -->
+    <div id="google_translate_element" style="display:none"></div>
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <script>
+        /* PASSWORD TOGGLE */
+        const passwordInput = document.getElementById('password');
+        document.getElementById('togglePassword').onclick = () => {
+            passwordInput.type =
+                passwordInput.type === 'password' ? 'text' : 'password';
+        };
+
+        /* LOGIN LOGIC (UNCHANGED) */
+        const form = document.getElementById('loginForm');
+        const errorBox = document.getElementById('errorBox');
+        const loginBtn = document.getElementById('loginBtn');
+
+        form.addEventListener('submit', async e => {
+            e.preventDefault();
+            errorBox.classList.add('hidden');
+
+            loginBtn.disabled = true;
+            loginBtn.textContent = 'Signing in...';
+
+            try {
+                const res = await fetch('http://localhost:5000/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: email.value.trim(),
+                        password: passwordInput.value
+                    })
+                });
+
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.message || 'Login failed');
+
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify(data.user));
+
+                location.href = data.user.role === 'admin'
+                    ? '../admin/dashboard.html'
+                    : '../user/dashboard.html';
+
+            } catch (err) {
+                errorBox.textContent = err.message;
+                errorBox.classList.remove('hidden');
+                loginBtn.disabled = false;
+                loginBtn.textContent = 'Login';
+            }
+        });
+
+        /* GOOGLE TRANSLATE – CORRECT TRIGGER */
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement(
+                {
+                    pageLanguage: 'en',
+                    includedLanguages: 'en,pt,de,fr,es,da',
+                    autoDisplay: false
+                },
+                'google_translate_element'
+            );
+        }
+
+        document.getElementById('langSelect').addEventListener('change', function () {
+            if (!this.value) return;
+
+            const frame = document.querySelector('iframe.goog-te-menu-frame');
+            if (!frame) return;
+
+            const items = frame.contentDocument.querySelectorAll('.goog-te-menu2-item span.text');
+            items.forEach(item => {
+                if (item.innerText.toLowerCase().includes(this.value)) {
+                    item.click();
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta name="theme-color" content="#0B2C5F" />
+    <title>Admin · Email Verifications</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0B2C5F',
+                        darkbg: '#081A33',
+                        accent: '#F59E0B'
+                    }
+                }
+            }
+        };
+    </script>
+</head>
+
+<body class="min-h-screen flex flex-col bg-gradient-to-b from-darkbg to-primary text-gray-100">
+
+    <!-- NAVBAR -->
+    <header class="sticky top-0 z-50 bg-darkbg/90 backdrop-blur border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <h1 class="font-bold text-lg">Admin Dashboard</h1>
+
+            <nav class="hidden md:flex gap-6 text-sm">
+                <a href="dashboard.html">Dashboard</a>
+                <a href="email-verification.html" class="text-accent">Email Verifications</a>
+                <a href="withdrawal.html">Withdrawals</a>
+                <a href="payment-settings.html">Payment Settings</a>
+                <button id="logoutBtn" class="text-red-400">Logout</button>
+            </nav>
+
+            <button id="menuBtn" class="md:hidden text-2xl">☰</button>
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="flex-1 max-w-7xl mx-auto px-4 py-8 w-full">
+
+        <!-- PAGE HEADER -->
+        <section class="mb-6 flex items-center justify-between">
+            <div>
+                <h2 class="text-2xl font-semibold mb-1">Email Verification Requests</h2>
+                <p class="text-sm text-gray-300">
+                    Users requesting manual email verification
+                </p>
+            </div>
+
+            <!-- BACK TO DASHBOARD -->
+            <a href="dashboard.html" class="text-sm bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg">
+                ← Back to Dashboard
+            </a>
+        </section>
+
+        <div id="messageBox" class="hidden mb-4 p-3 rounded text-sm"></div>
+
+        <div id="requestsList" class="space-y-4"></div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-white/10 text-center py-4 text-sm text-gray-300">
+        © <span id="year"></span> Contract Marketing Hub
+    </footer>
+
+    <!-- LOGIC -->
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+        // AUTH GUARD
+        if (!token || user.role !== 'admin') {
+            localStorage.clear();
+            location.href = '/auth/login.html';
+        }
+
+        document.getElementById('logoutBtn').onclick = () => {
+            localStorage.clear();
+            location.href = '/auth/login.html';
+        };
+
+        const list = document.getElementById('requestsList');
+        const messageBox = document.getElementById('messageBox');
+
+        function showMessage(msg, type = 'success') {
+            messageBox.textContent = msg;
+            messageBox.className =
+                `mb-4 p-3 rounded text-sm ${type === 'success'
+                    ? 'bg-green-100 text-green-700'
+                    : 'bg-red-100 text-red-700'
+                }`;
+            messageBox.classList.remove('hidden');
+        }
+
+        async function loadRequests() {
+            try {
+                const res = await fetch(
+                    'http://localhost:5000/api/admin/email-verifications',
+                    {
+                        headers: {
+                            Authorization: 'Bearer ' + token
+                        }
+                    }
+                );
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    throw new Error(data.message || 'Failed to load');
+                }
+
+                list.innerHTML = '';
+
+                if (!data.users || data.users.length === 0) {
+                    list.innerHTML =
+                        '<p class="text-sm text-gray-300">No pending requests</p>';
+                    return;
+                }
+
+                data.users.forEach(u => {
+                    list.innerHTML += `
+                        <div class="bg-white text-gray-800 rounded-xl p-5 shadow">
+                            <p class="text-sm"><strong>Name:</strong> ${u.name}</p>
+                            <p class="text-sm"><strong>Email:</strong> ${u.email}</p>
+                            <p class="text-sm"><strong>Country:</strong> ${u.country || '—'}</p>
+
+                            <div class="mt-4 flex gap-2">
+                                <button
+                                    onclick="approve('${u._id}')"
+                                    class="px-3 py-1 bg-green-600 text-white rounded text-sm">
+                                    Verify Email
+                                </button>
+                                <button
+                                    onclick="reject('${u._id}')"
+                                    class="px-3 py-1 bg-red-600 text-white rounded text-sm">
+                                    Reject
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+            } catch (err) {
+                showMessage(err.message || 'Failed to load verification requests', 'error');
+            }
+        }
+
+        async function approve(id) {
+            await action(`/verify/${id}`, 'Email verified successfully');
+        }
+
+        async function reject(id) {
+            await action(`/reject/${id}`, 'Verification request rejected');
+        }
+
+        async function action(path, msg) {
+            try {
+                const res = await fetch(
+                    `http://localhost:5000/api/admin/email-verifications${path}`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            Authorization: 'Bearer ' + token
+                        }
+                    }
+                );
+
+                const data = await res.json();
+
+                if (!res.ok) {
+                    throw new Error(data.message || 'Action failed');
+                }
+
+                showMessage(msg);
+                loadRequests();
+
+            } catch (err) {
+                showMessage(err.message, 'error');
+            }
+        }
+
+        loadRequests();
+    </script>
+
+</body>
+
+</html>

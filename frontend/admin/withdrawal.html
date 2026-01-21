@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Admin · Withdrawals</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0B2C5F',
+                        darkbg: '#081A33',
+                        accent: '#F59E0B'
+                    }
+                }
+            }
+        };
+    </script>
+
+    <style>
+        html,
+        body {
+            overflow-x: hidden;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-gradient-to-b from-darkbg to-primary text-gray-100">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-darkbg/90 backdrop-blur border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <h1 class="font-bold text-lg">Admin · Withdrawals</h1>
+            <a href="./dashboard.html" class="text-sm text-accent">← Back to Dashboard</a>
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+
+        <div class="bg-white text-gray-800 rounded-xl shadow p-6 mb-10">
+            <h2 class="text-xl font-semibold mb-4">Pending Withdrawals</h2>
+
+            <div id="messageBox" class="hidden mb-4 p-3 rounded text-sm"></div>
+
+            <div id="pendingContainer" class="space-y-4 text-sm text-gray-600">
+                Loading pending withdrawals…
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="mt-12 border-t border-white/10 text-center py-6 text-sm text-gray-300">
+        © <span id="year"></span> Contract Marketing Hub
+    </footer>
+
+    <!-- LOGIC -->
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        const token = localStorage.getItem('token');
+        if (!token) {
+            localStorage.clear();
+            location.href = '../auth/login.html';
+        }
+
+        const container = document.getElementById('pendingContainer');
+        const messageBox = document.getElementById('messageBox');
+
+        function showMessage(text, type = 'success') {
+            messageBox.textContent = text;
+            messageBox.className = 'mb-4 p-3 rounded text-sm';
+            messageBox.classList.remove('hidden');
+
+            if (type === 'success') {
+                messageBox.classList.add('bg-green-100', 'text-green-700');
+            } else {
+                messageBox.classList.add('bg-red-100', 'text-red-700');
+            }
+        }
+
+        async function loadWithdrawals() {
+            try {
+                const res = await fetch(
+                    'http://localhost:5000/api/admin/withdrawals/pending',
+                    { headers: { Authorization: 'Bearer ' + token } }
+                );
+
+                if (!res.ok) throw new Error();
+
+                const { withdrawals } = await res.json();
+                container.innerHTML = '';
+
+                if (!withdrawals.length) {
+                    container.innerHTML = `
+                        <div class="text-center py-10 text-gray-500">
+                            No pending withdrawal requests
+                        </div>`;
+                    return;
+                }
+
+                withdrawals.forEach(w => {
+                    const symbol = w.user.currencySymbol || '';
+                    const div = document.createElement('div');
+
+                    div.className = 'border rounded-lg p-4';
+
+                    div.innerHTML = `
+                        <p><strong>User:</strong> ${w.user.name}</p>
+                        <p><strong>Email:</strong> ${w.user.email}</p>
+                        <p><strong>Amount:</strong> ${symbol}${Number(w.amount).toLocaleString()}</p>
+                        <p><strong>Method:</strong> ${w.method}</p>
+
+                        <pre class="text-xs bg-gray-100 p-2 rounded mt-3 overflow-x-auto">
+${JSON.stringify(w.methodDetails, null, 2)}
+                        </pre>
+
+                        <div class="mt-4 flex gap-2">
+                            <button
+                                onclick="approveWithdrawal('${w._id}')"
+                                class="bg-green-600 text-white px-3 py-1 rounded text-xs">
+                                Approve & Pay
+                            </button>
+
+                            <button
+                                onclick="rejectWithdrawal('${w._id}')"
+                                class="bg-red-600 text-white px-3 py-1 rounded text-xs">
+                                Reject
+                            </button>
+                        </div>
+                    `;
+
+                    container.appendChild(div);
+                });
+
+            } catch {
+                container.innerHTML = `
+                    <div class="text-center py-10 text-red-500">
+                        Failed to load withdrawals
+                    </div>`;
+            }
+        }
+
+        async function approveWithdrawal(id) {
+            if (!confirm('Approve and pay this withdrawal?')) return;
+
+            try {
+                const res = await fetch(
+                    `http://localhost:5000/api/admin/withdrawals/${id}/approve`,
+                    {
+                        method: 'POST',
+                        headers: { Authorization: 'Bearer ' + token }
+                    }
+                );
+
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.message);
+
+                showMessage('Withdrawal approved and paid');
+                loadWithdrawals();
+
+            } catch (err) {
+                showMessage(err.message || 'Failed to approve withdrawal', 'error');
+            }
+        }
+
+        async function rejectWithdrawal(id) {
+            if (!confirm('Reject this withdrawal?')) return;
+
+            try {
+                const res = await fetch(
+                    `http://localhost:5000/api/admin/withdrawals/${id}/reject`,
+                    {
+                        method: 'POST',
+                        headers: { Authorization: 'Bearer ' + token }
+                    }
+                );
+
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.message);
+
+                showMessage('Withdrawal rejected');
+                loadWithdrawals();
+
+            } catch (err) {
+                showMessage(err.message || 'Failed to reject withdrawal', 'error');
+            }
+        }
+
+        loadWithdrawals();
+    </script>
+
+</body>
+
+</html>

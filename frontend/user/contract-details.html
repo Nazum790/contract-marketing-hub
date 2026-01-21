@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <meta name="theme-color" content="#0B2C5F" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <title>Contract Details | Contract Marketing Hub</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0B2C5F',
+                        darkbg: '#081A33',
+                        accent: '#F59E0B'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        .notranslate {
+            translate: no;
+        }
+
+        .goog-logo-link,
+        .goog-te-banner-frame,
+        .goog-te-gadget,
+        #goog-gt-tt,
+        body>.skiptranslate {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-gradient-to-b from-darkbg to-primary text-gray-100">
+
+    <!-- FIXED HEADER -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-darkbg/95 backdrop-blur border-b border-white/10 notranslate">
+
+        <div class="max-w-7xl mx-auto px-4 py-3">
+
+            <div class="flex items-center justify-between">
+                <h1 class="font-bold text-lg whitespace-nowrap">
+                    Contract Marketing Hub
+                </h1>
+
+                <div class="flex items-center gap-4">
+                    <a href="./contracts.html" class="text-sm text-accent hover:underline whitespace-nowrap">
+                        ← Back to Contracts
+                    </a>
+
+                    <select id="langSelect"
+                        class="hidden sm:block bg-darkbg border border-white/20 text-sm rounded px-2 py-1">
+                        <option value="">🌍</option>
+                        <option value="en">English</option>
+                        <option value="pt">Portuguese</option>
+                        <option value="de">German</option>
+                        <option value="fr">French</option>
+                        <option value="es">Spanish</option>
+                        <option value="da">Danish</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="sm:hidden mt-3">
+                <select id="langSelectMobile"
+                    class="bg-darkbg border border-white/20 text-sm rounded px-3 py-2 w-full max-w-[240px]">
+                    <option value="">Select language</option>
+                    <option value="en">English</option>
+                    <option value="pt">Portuguese</option>
+                    <option value="de">German</option>
+                    <option value="fr">French</option>
+                    <option value="es">Spanish</option>
+                    <option value="da">Danish</option>
+                </select>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main class="max-w-3xl mx-auto px-4 pt-36 pb-10">
+        <div class="bg-white text-gray-800 rounded-xl shadow p-6">
+
+            <h2 id="contractName" class="text-2xl font-semibold mb-2 notranslate">
+                Loading…
+            </h2>
+
+            <p id="contractDescription" class="text-gray-600 mb-6"></p>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 text-sm">
+                <div>
+                    <p class="text-gray-500">Entry Cost</p>
+                    <p class="font-semibold text-lg">
+                        <span id="currencySymbol"></span><span id="entryCost"></span>
+                    </p>
+                </div>
+
+                <div>
+                    <p class="text-gray-500">Duration</p>
+                    <p class="font-semibold text-lg">
+                        <span id="duration"></span> days
+                    </p>
+                </div>
+
+                <div>
+                    <p class="text-gray-500">Expected ROI</p>
+                    <p class="font-semibold text-lg text-primary">
+                        <span id="currencySymbolRoi"></span><span id="roi"></span>
+                    </p>
+                </div>
+
+                <div>
+                    <p class="text-gray-500">Profit Formula</p>
+                    <p id="profitFormula" class="text-sm text-gray-600"></p>
+                </div>
+            </div>
+
+            <!-- ACTIVATION STATUS -->
+            <div id="activationBox" class="mb-6"></div>
+
+            <div class="border-t pt-5 mt-6">
+                <h3 class="font-semibold mb-2">Payment Instructions</h3>
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-sm text-yellow-800">
+                    After payment, forward your proof to the admin payment details provided.
+                    Contract will be activated after confirmation.
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="mt-12 border-t border-white/10 text-center py-6 text-sm text-gray-300">
+        © <span id="year"></span> Contract Marketing Hub
+    </footer>
+
+    <!-- GOOGLE TRANSLATE -->
+    <div id="google_translate_element" style="display:none"></div>
+    <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        const token = localStorage.getItem('token');
+        const contractPlanId = new URLSearchParams(window.location.search).get('id');
+
+        if (!token || !/^[a-f\d]{24}$/i.test(contractPlanId)) {
+            location.href = './contracts.html';
+        }
+
+        const headers = { Authorization: 'Bearer ' + token };
+
+        function goToPayment() {
+            location.href = './payment-instructions.html';
+        }
+
+        async function requestContract() {
+            try {
+                const res = await fetch('http://localhost:5000/api/contracts/request', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Bearer ' + token
+                    },
+                    body: JSON.stringify({ contractPlanId })
+                });
+
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.message);
+
+                location.href = './payment-instructions.html';
+            } catch (err) {
+                alert(err.message || 'Unable to request contract');
+            }
+        }
+
+        async function loadPage() {
+            try {
+                const userRes = await fetch('http://localhost:5000/api/users/me', { headers });
+                const { user } = await userRes.json();
+
+                currencySymbol.textContent = user.currencySymbol || '';
+                currencySymbolRoi.textContent = user.currencySymbol || '';
+
+                const res = await fetch(
+                    `http://localhost:5000/api/contracts/${contractPlanId}`,
+                    { headers }
+                );
+
+                const { contract } = await res.json();
+
+                const entry = Number(contract.entryAmount);
+                const gross = entry * contract.multiplier;
+                const payout = gross - (gross * contract.platformFeePercent / 100);
+
+                contractName.textContent = contract.name;
+                contractDescription.textContent = contract.description || '';
+                entryCost.textContent = entry.toLocaleString();
+                duration.textContent = contract.durationDays;
+                roi.textContent = payout.toLocaleString();
+
+                profitFormula.textContent =
+                    `(${entry.toLocaleString()} × ${contract.multiplier}) − ${contract.platformFeePercent}%`;
+
+                // 🔑 ACTIVATION LOGIC (MISSING PART)
+                const myRes = await fetch('http://localhost:5000/api/contracts/my', { headers });
+                const { contracts = [] } = myRes.ok ? await myRes.json() : { contracts: [] };
+
+                const box = document.getElementById('activationBox');
+                const active = contracts.find(c => c.status === 'active');
+                const pending = contracts.find(c => c.status === 'pending');
+
+                if (active) {
+                    box.innerHTML = `
+                       <div class="bg-green-50 border border-green-200 rounded-lg p-3 text-sm text-green-800">
+    ℹ️ You already have an active contract.
+</div>
+                    `;
+                } else if (pending) {
+                    box.innerHTML = `
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-sm text-yellow-800 space-y-3">
+                            <p>⏳ Contract pending. Complete payment and send proof.</p>
+                            <button onclick="goToPayment()"
+                                class="w-full bg-accent text-black py-2 rounded-lg font-medium">
+                                Proceed to Payment
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    box.innerHTML = `
+                        <button onclick="requestContract()"
+                            class="w-full bg-accent text-black py-2 rounded-lg font-medium">
+                            Activate Contract
+                        </button>
+                    `;
+                }
+
+            } catch {
+                localStorage.clear();
+                location.href = '../auth/login.html';
+            }
+        }
+
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement(
+                { pageLanguage: 'en', includedLanguages: 'en,pt,de,fr,es,da', autoDisplay: false },
+                'google_translate_element'
+            );
+        }
+
+        function setLang(lang) {
+            if (!lang) return;
+            const val = lang === 'en' ? '' : `/en/${lang}`;
+            document.cookie = `googtrans=${val};path=/;`;
+            document.cookie = `googtrans=${val};path=/;domain=${location.hostname}`;
+            location.reload();
+        }
+
+        langSelect?.addEventListener('change', e => setLang(e.target.value));
+        langSelectMobile?.addEventListener('change', e => setLang(e.target.value));
+
+        loadPage();
+    </script>
+
+</body>
+
+</html>
