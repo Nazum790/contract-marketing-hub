@@ -1,11 +1,11 @@
+// ✅ LOAD ENV FIRST — THIS MUST BE LINE 1
+require('dotenv').config();
+
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
 const app = require('./app');
 
 // 👉 import cron job
 const startContractCompletionCron = require('./src/cron/contractCompletion.cron');
-
-dotenv.config();
 
 const PORT = process.env.PORT || 5000;
 
