@@ -4,6 +4,8 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const app = require('./app');
 
+console.log('MONGO_URI value:', process.env.MONGO_URI);
+
 // 👉 import cron job
 const startContractCompletionCron = require('./src/cron/contractCompletion.cron');
 
