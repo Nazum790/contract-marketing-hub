@@ -213,6 +213,10 @@
     <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     <script>
+        const API_BASE_URL = window.location.origin;
+    </script>
+
+    <script>
         const token = localStorage.getItem('token');
         if (!token) location.href = '../auth/login.html';
 
@@ -258,7 +262,9 @@
 
         // DASHBOARD LOAD
         async function loadDashboard() {
-            const userRes = await fetch('http://localhost:5000/api/users/me', { headers: authHeaders });
+            const userRes = await fetch(`${API_BASE_URL}/api/users/me`, {
+                headers: authHeaders
+            });
             const { user } = await userRes.json();
 
             userName.textContent = user.name;
@@ -274,7 +280,9 @@
             userBalance.dataset.visible = 'true';
             accountStatus.textContent = user.emailVerified ? 'Verified' : 'Verification pending';
 
-            const contractsRes = await fetch('http://localhost:5000/api/contracts/my', { headers: authHeaders });
+            const contractsRes = await fetch(`${API_BASE_URL}/api/contracts/my`, {
+                headers: authHeaders
+            });
             const { contracts = [] } = await contractsRes.json();
 
             const activeContract = contracts.find(c => c.status === 'active');

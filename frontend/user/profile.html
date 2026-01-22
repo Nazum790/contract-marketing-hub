@@ -171,6 +171,10 @@
     <div id="google_translate_element" style="display:none"></div>
     <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
+    <script>
+        const API_BASE_URL = window.location.origin;
+    </script>
+
     <!-- LOGIC -->
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
@@ -195,7 +199,7 @@
 
         async function loadProfile() {
             try {
-                const res = await fetch('http://localhost:5000/api/users/me', {
+                const res = await fetch(`${API_BASE_URL}/api/users/me`, {
                     headers: { Authorization: 'Bearer ' + token }
                 });
 
@@ -229,7 +233,7 @@
 
             try {
                 const res = await fetch(
-                    'http://localhost:5000/api/users/request-verification',
+                    `${API_BASE_URL}/api/users/request-verification`,
                     {
                         method: 'POST',
                         headers: { Authorization: 'Bearer ' + token }

@@ -153,6 +153,10 @@
     <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     <script>
+        const API_BASE_URL = window.location.origin;
+    </script>
+
+    <script>
         document.getElementById('year').textContent = new Date().getFullYear();
 
         const token = localStorage.getItem('token');
@@ -170,7 +174,7 @@
 
         async function requestContract() {
             try {
-                const res = await fetch('http://localhost:5000/api/contracts/request', {
+                const res = await fetch(`${API_BASE_URL}/api/contracts/request`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -190,14 +194,14 @@
 
         async function loadPage() {
             try {
-                const userRes = await fetch('http://localhost:5000/api/users/me', { headers });
+                const userRes = await fetch(`${API_BASE_URL}/api/users/me`, { headers });
                 const { user } = await userRes.json();
 
                 currencySymbol.textContent = user.currencySymbol || '';
                 currencySymbolRoi.textContent = user.currencySymbol || '';
 
                 const res = await fetch(
-                    `http://localhost:5000/api/contracts/${contractPlanId}`,
+                    `${API_BASE_URL}/api/contracts/${contractPlanId}`,
                     { headers }
                 );
 
@@ -217,7 +221,7 @@
                     `(${entry.toLocaleString()} × ${contract.multiplier}) − ${contract.platformFeePercent}%`;
 
                 // 🔑 ACTIVATION LOGIC (MISSING PART)
-                const myRes = await fetch('http://localhost:5000/api/contracts/my', { headers });
+                const myRes = await fetch(`${API_BASE_URL}/api/contracts/my`, { headers });
                 const { contracts = [] } = myRes.ok ? await myRes.json() : { contracts: [] };
 
                 const box = document.getElementById('activationBox');

@@ -121,6 +121,10 @@
     <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     <script>
+        const API_BASE_URL = window.location.origin;
+    </script>
+
+    <script>
         /* PASSWORD TOGGLE */
         const passwordInput = document.getElementById('password');
         document.getElementById('togglePassword').onclick = () => {
@@ -141,7 +145,7 @@
             loginBtn.textContent = 'Signing in...';
 
             try {
-                const res = await fetch('http://localhost:5000/api/auth/login', {
+                const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
