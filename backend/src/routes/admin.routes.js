@@ -4,12 +4,43 @@ const router = express.Router();
 const authMiddleware = require('../middleware/auth.middleware');
 const adminMiddleware = require('../middleware/admin.middleware');
 
-// 🔐 Protect admin dashboard-only routes
+const User = require('../models/User');
+const Contract = require('../models/Contract');
+const Withdrawal = require('../models/Withdrawal');
+
+// 🔐 Protect all admin routes
 router.use(authMiddleware, adminMiddleware);
 
-// Optional: simple test route (safe)
-router.get('/stats', (req, res) => {
-    res.json({ message: 'Admin routes working' });
+/**
+ * 📊 ADMIN DASHBOARD STATS
+ */
+router.get('/stats', async (req, res) => {
+    try {
+        const totalUsers = await User.countDocuments();
+
+        const totalContracts = await Contract.countDocuments();
+
+        const pendingWithdrawals = await Withdrawal.countDocuments({
+            status: 'pending'
+        });
+
+        const approvedWithdrawals = await Withdrawal.countDocuments({
+            status: 'approved',
+            paid: false
+        });
+
+        res.json({
+            totalUsers,
+            totalContracts,
+            pendingWithdrawals,
+            approvedWithdrawals
+        });
+
+    } catch (err) {
+        res.status(500).json({
+            message: 'Failed to load admin stats'
+        });
+    }
 });
 
 module.exports = router;

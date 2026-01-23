@@ -181,6 +181,27 @@
             localStorage.clear();
             location.href = '/auth/login.html';
         }
+        async function loadAdminStats() {
+            try {
+                const res = await fetch('/api/admin/stats', {
+                    headers: {
+                        Authorization: 'Bearer ' + token
+                    }
+                });
+
+                const data = await res.json();
+
+                totalUsers.textContent = data.totalUsers ?? '0';
+                totalContracts.textContent = data.totalContracts ?? '0';
+                pendingWithdrawals.textContent = data.pendingWithdrawals ?? '0';
+                approvedWithdrawals.textContent = data.approvedWithdrawals ?? '0';
+
+            } catch (err) {
+                console.error('Failed to load admin stats');
+            }
+        }
+
+        loadAdminStats();
 
         const menuBtn = document.getElementById('menuBtn');
         const closeMenu = document.getElementById('closeMenu');
