@@ -1,4 +1,4 @@
-// ✅ LOAD ENV FIRST
+// ✅ LOAD ENV FIRST — MUST BE FIRST LINE
 require('dotenv').config();
 
 const mongoose = require('mongoose');
@@ -9,18 +9,18 @@ const startContractCompletionCron = require('./src/cron/contractCompletion.cron'
 
 const PORT = process.env.PORT || 5000;
 
-// ✅ START SERVER IMMEDIATELY (IMPORTANT FOR RENDER)
+// ✅ START SERVER IMMEDIATELY (DO NOT WAIT FOR MONGO)
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
 
-// ✅ CONNECT TO MONGO SEPARATELY
+// ✅ CONNECT TO MONGO IN BACKGROUND
 mongoose
     .connect(process.env.MONGO_URI)
     .then(() => {
         console.log('MongoDB connected');
 
-        // 👉 start cron jobs AFTER DB is ready
+        // 👉 start cron jobs ONLY after DB is ready
         startContractCompletionCron();
     })
     .catch((err) => {
