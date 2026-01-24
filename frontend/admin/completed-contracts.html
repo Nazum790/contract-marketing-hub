@@ -30,7 +30,7 @@
     </style>
 </head>
 
-<body class="min-h-screen bg-gradient-to-b from-darkbg to-primary text-gray-100">
+<body class="min-h-screen flex flex-col bg-gradient-to-b from-darkbg to-primary text-gray-100">
 
     <!-- HEADER -->
     <header class="sticky top-0 z-50 bg-darkbg/90 backdrop-blur border-b border-white/10">
@@ -41,7 +41,7 @@
     </header>
 
     <!-- MAIN -->
-    <main class="max-w-7xl mx-auto px-4 py-8">
+    <main class="max-w-7xl mx-auto px-4 py-8 pb-16">
         <div class="bg-white text-gray-800 rounded-xl shadow p-6">
             <h2 class="text-xl font-semibold mb-4">Completed Contracts</h2>
 
@@ -78,6 +78,10 @@
         © <span id="year"></span> Contract Marketing Hub
     </footer>
 
+    <script>
+        const API_BASE_URL = window.location.origin;
+    </script>
+
     <!-- LOGIC -->
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
@@ -106,7 +110,7 @@
         async function loadCompletedContracts() {
             try {
                 const res = await fetch(
-                    'http://localhost:5000/api/admin/contracts/completed',
+                    `${API_BASE_URL}/api/admin/contracts/completed`,
                     {
                         headers: {
                             Authorization: 'Bearer ' + token
@@ -187,7 +191,7 @@
 
             try {
                 const res = await fetch(
-                    `http://localhost:5000/api/admin/contracts/${id}/credit`,
+                    `${API_BASE_URL}/api/admin/contracts/${id}/credit`,
                     {
                         method: 'POST',
                         headers: {
