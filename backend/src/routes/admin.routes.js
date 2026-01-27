@@ -7,7 +7,7 @@ const adminMiddleware = require('../middleware/admin.middleware');
 const {
     updateUserFinancials,
     getAllUsers
-} = require('../controllers/admin.controller');
+} = require('../controllers/admin.user.controller');
 
 const User = require('../models/User');
 const UserContract = require('../models/UserContract');
