@@ -106,6 +106,18 @@ const userSchema = new mongoose.Schema(
             default: 0,
             min: 0,
         },
+
+        entryCost: {
+            type: Number,
+            default: 0,
+            min: 0,
+        },
+
+        expectedEarnings: {
+            type: Number,
+            default: 0,
+            min: 0,
+        },
     },
     {
         timestamps: true,
