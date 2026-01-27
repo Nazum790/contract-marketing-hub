@@ -307,7 +307,22 @@
             currencySymbolEntry.textContent = user.currencySymbol || '';
             currencySymbolEarnings.textContent = user.currencySymbol || '';
 
-            if (activeContract) {
+            const manualEntryCost = Number(user.entryCost || 0);
+            const manualExpectedEarnings = Number(user.expectedEarnings || 0);
+
+            if (manualEntryCost > 0 && manualExpectedEarnings > 0) {
+                // ✅ ADMIN MANUAL VALUES
+                entryCost.textContent = manualEntryCost.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+
+                expectedEarnings.textContent = manualExpectedEarnings.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+            } else if (activeContract) {
+                // 🔁 CONTRACT FALLBACK
                 entryCost.textContent = Number(activeContract.entryAmount || 0).toLocaleString(undefined, {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2

@@ -19,6 +19,8 @@ exports.getMe = async (req, res) => {
             currency
             currencySymbol
             balance
+            entryCost
+            expectedEarnings
             createdAt
             `
         );
