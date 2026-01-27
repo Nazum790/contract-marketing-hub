@@ -11,6 +11,7 @@ exports.getMe = async (req, res) => {
             `
             name
             email
+            phone
             role
             emailVerified
             verificationRequested
