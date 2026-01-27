@@ -20,6 +20,16 @@ const userSchema = new mongoose.Schema(
         },
 
         // =====================
+        // CONTACT INFO
+        // =====================
+        phone: {
+            type: String,
+            unique: true,
+            sparse: true, // ✅ allows old users without phone
+            trim: true,
+        },
+
+        // =====================
         // AUTH & SECURITY
         // =====================
         password: {

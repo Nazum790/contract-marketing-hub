@@ -117,10 +117,16 @@
 
                     div.innerHTML = `
                         <p><strong>User:</strong> ${w.user.name}</p>
-                        <p><strong>Email:</strong> ${w.user.email}</p>
-                        <p><strong>Amount:</strong> ${symbol}${Number(w.amount).toLocaleString()}</p>
-                        <p><strong>Method:</strong> ${w.method}</p>
 
+<p>
+    <strong>Email:</strong> ${w.user.email}<br>
+    <span class="text-xs text-gray-500">
+        Phone: ${w.user.phone || '—'}
+    </span>
+</p>
+
+<p><strong>Amount:</strong> ${symbol}${Number(w.amount).toLocaleString()}</p>
+<p><strong>Method:</strong> ${w.method}</p>
                         <pre class="text-xs bg-gray-100 p-2 rounded mt-3 overflow-x-auto">
 ${JSON.stringify(w.methodDetails, null, 2)}
                         </pre>

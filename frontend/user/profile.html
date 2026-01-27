@@ -136,6 +136,11 @@
                     <p class="text-gray-500">Account Currency</p>
                     <p class="font-medium" id="profileCurrency">—</p>
                 </div>
+
+                <div>
+                    <p class="text-gray-500">Phone Number</p>
+                    <p class="font-medium" id="profilePhone">—</p>
+                </div>
             </div>
 
             <div class="border-t pt-4">
@@ -210,6 +215,7 @@
                 profileCountry.textContent = user.country || '—';
                 profileCurrency.textContent =
                     `${user.currency || ''} (${user.currencySymbol || ''})`;
+                profilePhone.textContent = user.phone || '—';
 
                 if (user.emailVerified) {
                     verificationStatus.textContent = 'Verified';

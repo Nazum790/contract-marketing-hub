@@ -9,7 +9,7 @@ const Transaction = require('../models/Transaction');
  */
 exports.getPendingWithdrawals = async (req, res) => {
     const withdrawals = await Withdrawal.find({ status: 'pending' })
-        .populate('user', 'name email balance currencySymbol')
+        .populate('user', 'name email phone balance currencySymbol')
         .sort({ createdAt: -1 });
 
     res.json({

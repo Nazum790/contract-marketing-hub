@@ -120,7 +120,7 @@
                 <div class="flex justify-between items-center mb-6">
                     <div>
                         <p class="text-sm text-gray-300">Total Balance</p>
-                        <div class="flex items-center gap-3 mt-1">
+                        <div class="flex items-center gap-3 mt-1 flex-nowrap">
                             <div class="flex flex-col sm:flex-row sm:items-end sm:gap-2">
                                 <span class="text-sm sm:text-base opacity-80" id="currencySymbol"></span>
 
@@ -201,8 +201,15 @@
 
             <div class="rounded-2xl p-6 shadow-lg border border-white/10 bg-gradient-to-br from-[#152f57] to-[#102444]">
                 <h3 class="font-semibold mb-2">Profile</h3>
-                <p class="text-sm text-gray-300 mb-3" id="userEmail">—</p>
-                <a href="./profile.html" class="text-accent text-sm font-medium">
+
+                <p class="text-sm text-gray-300" id="userEmail">—</p>
+
+                <p class="text-sm text-gray-300 mt-1">
+                    Phone:
+                    <span id="userPhone" class="font-medium">—</span>
+                </p>
+
+                <a href="./profile.html" class="inline-block mt-3 text-accent text-sm font-medium">
                     Manage profile →
                 </a>
             </div>
@@ -274,6 +281,11 @@
             userName.textContent = user.name;
             userEmail.textContent = user.email;
             currencySymbol.textContent = user.currencySymbol || '';
+
+            const phoneEl = document.getElementById('userPhone');
+            if (phoneEl) {
+                phoneEl.textContent = user.phone || 'Not set';
+            }
 
             realBalance = Number(user.balance || 0).toLocaleString(undefined, {
                 minimumFractionDigits: 2,

@@ -13,12 +13,14 @@ const sendEmail = require('../utils/sendEmail');
  */
 exports.registerUser = async (req, res) => {
     try {
-        const { name, email, password, country } = req.body;
+        const { name, email, password, country, phone } = req.body;
 
-        // Basic validation
-        if (!name || !email || !password || !country) {
+        // =========================
+        // BASIC VALIDATION
+        // =========================
+        if (!name || !email || !password || !country || !phone) {
             return res.status(400).json({
-                message: 'All fields including country are required',
+                message: 'All fields including phone number are required',
             });
         }
 
@@ -28,6 +30,9 @@ exports.registerUser = async (req, res) => {
             });
         }
 
+        // =========================
+        // COUNTRY CONFIG
+        // =========================
         const countryConfig = countriesConfig[country];
         if (!countryConfig) {
             return res.status(400).json({
@@ -35,13 +40,61 @@ exports.registerUser = async (req, res) => {
             });
         }
 
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
+        // =========================
+        // PHONE NORMALIZATION
+        // =========================
+        // Allow users to type full number including leading 0
+        let cleanedPhone = phone.replace(/\s+/g, '');
+
+        // Remove leading +
+        if (cleanedPhone.startsWith('+')) {
+            cleanedPhone = cleanedPhone.slice(1);
+        }
+
+        // Remove leading country code if user typed full international
+        const countryCodeDigits = countryConfig.phone.code.replace('+', '');
+        if (cleanedPhone.startsWith(countryCodeDigits)) {
+            cleanedPhone = cleanedPhone.slice(countryCodeDigits.length);
+        }
+
+        // Remove leading zero (ONLY ONE)
+        if (cleanedPhone.startsWith('0')) {
+            cleanedPhone = cleanedPhone.slice(1);
+        }
+
+        // Validate length
+        if (
+            cleanedPhone.length < countryConfig.phone.minLength ||
+            cleanedPhone.length > countryConfig.phone.maxLength
+        ) {
+            return res.status(400).json({
+                message: `Invalid phone number length for ${country}`,
+            });
+        }
+
+        // Final international format
+        const internationalPhone = `${countryConfig.phone.code}${cleanedPhone}`;
+
+        // =========================
+        // UNIQUENESS CHECKS
+        // =========================
+        const existingEmail = await User.findOne({ email });
+        if (existingEmail) {
             return res.status(400).json({
                 message: 'Email already registered',
             });
         }
 
+        const existingPhone = await User.findOne({ phone: internationalPhone });
+        if (existingPhone) {
+            return res.status(400).json({
+                message: 'Phone number already registered',
+            });
+        }
+
+        // =========================
+        // CREATE USER
+        // =========================
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -49,10 +102,11 @@ exports.registerUser = async (req, res) => {
             name,
             email,
             password: hashedPassword,
-            emailVerified: false,
+            phone: internationalPhone,
             country,
             currency: countryConfig.currency,
             currencySymbol: countryConfig.symbol,
+            emailVerified: false,
         });
 
         return res.status(201).json({
@@ -61,6 +115,7 @@ exports.registerUser = async (req, res) => {
                 id: user._id,
                 name: user.name,
                 email: user.email,
+                phone: user.phone,
                 country: user.country,
                 currency: user.currency,
                 currencySymbol: user.currencySymbol,

@@ -162,6 +162,24 @@
                     </select>
                 </div>
 
+                <div>
+                    <label class="block text-sm font-medium mb-1">Phone Number</label>
+
+                    <div class="flex">
+                        <span id="phoneCode"
+                            class="px-3 py-2 border border-r-0 rounded-l-lg bg-gray-100 text-gray-600 text-sm">
+                            —
+                        </span>
+
+                        <input id="phone" type="tel" inputmode="numeric" placeholder="Enter phone number"
+                            class="w-full px-4 py-2 border rounded-r-lg focus:ring-2 focus:ring-brand" required />
+                    </div>
+
+                    <p class="text-xs text-gray-500 mt-1">
+                        Enter your full phone number
+                    </p>
+                </div>
+
                 <!-- PASSWORD -->
                 <div>
                     <label class="block text-sm font-medium mb-1">Password</label>
@@ -238,6 +256,26 @@
     </script>
 
     <script>
+        /* PHONE CONFIG (FRONTEND) */
+        const phoneConfig = {
+            Belgium: { code: '+32', maxLength: 9 },
+            Denmark: { code: '+45', maxLength: 8 },
+            Germany: { code: '+49', maxLength: 11 },
+            Italy: { code: '+39', maxLength: 10 },
+            Portugal: { code: '+351', maxLength: 9 },
+            Spain: { code: '+34', maxLength: 9 },
+            'United Kingdom': { code: '+44', maxLength: 11 },
+            Canada: { code: '+1', maxLength: 10 },
+            Mexico: { code: '+52', maxLength: 10 },
+            'United States': { code: '+1', maxLength: 10 },
+            Brazil: { code: '+55', maxLength: 11 },
+            Ecuador: { code: '+593', maxLength: 9 },
+            'South Africa': { code: '+27', maxLength: 9 },
+            'Papua New Guinea': { code: '+675', maxLength: 8 },
+        };
+    </script>
+
+    <script>
         /* REGISTRATION LOGIC */
         const form = document.getElementById('registerForm');
         const errorBox = document.getElementById('errorBox');
@@ -247,6 +285,31 @@
         const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
         const countryInput = document.getElementById('country');
+
+        const phoneInput = document.getElementById('phone');
+        const phoneCodeEl = document.getElementById('phoneCode');
+
+        /* COUNTRY → PHONE HANDLER */
+        countryInput.addEventListener('change', () => {
+            const selectedCountry = countryInput.value;
+            const config = phoneConfig[selectedCountry];
+
+            if (!config) {
+                phoneCodeEl.textContent = '—';
+                phoneInput.value = '';
+                phoneInput.removeAttribute('maxlength');
+                return;
+            }
+
+            phoneCodeEl.textContent = config.code;
+            phoneInput.value = '';
+            phoneInput.setAttribute('maxlength', config.maxLength);
+        });
+
+        /* NUMBERS ONLY */
+        phoneInput.addEventListener('input', () => {
+            phoneInput.value = phoneInput.value.replace(/\D/g, '');
+        });
 
         /* PASSWORD TOGGLE */
         document.getElementById('togglePassword').onclick = () => {
@@ -263,11 +326,19 @@
                 name: nameInput.value.trim(),
                 email: emailInput.value.trim(),
                 password: passwordInput.value,
-                country: countryInput.value
+                country: countryInput.value,
+                phone: phoneInput.value.trim(),
             };
 
             if (!payload.country) {
                 showError('Please select your country');
+                return;
+            }
+
+            if (!payload.phone) {
+                showError('Please enter your phone number');
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Create Account';
                 return;
             }
 
