@@ -177,11 +177,11 @@
         document.getElementById('year').textContent = new Date().getFullYear();
 
         const token = localStorage.getItem('token');
-        const user = JSON.parse(localStorage.getItem('user') || '{}');
 
-        if (!token || user.role !== 'admin') {
+
+        if (!token) {
             localStorage.clear();
-            location.href = '/auth/login.html';
+            window.location.href = '../auth/login.html';
         }
         async function loadAdminStats() {
             try {
