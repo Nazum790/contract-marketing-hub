@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0B2C5F" />
-    <title>Admin Dashboard | Contract Marketing Hub</title>
+    <title>Admin · Users</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -32,206 +32,198 @@
 
 <body class="min-h-screen flex flex-col bg-gradient-to-b from-darkbg to-primary text-gray-100">
 
-    <!-- ================= NAVBAR ================= -->
-    <header class="fixed top-0 left-0 w-full z-50 bg-darkbg shadow-md">
-        <div class="max-w-7xl mx-auto px-4 py-4">
-            <div class="flex items-center justify-between">
-                <h1 class="font-bold text-lg">Admin Dashboard</h1>
-
-                <!-- DESKTOP NAV -->
-                <nav class="hidden md:flex items-center gap-6 text-sm">
-                    <a href="dashboard.html" class="text-accent">Dashboard</a>
-                    <a href="contracts-pending.html">Pending Contracts</a>
-                    <a href="active-contracts.html">Active Contracts</a>
-                    <a href="completed-contracts.html">Completed Contracts</a>
-                    <a href="email-verification.html">Email Verifications</a>
-                    <a href="withdrawal.html">Withdrawals</a>
-                    <a href="payment-settings.html">Payment Settings</a>
-                    <button id="logoutBtnDesktop" class="text-red-400 ml-4">Logout</button>
-                </nav>
-
-                <!-- MOBILE MENU BUTTON -->
-                <button id="menuBtn" class="md:hidden flex flex-col gap-1.5">
-                    <span class="w-6 h-0.5 bg-accent"></span>
-                    <span class="w-6 h-0.5 bg-accent"></span>
-                    <span class="w-6 h-0.5 bg-accent"></span>
-                </button>
-            </div>
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-darkbg/90 backdrop-blur border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <h1 class="font-bold text-lg">Admin · Users</h1>
+            <a href="/admin/dashboard.html" class="text-sm text-accent">← Back to Dashboard</a>
         </div>
     </header>
 
-    <!-- MOBILE MENU OVERLAY -->
-    <div id="menuOverlay" class="fixed inset-0 bg-black/50 hidden z-40"></div>
+    <!-- MAIN -->
+    <main class="flex-1 max-w-7xl mx-auto px-4 py-10 w-full">
 
-    <!-- MOBILE MENU PANEL -->
-    <div id="mobileMenu" class="fixed top-0 right-0 h-full w-72 bg-darkbg text-white
-        translate-x-full transition-transform duration-300 z-50">
-
-        <div class="p-6 space-y-6 text-sm">
-            <button id="closeMenu" class="text-right w-full text-xl text-accent font-bold">
-                ✕
-            </button>
-
-            <a href="dashboard.html" class="block text-accent">Dashboard</a>
-            <a href="contracts-pending.html" class="block">Pending Contracts</a>
-            <a href="active-contracts.html" class="block">Active Contracts</a>
-            <a href="completed-contracts.html" class="block">Completed Contracts</a>
-            <a href="email-verification.html" class="block">Email Verifications</a>
-            <a href="withdrawal.html" class="block">Withdrawals</a>
-            <a href="payment-settings.html" class="block">Payment Settings</a>
-
-            <button id="logoutBtnMobile" class="block mt-6 px-4 py-3 bg-red-500/10 text-red-400 rounded-lg text-left">
-                Logout
-            </button>
+        <!-- SEARCH -->
+        <div class="mb-4">
+            <input id="searchInput" type="text" placeholder="Search by name, email, phone…"
+                class="w-full md:w-1/2 px-4 py-2 rounded-lg text-gray-800 outline-none" />
         </div>
-    </div>
 
-    <!-- ================= MAIN ================= -->
-    <main class="flex-1 max-w-7xl mx-auto px-4 pt-28 pb-8 w-full">
+        <!-- MESSAGE -->
+        <div id="messageBox" class="hidden mb-4 p-3 rounded text-sm"></div>
 
-        <section class="mb-6">
-            <h2 class="text-2xl font-semibold">Overview</h2>
-            <p class="text-sm text-gray-300">Administrative summary and controls</p>
-        </section>
-
-        <!-- STATS -->
-        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
-            <div class="bg-white text-gray-800 rounded-xl p-5 shadow">
-                <p class="text-sm text-gray-500">Total Users</p>
-                <p id="totalUsers" class="text-2xl font-bold">—</p>
-            </div>
-
-            <div class="bg-white text-gray-800 rounded-xl p-5 shadow">
-                <p class="text-sm text-gray-500">Total Contracts</p>
-                <p id="totalContracts" class="text-2xl font-bold">—</p>
-            </div>
-
-            <div class="bg-white text-gray-800 rounded-xl p-5 shadow">
-                <p class="text-sm text-gray-500">Pending Withdrawals</p>
-                <p id="pendingWithdrawals" class="text-2xl font-bold text-yellow-600">—</p>
-            </div>
-
-            <div class="bg-white text-gray-800 rounded-xl p-5 shadow">
-                <p class="text-sm text-gray-500">Approved (Unpaid)</p>
-                <p id="approvedWithdrawals" class="text-2xl font-bold text-primary">—</p>
-            </div>
-        </section>
-
-        <!-- QUICK ACTIONS -->
-        <section class="grid grid-cols-1 md:grid-cols-4 gap-6">
-
-            <div class="bg-white text-gray-800 rounded-xl p-6 shadow">
-                <h3 class="font-semibold mb-2">Pending Contracts</h3>
-                <p class="text-sm text-gray-600 mb-4">
-                    Review payments and approve or reject contracts.
-                </p>
-                <a href="contracts-pending.html"
-                    class="inline-block px-4 py-2 bg-primary text-white rounded-lg text-sm">
-                    Review →
-                </a>
-            </div>
-
-            <div class="bg-white text-gray-800 rounded-xl p-6 shadow">
-                <h3 class="font-semibold mb-2">Active Contracts</h3>
-                <p class="text-sm text-gray-600 mb-4">
-                    View running contracts.
-                </p>
-                <a href="active-contracts.html" class="inline-block px-4 py-2 bg-primary text-white rounded-lg text-sm">
-                    View →
-                </a>
-            </div>
-
-            <div class="bg-white text-gray-800 rounded-xl p-6 shadow">
-                <h3 class="font-semibold mb-2">Completed Contracts</h3>
-                <p class="text-sm text-gray-600 mb-4">
-                    View finished and credited contracts.
-                </p>
-                <a href="completed-contracts.html"
-                    class="inline-block px-4 py-2 bg-primary text-white rounded-lg text-sm">
-                    View →
-                </a>
-            </div>
-
-            <div class="bg-white text-gray-800 rounded-xl p-6 shadow">
-                <h3 class="font-semibold mb-2">Withdrawals</h3>
-                <p class="text-sm text-gray-600 mb-4">
-                    Review and manage withdrawals.
-                </p>
-                <a href="withdrawal.html" class="inline-block px-4 py-2 bg-primary text-white rounded-lg text-sm">
-                    Manage →
-                </a>
-            </div>
-
-        </section>
+        <!-- USERS TABLE -->
+        <div class="bg-white text-gray-800 rounded-xl shadow overflow-x-auto">
+            <table class="w-full text-sm border">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="p-2 border">Name</th>
+                        <th class="p-2 border">Email</th>
+                        <th class="p-2 border">Phone</th>
+                        <th class="p-2 border">Balance</th>
+                        <th class="p-2 border">Entry Cost</th>
+                        <th class="p-2 border">Expected Earnings</th>
+                        <th class="p-2 border">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="usersBody">
+                    <tr>
+                        <td colspan="7" class="p-4 text-center text-gray-500">
+                            Loading users…
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </main>
 
-    <!-- ================= FOOTER ================= -->
+    <!-- FOOTER -->
     <footer class="border-t border-white/10 text-center py-4 text-sm text-gray-300">
         © <span id="year"></span> Contract Marketing Hub
     </footer>
 
     <script>
         const API_BASE_URL = window.location.origin;
-    </script>
 
-    <!-- ================= LOGIC ================= -->
-    <script>
         document.getElementById('year').textContent = new Date().getFullYear();
 
         const token = localStorage.getItem('token');
         if (!token) {
             localStorage.clear();
-            window.location.href = '../auth/login.html';
+            location.href = '/auth/login.html';
         }
-        async function loadAdminStats() {
+
+        const usersBody = document.getElementById('usersBody');
+        const messageBox = document.getElementById('messageBox');
+        const searchInput = document.getElementById('searchInput');
+
+        let allUsers = [];
+
+        function showMessage(text, type = 'success') {
+            messageBox.textContent = text;
+            messageBox.className = 'mb-4 p-3 rounded text-sm';
+            messageBox.classList.remove('hidden');
+
+            if (type === 'success') {
+                messageBox.classList.add('bg-green-100', 'text-green-700');
+            } else {
+                messageBox.classList.add('bg-red-100', 'text-red-700');
+            }
+        }
+
+        function renderUsers(users) {
+            usersBody.innerHTML = '';
+
+            if (!users.length) {
+                usersBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="p-4 text-center text-gray-500">
+                            No users found
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            users.forEach(u => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="p-2 border">${u.name || '—'}</td>
+                    <td class="p-2 border">${u.email || '—'}</td>
+                    <td class="p-2 border">${u.phone || '—'}</td>
+
+                    <td class="p-2 border">
+                        <input type="number" class="w-24 border px-2 py-1 rounded"
+                            value="${u.balance ?? 0}" id="bal-${u._id}">
+                    </td>
+
+                    <td class="p-2 border">
+                        <input type="number" class="w-24 border px-2 py-1 rounded"
+                            value="${u.entryCost ?? 0}" id="entry-${u._id}">
+                    </td>
+
+                    <td class="p-2 border">
+                        <input type="number" class="w-24 border px-2 py-1 rounded"
+                            value="${u.expectedEarnings ?? 0}" id="earn-${u._id}">
+                    </td>
+
+                    <td class="p-2 border">
+                        <button
+                            onclick="saveUser('${u._id}')"
+                            class="bg-primary text-white px-3 py-1 rounded text-xs">
+                            Save
+                        </button>
+                    </td>
+                `;
+                usersBody.appendChild(tr);
+            });
+        }
+
+        async function loadUsers() {
             try {
-                const res = await fetch(`${API_BASE_URL}/api/admin/stats`, {
+                const res = await fetch(`${API_BASE_URL}/api/admin/users`, {
                     headers: {
                         Authorization: 'Bearer ' + token
                     }
                 });
 
+                if (!res.ok) throw new Error();
+
                 const data = await res.json();
+                allUsers = data.users || [];
+                renderUsers(allUsers);
 
-                totalUsers.textContent = data.totalUsers ?? '0';
-                totalContracts.textContent = data.totalContracts ?? '0';
-                pendingWithdrawals.textContent = data.pendingWithdrawals ?? '0';
-                approvedWithdrawals.textContent = data.approvedWithdrawals ?? '0';
-
-            } catch (err) {
-                console.error('Failed to load admin stats');
+            } catch {
+                usersBody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="p-4 text-center text-red-500">
+                            Failed to load users
+                        </td>
+                    </tr>
+                `;
             }
         }
 
-        loadAdminStats();
+        async function saveUser(id) {
+            try {
+                const body = {
+                    balance: document.getElementById(`bal-${id}`).value,
+                    entryCost: document.getElementById(`entry-${id}`).value,
+                    expectedEarnings: document.getElementById(`earn-${id}`).value
+                };
 
-        const menuBtn = document.getElementById('menuBtn');
-        const closeMenu = document.getElementById('closeMenu');
-        const mobileMenu = document.getElementById('mobileMenu');
-        const menuOverlay = document.getElementById('menuOverlay');
+                const res = await fetch(
+                    `${API_BASE_URL}/api/admin/users/${id}/financials`,
+                    {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: 'Bearer ' + token
+                        },
+                        body: JSON.stringify(body)
+                    }
+                );
 
-        menuBtn.onclick = () => {
-            mobileMenu.classList.remove('translate-x-full');
-            menuOverlay.classList.remove('hidden');
-            document.body.style.overflow = 'hidden';
-        };
+                if (!res.ok) throw new Error();
 
-        function closeMobileMenu() {
-            mobileMenu.classList.add('translate-x-full');
-            menuOverlay.classList.add('hidden');
-            document.body.style.overflow = '';
+                showMessage('User financials updated successfully');
+
+            } catch {
+                showMessage('Failed to update user', 'error');
+            }
         }
 
-        closeMenu.onclick = closeMobileMenu;
-        menuOverlay.onclick = closeMobileMenu;
+        searchInput.addEventListener('input', e => {
+            const q = e.target.value.toLowerCase();
+            const filtered = allUsers.filter(u =>
+                (u.name || '').toLowerCase().includes(q) ||
+                (u.email || '').toLowerCase().includes(q) ||
+                (u.phone || '').toLowerCase().includes(q)
+            );
+            renderUsers(filtered);
+        });
 
-        const logout = () => {
-            localStorage.clear();
-            location.href = '/auth/login.html';
-        };
-
-        document.getElementById('logoutBtnDesktop').onclick = logout;
-        document.getElementById('logoutBtnMobile').onclick = logout;
+        loadUsers();
     </script>
 
 </body>
