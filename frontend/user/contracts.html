@@ -49,7 +49,6 @@
         <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
             <h1 class="font-bold text-lg">Contract Marketing Hub</h1>
 
-            <!-- DESKTOP NAV -->
             <nav class="hidden md:flex gap-6 text-sm items-center">
                 <a href="./dashboard.html">Dashboard</a>
                 <a href="./contracts.html" class="text-accent">Contracts</a>
@@ -67,11 +66,9 @@
                 </select>
             </nav>
 
-            <!-- MOBILE TOGGLE -->
             <button id="menuBtn" class="md:hidden text-2xl">☰</button>
         </div>
 
-        <!-- MOBILE TRANSLATOR -->
         <div class="md:hidden px-4 pb-3">
             <select id="langSelectMobile"
                 class="bg-darkbg border border-white/20 text-sm rounded px-3 py-2 w-full max-w-[200px]">
@@ -86,27 +83,25 @@
         </div>
     </header>
 
-    <!-- ================= MOBILE MENU (MATCHES DASHBOARD) ================= -->
+    <!-- MOBILE MENU -->
     <div id="mobileMenu" class="fixed top-0 right-0 h-full w-72 bg-darkbg/95 backdrop-blur
         translate-x-full transition-transform duration-300
         md:hidden border-l border-white/10 z-50">
 
         <div class="p-6 space-y-6 text-sm">
-
             <div class="flex justify-end">
                 <button id="closeMenu" class="text-xl text-gray-300">✕</button>
             </div>
 
-            <a href="./dashboard.html" class="block">Dashboard</a>
-            <a href="./contracts.html" class="block text-accent">Contracts</a>
-            <a href="./transactions.html" class="block">Transactions</a>
-            <a href="./profile.html" class="block">Profile</a>
+            <a href="./dashboard.html">Dashboard</a>
+            <a href="./contracts.html" class="text-accent">Contracts</a>
+            <a href="./transactions.html">Transactions</a>
+            <a href="./profile.html">Profile</a>
         </div>
     </div>
 
     <!-- ================= MAIN ================= -->
     <main class="max-w-7xl mx-auto px-4 pt-28 pb-16">
-
         <section class="mb-8">
             <h2 class="text-2xl font-semibold">Available Contracts</h2>
             <p class="text-sm text-gray-300">
@@ -126,6 +121,7 @@
     <div id="google_translate_element" style="display:none"></div>
     <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
+    <!-- API BASE (KEPT WHERE IT WAS) -->
     <script>
         const API_BASE_URL = window.location.origin;
     </script>
@@ -137,12 +133,10 @@
 
         const authHeaders = { Authorization: 'Bearer ' + token };
 
-        // MENU ELEMENTS
         const menuBtn = document.getElementById('menuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
         const closeMenu = document.getElementById('closeMenu');
 
-        // MENU LOGIC (IDENTICAL TO DASHBOARD)
         menuBtn.addEventListener('click', () => {
             mobileMenu.classList.toggle('translate-x-full');
             document.body.classList.toggle('overflow-hidden');
@@ -153,7 +147,6 @@
             document.body.classList.remove('overflow-hidden');
         });
 
-        // GOOGLE TRANSLATE
         function googleTranslateElementInit() {
             new google.translate.TranslateElement(
                 { pageLanguage: 'en', includedLanguages: 'en,pt,de,fr,es,da', autoDisplay: false },
@@ -172,13 +165,20 @@
         langSelect?.addEventListener('change', e => setLang(e.target.value));
         langSelectMobile?.addEventListener('change', e => setLang(e.target.value));
 
-        // LOAD CONTRACTS
         async function loadContracts() {
+            // 1️⃣ get user (currency)
+            const userRes = await fetch(`${API_BASE_URL}/api/users/me`, {
+                headers: authHeaders
+            });
+            const { user } = await userRes.json();
+            const symbol = user.currencySymbol || '';
+
+            // 2️⃣ get contracts
             const res = await fetch(`${API_BASE_URL}/api/contracts`, {
                 headers: authHeaders
             });
-
             const { contracts = [] } = await res.json();
+
             const grid = document.getElementById('contractsGrid');
 
             grid.innerHTML = contracts.map(plan => {
@@ -192,10 +192,13 @@
                         <h3 class="font-semibold text-lg mb-1">${plan.name}</h3>
                         <p class="text-sm text-gray-300 mb-4">${plan.description}</p>
 
-                        <p><strong>Entry:</strong> €${plan.entryAmount.toLocaleString()}</p>
+                        <p><strong>Entry:</strong> ${symbol}${plan.entryAmount.toLocaleString()}</p>
                         <p><strong>Duration:</strong> ${plan.durationDays} days</p>
                         <p><strong>Expected ROI:</strong>
-                            €${roi.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            ${symbol}${roi.toLocaleString(undefined, {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                })}
                         </p>
 
                         <a href="./contract-details.html?id=${plan._id}"
@@ -211,6 +214,7 @@
         document.getElementById('year').textContent = new Date().getFullYear();
         loadContracts();
     </script>
+
 </body>
 
 </html>
