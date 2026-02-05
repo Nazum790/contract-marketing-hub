@@ -152,31 +152,29 @@ exports.updateUserFinancials = async (req, res) => {
  */
 exports.toggleAccountRestriction = async (req, res) => {
     try {
-        const userId = req.params.id;
-        const { restricted } = req.body; // true or false
-
-        const user = await User.findById(userId);
+        const user = await User.findById(req.params.id);
 
         if (!user) {
-            return res.status(404).json({
-                message: 'User not found',
-            });
+            return res.status(404).json({ message: 'User not found' });
         }
 
-        user.accountRestricted = Boolean(restricted);
+        // 🔁 TOGGLE VALUE
+        user.accountRestricted = !user.accountRestricted;
         await user.save();
 
         await Transaction.create({
             user: user._id,
-            type: 'account_restriction_update',
-            title: restricted ? 'Account Restricted' : 'Account Unrestricted',
-            description: restricted
+            type: 'account_restriction_toggle',
+            title: user.accountRestricted
+                ? 'Account Restricted'
+                : 'Account Unrestricted',
+            description: user.accountRestricted
                 ? 'Admin restricted this account'
                 : 'Admin lifted account restriction',
         });
 
         res.status(200).json({
-            message: restricted
+            message: user.accountRestricted
                 ? 'User account restricted successfully'
                 : 'User account unrestricted successfully',
             accountRestricted: user.accountRestricted,
