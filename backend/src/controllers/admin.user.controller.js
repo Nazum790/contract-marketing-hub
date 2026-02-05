@@ -79,6 +79,7 @@ exports.getAllUsers = async (req, res) => {
                 entryCost
                 expectedEarnings
                 emailVerified
+                accountRestricted
                 createdAt
             `)
             .sort({ createdAt: -1 });
