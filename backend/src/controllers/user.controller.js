@@ -21,6 +21,7 @@ exports.getMe = async (req, res) => {
             balance
             entryCost
             expectedEarnings
+            accountRestricted
             createdAt
             `
         );
