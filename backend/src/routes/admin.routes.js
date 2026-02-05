@@ -6,7 +6,8 @@ const adminMiddleware = require('../middleware/admin.middleware');
 
 const {
     updateUserFinancials,
-    getAllUsers
+    getAllUsers,
+    toggleAccountRestriction
 } = require('../controllers/admin.user.controller');
 
 const User = require('../models/User');
@@ -53,5 +54,10 @@ router.get('/users', getAllUsers);
  * UPDATE USER FINANCIALS (ADMIN)
  */
 router.put('/users/:id/financials', updateUserFinancials);
+
+/**
+ * TOGGLE USER ACCOUNT RESTRICTION (ADMIN)
+ */
+router.put('/users/:id/restrict', toggleAccountRestriction);
 
 module.exports = router;

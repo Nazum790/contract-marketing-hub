@@ -63,12 +63,13 @@
                         <th class="p-2 border">Balance</th>
                         <th class="p-2 border">Entry Cost</th>
                         <th class="p-2 border">Expected Earnings</th>
+                        <th class="p-2 border">Status</th>
                         <th class="p-2 border">Action</th>
                     </tr>
                 </thead>
                 <tbody id="usersBody">
                     <tr>
-                        <td colspan="7" class="p-4 text-center text-gray-500">
+                        <td colspan="8" class="p-4 text-center text-gray-500">
                             Loading users…
                         </td>
                     </tr>
@@ -84,7 +85,6 @@
 
     <script>
         const API_BASE_URL = window.location.origin;
-
         document.getElementById('year').textContent = new Date().getFullYear();
 
         const token = localStorage.getItem('token');
@@ -117,7 +117,7 @@
             if (!users.length) {
                 usersBody.innerHTML = `
                     <tr>
-                        <td colspan="7" class="p-4 text-center text-gray-500">
+                        <td colspan="8" class="p-4 text-center text-gray-500">
                             No users found
                         </td>
                     </tr>
@@ -127,34 +127,54 @@
 
             users.forEach(u => {
                 const tr = document.createElement('tr');
+
                 tr.innerHTML = `
                     <td class="p-2 border">${u.name || '—'}</td>
                     <td class="p-2 border">${u.email || '—'}</td>
                     <td class="p-2 border">${u.phone || '—'}</td>
 
                     <td class="p-2 border">
-                        <input type="number" class="w-24 border px-2 py-1 rounded"
-                            value="${u.balance ?? 0}" id="bal-${u._id}">
+                        <input type="number"
+                            class="w-24 border px-2 py-1 rounded"
+                            value="${u.balance ?? 0}"
+                            id="bal-${u._id}">
                     </td>
 
                     <td class="p-2 border">
-                        <input type="number" class="w-24 border px-2 py-1 rounded"
-                            value="${u.entryCost ?? 0}" id="entry-${u._id}">
+                        <input type="number"
+                            class="w-24 border px-2 py-1 rounded"
+                            value="${u.entryCost ?? 0}"
+                            id="entry-${u._id}">
                     </td>
 
                     <td class="p-2 border">
-                        <input type="number" class="w-24 border px-2 py-1 rounded"
-                            value="${u.expectedEarnings ?? 0}" id="earn-${u._id}">
+                        <input type="number"
+                            class="w-24 border px-2 py-1 rounded"
+                            value="${u.expectedEarnings ?? 0}"
+                            id="earn-${u._id}">
                     </td>
 
-                    <td class="p-2 border">
+                    <td class="p-2 border text-center font-semibold
+                        ${u.accountRestricted ? 'text-red-600' : 'text-green-600'}">
+                        ${u.accountRestricted ? 'Restricted' : 'Active'}
+                    </td>
+
+                    <td class="p-2 border flex gap-2">
                         <button
                             onclick="saveUser('${u._id}')"
                             class="bg-primary text-white px-3 py-1 rounded text-xs">
                             Save
                         </button>
+
+                        <button
+                            onclick="toggleRestriction('${u._id}')"
+                            class="px-3 py-1 rounded text-xs text-white
+                            ${u.accountRestricted ? 'bg-green-600' : 'bg-red-600'}">
+                            ${u.accountRestricted ? 'Unrestrict' : 'Restrict'}
+                        </button>
                     </td>
                 `;
+
                 usersBody.appendChild(tr);
             });
         }
@@ -162,9 +182,7 @@
         async function loadUsers() {
             try {
                 const res = await fetch(`${API_BASE_URL}/api/admin/users`, {
-                    headers: {
-                        Authorization: 'Bearer ' + token
-                    }
+                    headers: { Authorization: 'Bearer ' + token }
                 });
 
                 if (!res.ok) throw new Error();
@@ -176,7 +194,7 @@
             } catch {
                 usersBody.innerHTML = `
                     <tr>
-                        <td colspan="7" class="p-4 text-center text-red-500">
+                        <td colspan="8" class="p-4 text-center text-red-500">
                             Failed to load users
                         </td>
                     </tr>
@@ -205,11 +223,30 @@
                 );
 
                 if (!res.ok) throw new Error();
-
                 showMessage('User financials updated successfully');
 
             } catch {
                 showMessage('Failed to update user', 'error');
+            }
+        }
+
+        async function toggleRestriction(id) {
+            try {
+                const res = await fetch(
+                    `${API_BASE_URL}/api/admin/users/${id}/restrict`,
+                    {
+                        method: 'PUT',
+                        headers: { Authorization: 'Bearer ' + token }
+                    }
+                );
+
+                if (!res.ok) throw new Error();
+
+                showMessage('Account restriction updated');
+                loadUsers();
+
+            } catch {
+                showMessage('Failed to update account restriction', 'error');
             }
         }
 

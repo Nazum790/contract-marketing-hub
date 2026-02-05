@@ -146,3 +146,43 @@ exports.updateUserFinancials = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
+
+/**
+ * TOGGLE USER ACCOUNT RESTRICTION (ADMIN)
+ */
+exports.toggleAccountRestriction = async (req, res) => {
+    try {
+        const userId = req.params.id;
+        const { restricted } = req.body; // true or false
+
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({
+                message: 'User not found',
+            });
+        }
+
+        user.accountRestricted = Boolean(restricted);
+        await user.save();
+
+        await Transaction.create({
+            user: user._id,
+            type: 'account_restriction_update',
+            title: restricted ? 'Account Restricted' : 'Account Unrestricted',
+            description: restricted
+                ? 'Admin restricted this account'
+                : 'Admin lifted account restriction',
+        });
+
+        res.status(200).json({
+            message: restricted
+                ? 'User account restricted successfully'
+                : 'User account unrestricted successfully',
+            accountRestricted: user.accountRestricted,
+        });
+    } catch (error) {
+        console.error('TOGGLE ACCOUNT RESTRICTION ERROR:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};

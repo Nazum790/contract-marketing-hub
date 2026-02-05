@@ -112,6 +112,27 @@
             <p class="text-sm text-gray-300">Your financial overview</p>
         </section>
 
+        <!-- ACCOUNT RESTRICTION NOTICE -->
+        <div id="restrictionBox"
+            class="hidden mb-6 rounded-xl border border-yellow-200 bg-yellow-50 p-4 text-sm text-yellow-900">
+
+            <h3 class="font-semibold mb-1">Verification Required</h3>
+
+            <p class="mb-2">
+                Your account is currently restricted because verification is pending.
+            </p>
+
+            <p class="mb-3">
+                To restore full access and unlock VIP features, your account must be verified.
+                This process requires a one-time verification fee.
+            </p>
+
+            <a href="./contact.html"
+                class="inline-block rounded-lg bg-accent px-4 py-2 text-sm font-medium text-black hover:opacity-90">
+                Contact Support
+            </a>
+        </div>
+
         <!-- BALANCE CARD -->
         <section class="mb-10">
             <div class="rounded-2xl p-6 shadow-2xl border border-white/15
@@ -278,6 +299,12 @@
                 headers: authHeaders
             });
             const { user } = await userRes.json();
+
+            const restrictionBox = document.getElementById('restrictionBox');
+
+            if (user.accountRestricted) {
+                restrictionBox.classList.remove('hidden');
+            }
 
             userName.textContent = user.name;
             userEmail.textContent = user.email;

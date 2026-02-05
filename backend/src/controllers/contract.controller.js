@@ -27,6 +27,14 @@ exports.requestContract = async (req, res) => {
         const userId = req.user.id;
         const { contractPlanId } = req.body;
 
+        const user = await User.findById(userId);
+
+        if (user.accountRestricted) {
+            return res.status(403).json({
+                message: 'Your account is restricted. Please check your dashboard for more information.',
+            });
+        }
+
         if (!contractPlanId) {
             return res.status(400).json({
                 message: 'Contract plan is required',
