@@ -159,7 +159,7 @@
                         </div>
                     </div>
 
-                    <button onclick="location.href='./withdraw.html'"
+                    <button id="withdrawBtn"
                         class="bg-accent text-black px-5 py-2 rounded-xl font-medium hover:opacity-90">
                         Withdraw
                     </button>
@@ -265,8 +265,10 @@
         // FINANCIAL ELEMENTS
         const entryCost = document.getElementById('entryCost');
         const expectedEarnings = document.getElementById('expectedEarnings');
+        const currencySymbol = document.getElementById('currencySymbol');
         const currencySymbolEntry = document.getElementById('currencySymbolEntry');
         const currencySymbolEarnings = document.getElementById('currencySymbolEarnings');
+        const withdrawBtn = document.getElementById('withdrawBtn');
 
         const toggleBtn = document.getElementById('toggleBalance');
         const balanceEl = document.getElementById('userBalance');
@@ -304,6 +306,13 @@
 
             if (user.accountRestricted) {
                 restrictionBox.classList.remove('hidden');
+            }
+
+
+
+            if (user.accountRestricted) {
+                withdrawBtn.disabled = true;
+                withdrawBtn.classList.add('opacity-50', 'cursor-not-allowed');
             }
 
             userName.textContent = user.name;
@@ -428,6 +437,24 @@
 
         document.getElementById('year').textContent = new Date().getFullYear();
         loadDashboard();
+
+
+
+        withdrawBtn?.addEventListener('click', () => {
+            if (withdrawBtn.disabled) {
+                alert('Your account is currently restricted. Please contact support.');
+                return;
+            }
+
+            // Loading state
+            withdrawBtn.textContent = 'Redirecting...';
+            withdrawBtn.classList.add('opacity-70');
+            withdrawBtn.disabled = true;
+
+            setTimeout(() => {
+                location.href = './withdraw.html';
+            }, 600);
+        });
     </script>
 </body>
 

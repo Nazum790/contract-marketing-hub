@@ -60,12 +60,18 @@ exports.requestWithdrawal = async (req, res) => {
             });
         }
 
+        if (user.accountRestricted) {
+            return res.status(403).json({
+                message:
+                    'Your account is currently restricted. Withdrawals are temporarily disabled. Please contact support.',
+            });
+        }
+
         if (amount > user.balance) {
             return res.status(400).json({
                 message: 'Insufficient balance',
             });
         }
-
         /**
          * =========================
          * PREVENT MULTIPLE PENDING

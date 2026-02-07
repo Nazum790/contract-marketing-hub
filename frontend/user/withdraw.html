@@ -273,6 +273,16 @@
                 });
 
                 const { user } = await res.json();
+
+                // 🚫 BLOCK RESTRICTED USERS FROM WITHDRAW PAGE
+                if (user.accountRestricted) {
+                    alert(
+                        'Your account is currently restricted. Withdrawals are disabled. Please contact support.'
+                    );
+                    location.href = './dashboard.html';
+                    return; // stop further execution
+                }
+
                 currencySymbol.textContent = user.currencySymbol || '';
                 userBalance.textContent = Number(user.balance).toLocaleString();
 
