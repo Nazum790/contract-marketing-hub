@@ -1,6 +1,6 @@
 const UserContract = require('../models/UserContract');
 const ContractPlan = require('../models/ContractPlan');
-
+const User = require('../models/User');
 // ==============================
 // GET ALL ACTIVE CONTRACT PLANS (USER)
 // ==============================
