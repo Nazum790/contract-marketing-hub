@@ -162,11 +162,21 @@
         const token = localStorage.getItem('token');
         const contractPlanId = new URLSearchParams(window.location.search).get('id');
 
-        if (!token || !/^[a-f\d]{24}$/i.test(contractPlanId)) {
+        // Validate token properly
+        if (!token || token === "null" || token === "undefined") {
+            localStorage.clear();
+            location.href = '../auth/login.html';
+        }
+
+        // Validate contract id
+        if (!/^[a-f\d]{24}$/i.test(contractPlanId)) {
             location.href = './contracts.html';
         }
 
-        const headers = { Authorization: 'Bearer ' + token };
+        const headers = {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        };
 
         function goToPayment() {
             location.href = './payment-instructions.html';
@@ -195,6 +205,13 @@
         async function loadPage() {
             try {
                 const userRes = await fetch(`${API_BASE_URL}/api/users/me`, { headers });
+
+                if (!userRes.ok) {
+                    localStorage.clear();
+                    location.href = '../auth/login.html';
+                    return;
+                }
+
                 const { user } = await userRes.json();
 
                 currencySymbol.textContent = user.currencySymbol || '';
