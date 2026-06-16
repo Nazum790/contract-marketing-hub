@@ -86,13 +86,18 @@
             <div class="md:hidden mt-2">
                 <select id="langMobile" class="bg-brandDark text-white text-xs rounded px-2 py-1
                border border-white/20 max-w-[160px]">
-                    <option selected>Select Language</option>
+                    <option value="">Select Language</option>
                     <option value="en">English</option>
                     <option value="pt">Portuguese</option>
                     <option value="de">German</option>
                     <option value="fr">French</option>
                     <option value="es">Spanish</option>
                     <option value="da">Danish</option>
+                    <option value="ar">Arabic</option>
+                    <option value="nl">Dutch</option>
+                    <option value="sv">Swedish</option>
+                    <option value="no">Norwegian</option>
+                    <option value="fi">Finnish</option>
                 </select>
             </div>
         </div>
@@ -159,6 +164,17 @@
                         <option value="Ecuador">Ecuador</option>
                         <option value="South Africa">South Africa</option>
                         <option value="Papua New Guinea">Papua New Guinea</option>
+                        <option value="Saudi Arabia">Saudi Arabia</option>
+                        <option value="United Arab Emirates">United Arab Emirates</option>
+                        <option value="France">France</option>
+                        <option value="Netherlands">Netherlands</option>
+                        <option value="Sweden">Sweden</option>
+                        <option value="Norway">Norway</option>
+                        <option value="Finland">Finland</option>
+                        <option value="Austria">Austria</option>
+                        <option value="Switzerland">Switzerland</option>
+                        <option value="Australia">Australia</option>
+                        <option value="New Zealand">New Zealand</option>
                     </select>
                 </div>
 
@@ -233,7 +249,7 @@
         /* GOOGLE TRANSLATE */
         function googleTranslateElementInit() {
             new google.translate.TranslateElement(
-                { pageLanguage: 'en', includedLanguages: 'en,pt,de,fr,es,da', autoDisplay: false },
+                { pageLanguage: 'en', includedLanguages: 'en,pt,de,fr,es,da,ar,nl,sv,no,fi', autoDisplay: false },
                 'google_translate_element'
             );
         }
@@ -272,6 +288,17 @@
             Ecuador: { code: '+593', maxLength: 9 },
             'South Africa': { code: '+27', maxLength: 9 },
             'Papua New Guinea': { code: '+675', maxLength: 8 },
+            'Saudi Arabia': { code: '+966', maxLength: 9 },
+            'United Arab Emirates': { code: '+971', maxLength: 9 },
+            France: { code: '+33', maxLength: 9 },
+            Netherlands: { code: '+31', maxLength: 9 },
+            Sweden: { code: '+46', maxLength: 9 },
+            Norway: { code: '+47', maxLength: 8 },
+            Finland: { code: '+358', maxLength: 10 },
+            Austria: { code: '+43', maxLength: 11 },
+            Switzerland: { code: '+41', maxLength: 9 },
+            Australia: { code: '+61', maxLength: 9 },
+            'New Zealand': { code: '+64', maxLength: 9 },
         };
     </script>
 

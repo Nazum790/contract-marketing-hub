@@ -147,4 +147,114 @@ module.exports = {
             maxLength: 8,
         },
     },
+
+    Saudi Arabia: {
+        currency: 'SAR',
+        symbol: '﷼',
+        phone: {
+            code: '+966',
+            minLength: 9,
+            maxLength: 9,
+        },
+    },
+
+    'United Arab Emirates': {
+        currency: 'AED',
+        symbol: 'د.إ',
+        phone: {
+            code: '+971',
+            minLength: 9,
+            maxLength: 9,
+        },
+    },
+
+    France: {
+        currency: 'EUR',
+        symbol: '€',
+        phone: {
+            code: '+33',
+            minLength: 9,
+            maxLength: 9,
+        },
+    },
+
+    Netherlands: {
+        currency: 'EUR',
+        symbol: '€',
+        phone: {
+            code: '+31',
+            minLength: 9,
+            maxLength: 9,
+        },
+    },
+
+    Sweden: {
+        currency: 'SEK',
+        symbol: 'kr',
+        phone: {
+            code: '+46',
+            minLength: 9,
+            maxLength: 9,
+        },
+    },
+
+    Norway: {
+        currency: 'NOK',
+        symbol: 'kr',
+        phone: {
+            code: '+47',
+            minLength: 8,
+            maxLength: 8,
+        },
+    },
+
+    Finland: {
+        currency: 'EUR',
+        symbol: '€',
+        phone: {
+            code: '+358',
+            minLength: 9,
+            maxLength: 10,
+        },
+    },
+
+    Austria: {
+        currency: 'EUR',
+        symbol: '€',
+        phone: {
+            code: '+43',
+            minLength: 10,
+            maxLength: 11,
+        },
+    },
+
+    Switzerland: {
+        currency: 'CHF',
+        symbol: 'CHF',
+        phone: {
+            code: '+41',
+            minLength: 9,
+            maxLength: 9,
+        },
+    },
+
+    Australia: {
+        currency: 'AUD',
+        symbol: '$',
+        phone: {
+            code: '+61',
+            minLength: 9,
+            maxLength: 9,
+        },
+    },
+
+    'New Zealand': {
+        currency: 'NZD',
+        symbol: '$',
+        phone: {
+            code: '+64',
+            minLength: 9,
+            maxLength: 9,
+        },
+    },
 };
