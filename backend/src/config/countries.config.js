@@ -148,7 +148,7 @@ module.exports = {
         },
     },
 
-    Saudi Arabia: {
+    'Saudi Arabia': {
         currency: 'SAR',
         symbol: '﷼',
         phone: {
