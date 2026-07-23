@@ -7,7 +7,8 @@ const adminMiddleware = require('../middleware/admin.middleware');
 const {
     updateUserFinancials,
     getAllUsers,
-    toggleAccountRestriction
+    toggleAccountRestriction,
+    updateUserAnnouncement
 } = require('../controllers/admin.user.controller');
 
 const User = require('../models/User');
@@ -40,8 +41,11 @@ router.get('/stats', async (req, res) => {
             pendingWithdrawals,
             approvedWithdrawals
         });
+
     } catch (err) {
-        res.status(500).json({ message: 'Failed to load admin stats' });
+        res.status(500).json({
+            message: 'Failed to load admin stats'
+        });
     }
 });
 
@@ -59,5 +63,11 @@ router.put('/users/:id/financials', updateUserFinancials);
  * TOGGLE USER ACCOUNT RESTRICTION (ADMIN)
  */
 router.put('/users/:id/restrict', toggleAccountRestriction);
+
+/**
+ * UPDATE USER ANNOUNCEMENT (ADMIN)
+ * Custom dashboard message per user
+ */
+router.put('/users/:id/announcement', updateUserAnnouncement);
 
 module.exports = router;

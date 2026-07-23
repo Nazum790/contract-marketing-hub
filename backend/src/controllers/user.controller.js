@@ -22,6 +22,9 @@ exports.getMe = async (req, res) => {
             entryCost
             expectedEarnings
             accountRestricted
+            restrictionMessage
+            restrictionTitle
+            announcement
             createdAt
             `
         );

@@ -4,10 +4,13 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <meta name="theme-color" content="#0B2C5F" />
+
     <title>Admin · Users</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -28,240 +31,786 @@
             overflow-x: hidden;
         }
     </style>
+
 </head>
+
 
 <body class="min-h-screen flex flex-col bg-gradient-to-b from-darkbg to-primary text-gray-100">
 
-    <!-- HEADER -->
+
     <header class="sticky top-0 z-50 bg-darkbg/90 backdrop-blur border-b border-white/10">
+
         <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-            <h1 class="font-bold text-lg">Admin · Users</h1>
-            <a href="/admin/dashboard.html" class="text-sm text-accent">← Back to Dashboard</a>
+
+            <h1 class="font-bold text-lg">
+                Admin · Users
+            </h1>
+
+
+            <a href="/admin/dashboard.html" class="text-sm text-accent">
+                ← Back to Dashboard
+            </a>
+
         </div>
+
     </header>
 
-    <!-- MAIN -->
+
+
     <main class="flex-1 max-w-7xl mx-auto px-4 py-10 w-full">
 
-        <!-- SEARCH -->
+
         <div class="mb-4">
-            <input id="searchInput" type="text" placeholder="Search by name, email, phone…"
+
+            <input id="searchInput" type="text" placeholder="Search by name, email, phone..."
                 class="w-full md:w-1/2 px-4 py-2 rounded-lg text-gray-800 outline-none" />
+
         </div>
 
-        <!-- MESSAGE -->
+
+
         <div id="messageBox" class="hidden mb-4 p-3 rounded text-sm"></div>
 
-        <!-- USERS TABLE -->
+
+
+
         <div class="bg-white text-gray-800 rounded-xl shadow overflow-x-auto">
+
+
             <table class="w-full text-sm border">
+
+
                 <thead class="bg-gray-100">
+
+
                     <tr>
+
                         <th class="p-2 border">Name</th>
+
                         <th class="p-2 border">Email</th>
+
                         <th class="p-2 border">Phone</th>
+
                         <th class="p-2 border">Balance</th>
+
                         <th class="p-2 border">Entry Cost</th>
+
                         <th class="p-2 border">Expected Earnings</th>
+
+                        <th class="p-2 border">Announcement</th>
+
                         <th class="p-2 border">Status</th>
+
                         <th class="p-2 border">Action</th>
+
                     </tr>
+
+
                 </thead>
+
+
+
                 <tbody id="usersBody">
+
                     <tr>
-                        <td colspan="8" class="p-4 text-center text-gray-500">
-                            Loading users…
+
+                        <td colspan="9" class="p-4 text-center text-gray-500">
+                            Loading users...
                         </td>
+
                     </tr>
+
+
                 </tbody>
+
+
             </table>
+
+
         </div>
+
+
     </main>
 
-    <!-- FOOTER -->
-    <footer class="border-t border-white/10 text-center py-4 text-sm text-gray-300">
-        © <span id="year"></span> Contract Marketing Hub
-    </footer>
 
+
+    <footer class="border-t border-white/10 text-center py-4 text-sm text-gray-300">
+
+        © <span id="year"></span> Contract Marketing Hub
+
+    </footer>
     <script>
+
         const API_BASE_URL = window.location.origin;
-        document.getElementById('year').textContent = new Date().getFullYear();
+
+
+        document.getElementById('year').textContent =
+            new Date().getFullYear();
+
+
 
         const token = localStorage.getItem('token');
+
+
         if (!token) {
+
             localStorage.clear();
+
             location.href = '/auth/login.html';
+
         }
 
+
+
         const usersBody = document.getElementById('usersBody');
+
         const messageBox = document.getElementById('messageBox');
+
         const searchInput = document.getElementById('searchInput');
+
 
         let allUsers = [];
 
+
+
+
+
         function showMessage(text, type = 'success') {
+
+
             messageBox.textContent = text;
-            messageBox.className = 'mb-4 p-3 rounded text-sm';
+
+
+            messageBox.className =
+                'mb-4 p-3 rounded text-sm';
+
+
             messageBox.classList.remove('hidden');
 
+
             if (type === 'success') {
-                messageBox.classList.add('bg-green-100', 'text-green-700');
+
+                messageBox.classList.add(
+                    'bg-green-100',
+                    'text-green-700'
+                );
+
             } else {
-                messageBox.classList.add('bg-red-100', 'text-red-700');
+
+                messageBox.classList.add(
+                    'bg-red-100',
+                    'text-red-700'
+                );
+
             }
+
+
+
+            setTimeout(() => {
+
+                messageBox.classList.add('hidden');
+
+            }, 4000);
+
+
         }
+
+
+
+
 
         function renderUsers(users) {
+
+
             usersBody.innerHTML = '';
 
+
+
             if (!users.length) {
+
+
                 usersBody.innerHTML = `
-                    <tr>
-                        <td colspan="8" class="p-4 text-center text-gray-500">
-                            No users found
-                        </td>
-                    </tr>
-                `;
+
+        <tr>
+
+            <td colspan="9" class="p-4 text-center text-gray-500">
+
+                No users found
+
+            </td>
+
+        </tr>
+
+        `;
+
+
                 return;
+
             }
+
+
+
+
 
             users.forEach(u => {
+
+
                 const tr = document.createElement('tr');
 
+
+
                 tr.innerHTML = `
-                    <td class="p-2 border">${u.name || '—'}</td>
-                    <td class="p-2 border">${u.email || '—'}</td>
-                    <td class="p-2 border">${u.phone || '—'}</td>
 
-                    <td class="p-2 border">
-                        <input type="number"
-                            class="w-24 border px-2 py-1 rounded"
-                            value="${u.balance ?? 0}"
-                            id="bal-${u._id}">
-                    </td>
 
-                    <td class="p-2 border">
-                        <input type="number"
-                            class="w-24 border px-2 py-1 rounded"
-                            value="${u.entryCost ?? 0}"
-                            id="entry-${u._id}">
-                    </td>
+<td class="p-2 border">
+${u.name || '—'}
+</td>
 
-                    <td class="p-2 border">
-                        <input type="number"
-                            class="w-24 border px-2 py-1 rounded"
-                            value="${u.expectedEarnings ?? 0}"
-                            id="earn-${u._id}">
-                    </td>
 
-                    <td class="p-2 border text-center font-semibold
-                        ${u.accountRestricted ? 'text-red-600' : 'text-green-600'}">
-                        ${u.accountRestricted ? 'Restricted' : 'Active'}
-                    </td>
 
-                    <td class="p-2 border flex gap-2">
-                        <button
-                            onclick="saveUser('${u._id}')"
-                            class="bg-primary text-white px-3 py-1 rounded text-xs">
-                            Save
-                        </button>
+<td class="p-2 border">
+${u.email || '—'}
+</td>
 
-                        <button
-                            onclick="toggleRestriction('${u._id}')"
-                            class="px-3 py-1 rounded text-xs text-white
-                            ${u.accountRestricted ? 'bg-green-600' : 'bg-red-600'}">
-                            ${u.accountRestricted ? 'Unrestrict' : 'Restrict'}
-                        </button>
-                    </td>
-                `;
+
+
+<td class="p-2 border">
+${u.phone || '—'}
+</td>
+
+
+
+
+<td class="p-2 border">
+
+<input
+
+type="number"
+
+id="bal-${u._id}"
+
+value="${u.balance ?? 0}"
+
+class="w-24 border px-2 py-1 rounded"
+
+>
+
+</td>
+
+
+
+
+<td class="p-2 border">
+
+<input
+
+type="number"
+
+id="entry-${u._id}"
+
+value="${u.entryCost ?? 0}"
+
+class="w-24 border px-2 py-1 rounded"
+
+>
+
+</td>
+
+
+
+
+<td class="p-2 border">
+
+<input
+
+type="number"
+
+id="earn-${u._id}"
+
+value="${u.expectedEarnings ?? 0}"
+
+class="w-24 border px-2 py-1 rounded"
+
+>
+
+</td>
+
+
+
+
+
+<td class="p-2 border">
+
+
+<textarea
+
+id="announce-${u._id}"
+
+rows="3"
+
+class="w-40 border rounded p-2 text-xs"
+
+placeholder="Type message..."
+
+>${u.announcement || ''}</textarea>
+
+
+
+<button
+
+onclick="saveAnnouncement('${u._id}')"
+
+class="mt-2 bg-accent text-white px-3 py-1 rounded text-xs">
+
+Save Message
+
+</button>
+
+
+</td>
+
+
+
+
+
+<td class="p-2 border text-center font-semibold
+${u.accountRestricted ? 'text-red-600' : 'text-green-600'}">
+
+
+${u.accountRestricted ? 'Restricted' : 'Active'}
+
+
+</td>
+
+
+
+
+
+<td class="p-2 border">
+
+
+<div class="flex flex-col gap-2">
+
+
+<button
+
+onclick="saveUser('${u._id}')"
+
+class="bg-primary text-white px-3 py-1 rounded text-xs">
+
+Save Financials
+
+</button>
+
+
+
+
+<button
+
+onclick="toggleRestriction('${u._id}')"
+
+class="px-3 py-1 rounded text-xs text-white
+${u.accountRestricted ? 'bg-green-600' : 'bg-red-600'}">
+
+${u.accountRestricted ? 'Unrestrict' : 'Restrict'}
+
+</button>
+
+
+</div>
+
+
+</td>
+
+
+`;
+
+
 
                 usersBody.appendChild(tr);
+
+
             });
+
+
         }
+
+
+
+
+
+
 
         async function loadUsers() {
+
+
             try {
-                const res = await fetch(`${API_BASE_URL}/api/admin/users`, {
-                    headers: { Authorization: 'Bearer ' + token }
-                });
+
+
+                const res = await fetch(
+
+                    `${API_BASE_URL}/api/admin/users`,
+
+                    {
+
+                        headers: {
+
+                            Authorization: 'Bearer ' + token
+
+                        }
+
+                    }
+
+                );
+
+
 
                 if (!res.ok) throw new Error();
+
+
 
                 const data = await res.json();
+
+
+
                 allUsers = data.users || [];
+
+
+
                 renderUsers(allUsers);
 
-            } catch {
-                usersBody.innerHTML = `
-                    <tr>
-                        <td colspan="8" class="p-4 text-center text-red-500">
-                            Failed to load users
-                        </td>
-                    </tr>
-                `;
-            }
-        }
 
+
+            } catch (error) {
+
+
+                usersBody.innerHTML = `
+
+        <tr>
+
+            <td colspan="9" class="p-4 text-center text-red-500">
+
+                Failed to load users
+
+            </td>
+
+        </tr>
+
+        `;
+
+            }
+
+
+        }
         async function saveUser(id) {
+
+
             try {
+
+
                 const body = {
-                    balance: document.getElementById(`bal-${id}`).value,
-                    entryCost: document.getElementById(`entry-${id}`).value,
-                    expectedEarnings: document.getElementById(`earn-${id}`).value
+
+                    balance:
+                        document.getElementById(`bal-${id}`).value,
+
+
+                    entryCost:
+                        document.getElementById(`entry-${id}`).value,
+
+
+                    expectedEarnings:
+                        document.getElementById(`earn-${id}`).value
+
                 };
 
+
+
                 const res = await fetch(
+
                     `${API_BASE_URL}/api/admin/users/${id}/financials`,
+
                     {
+
                         method: 'PUT',
+
                         headers: {
+
                             'Content-Type': 'application/json',
+
                             Authorization: 'Bearer ' + token
+
                         },
+
                         body: JSON.stringify(body)
+
                     }
+
                 );
 
+
+
                 if (!res.ok) throw new Error();
-                showMessage('User financials updated successfully');
+
+
+
+                showMessage(
+                    'User financials updated successfully'
+                );
+
 
             } catch {
-                showMessage('Failed to update user', 'error');
+
+
+                showMessage(
+                    'Failed to update user',
+                    'error'
+                );
+
+
             }
+
+
         }
+
+
+
+
+
+
+
+
+        async function saveAnnouncement(id) {
+
+
+            try {
+
+
+                const announcement =
+                    document.getElementById(`announce-${id}`).value.trim();
+
+
+
+                const res = await fetch(
+
+                    `${API_BASE_URL}/api/admin/users/${id}/announcement`,
+
+                    {
+
+                        method: 'PUT',
+
+                        headers: {
+
+                            'Content-Type': 'application/json',
+
+                            Authorization: 'Bearer ' + token
+
+                        },
+
+                        body: JSON.stringify({
+
+                            announcement
+
+                        })
+
+                    }
+
+                );
+
+
+
+                if (!res.ok) throw new Error();
+
+
+
+                showMessage(
+                    'User announcement updated successfully'
+                );
+
+
+            } catch {
+
+
+                showMessage(
+                    'Failed to update announcement',
+                    'error'
+                );
+
+
+            }
+
+
+        }
+
+
+
+
+
 
         async function toggleRestriction(id) {
+
             try {
-                const res = await fetch(
-                    `${API_BASE_URL}/api/admin/users/${id}/restrict`,
-                    {
-                        method: 'PUT',
-                        headers: { Authorization: 'Bearer ' + token }
-                    }
+
+                const user = allUsers.find(
+                    u => u._id === id
                 );
+
+
+                let restrictionTitle = '';
+                let restrictionMessage = '';
+
+
+
+                // Ask details only when restricting
+                if (user && !user.accountRestricted) {
+
+
+                    restrictionTitle = prompt(
+                        'Enter restriction title:'
+                    );
+
+
+                    if (restrictionTitle === null) {
+                        return;
+                    }
+
+
+
+                    restrictionMessage = prompt(
+                        'Enter restriction message:'
+                    );
+
+
+                    if (restrictionMessage === null) {
+                        return;
+                    }
+
+                }
+
+
+
+                const res = await fetch(
+
+                    `${API_BASE_URL}/api/admin/users/${id}/restrict`,
+
+                    {
+
+                        method: 'PUT',
+
+                        headers: {
+
+                            'Content-Type': 'application/json',
+
+                            Authorization: 'Bearer ' + token
+
+                        },
+
+                        body: JSON.stringify({
+
+                            restrictionTitle,
+
+                            restrictionMessage
+
+                        })
+
+                    }
+
+                );
+
+
 
                 if (!res.ok) throw new Error();
 
-                showMessage('Account restriction updated');
+
+
+                showMessage(
+                    'Account restriction updated'
+                );
+
+
                 loadUsers();
 
-            } catch {
-                showMessage('Failed to update account restriction', 'error');
+
+
+            } catch (error) {
+
+
+                console.error(error);
+
+
+                showMessage(
+                    'Failed to update account restriction',
+                    'error'
+                );
+
+
             }
+
         }
 
-        searchInput.addEventListener('input', e => {
-            const q = e.target.value.toLowerCase();
-            const filtered = allUsers.filter(u =>
-                (u.name || '').toLowerCase().includes(q) ||
-                (u.email || '').toLowerCase().includes(q) ||
-                (u.phone || '').toLowerCase().includes(q)
-            );
-            renderUsers(filtered);
-        });
+
+
+
+
+
+
+
+
+        searchInput.addEventListener(
+            'input',
+            e => {
+
+
+                const q =
+                    e.target.value.toLowerCase();
+
+
+
+                const filtered =
+                    allUsers.filter(u =>
+
+
+                        (u.name || '')
+                            .toLowerCase()
+                            .includes(q)
+
+
+                        ||
+
+
+                        (u.email || '')
+                            .toLowerCase()
+                            .includes(q)
+
+
+                        ||
+
+
+                        (u.phone || '')
+                            .toLowerCase()
+                            .includes(q)
+
+
+                    );
+
+
+
+                renderUsers(filtered);
+
+
+            }
+
+        );
+
+
+
+
 
         loadUsers();
+
+
+
     </script>
+
 
 </body>
 

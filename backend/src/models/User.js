@@ -125,6 +125,24 @@ const userSchema = new mongoose.Schema(
             type: Boolean,
             default: false,
         },
+
+        restrictionTitle: {
+            type: String,
+            default: '',
+            trim: true,
+        },
+
+        restrictionMessage: {
+            type: String,
+            default: '',
+            trim: true,
+        },
+
+        announcement: {
+            type: String,
+            default: '',
+            trim: true,
+        },
     },
     {
         timestamps: true,

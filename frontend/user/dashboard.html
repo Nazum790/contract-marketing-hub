@@ -4,12 +4,14 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Dashboard | Contract Marketing Hub</title>
 
     <meta name="theme-color" content="#0B2C5F" />
     <meta name="apple-mobile-web-app-capable" content="yes">
 
     <script src="https://cdn.tailwindcss.com"></script>
+
     <script>
         tailwind.config = {
             theme: {
@@ -24,12 +26,14 @@
         }
     </script>
 
+
     <style>
         html,
         body {
             width: 100%;
             overflow-x: hidden;
         }
+
 
         .goog-logo-link,
         .goog-te-banner-frame,
@@ -39,433 +43,1100 @@
             display: none !important;
         }
     </style>
+
 </head>
+
+
 
 <body class="min-h-screen bg-gradient-to-b from-[#06162d] via-[#0a2550] to-[#0B2C5F] text-gray-100">
 
+
+
+    <!-- NAVBAR -->
+
     <header class="fixed top-0 left-0 right-0 z-50 bg-darkbg/95 backdrop-blur border-b border-white/10">
+
+
         <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-            <h1 class="font-bold text-lg">Contract Marketing Hub</h1>
+
+
+            <h1 class="font-bold text-lg">
+                Contract Marketing Hub
+            </h1>
+
+
 
             <nav class="hidden md:flex gap-6 text-sm items-center">
-                <a href="./dashboard.html" class="text-accent">Dashboard</a>
-                <a href="./contracts.html">Contracts</a>
-                <a href="./transactions.html">Transactions</a>
-                <a href="./profile.html">Profile</a>
-                <button id="logoutDesktop" class="text-red-400">Logout</button>
+
+
+                <a href="./dashboard.html" class="text-accent">
+                    Dashboard
+                </a>
+
+
+                <a href="./contracts.html">
+                    Contracts
+                </a>
+
+
+                <a href="./transactions.html">
+                    Transactions
+                </a>
+
+
+                <a href="./profile.html">
+                    Profile
+                </a>
+
+
+
+                <button id="logoutDesktop" class="text-red-400">
+                    Logout
+                </button>
+
+
 
                 <select id="langSelect" class="bg-darkbg border border-white/20 text-sm rounded px-2 py-1">
-                    <option value="">Select Language</option>
-                    <option value="en">English</option>
-                    <option value="pt">Portuguese</option>
-                    <option value="de">German</option>
-                    <option value="fr">French</option>
-                    <option value="es">Spanish</option>
-                    <option value="da">Danish</option>
-                    <option value="ar">Arabic</option>
-                    <option value="nl">Dutch</option>
-                    <option value="sv">Swedish</option>
-                    <option value="no">Norwegian</option>
-                    <option value="fi">Finnish</option>
+
+
+                    <option value="">
+                        Select Language
+                    </option>
+
+                    <option value="en">
+                        English
+                    </option>
+
+                    <option value="pt">
+                        Portuguese
+                    </option>
+
+                    <option value="de">
+                        German
+                    </option>
+
+                    <option value="fr">
+                        French
+                    </option>
+
+                    <option value="es">
+                        Spanish
+                    </option>
+
+                    <option value="da">
+                        Danish
+                    </option>
+
+                    <option value="ar">
+                        Arabic
+                    </option>
+
+                    <option value="nl">
+                        Dutch
+                    </option>
+
+                    <option value="sv">
+                        Swedish
+                    </option>
+
+                    <option value="no">
+                        Norwegian
+                    </option>
+
+                    <option value="fi">
+                        Finnish
+                    </option>
+
+
                 </select>
+
+
             </nav>
 
-            <button id="menuBtn" class="md:hidden text-2xl">☰</button>
+
+
+
+            <button id="menuBtn" class="md:hidden text-2xl">
+                ☰
+            </button>
+
+
+
         </div>
 
+
+
+
+
+        <!-- MOBILE LANGUAGE -->
+
         <div class="md:hidden px-4 pb-3">
+
+
             <select id="langSelectMobile"
                 class="bg-darkbg border border-white/20 text-sm rounded px-3 py-2 w-full max-w-[200px]">
-                <option value="">Select language</option>
-                <option value="en">English</option>
-                <option value="pt">Portuguese</option>
-                <option value="de">German</option>
-                <option value="fr">French</option>
-                <option value="es">Spanish</option>
-                <option value="da">Danish</option>
-                <option value="ar">Arabic</option>
-                <option value="nl">Dutch</option>
-                <option value="sv">Swedish</option>
-                <option value="no">Norwegian</option>
-                <option value="fi">Finnish</option>
+
+
+                <option value="">
+                    Select language
+                </option>
+
+
+                <option value="en">
+                    English
+                </option>
+
+
+                <option value="pt">
+                    Portuguese
+                </option>
+
+
+                <option value="de">
+                    German
+                </option>
+
+
+                <option value="fr">
+                    French
+                </option>
+
+
+                <option value="es">
+                    Spanish
+                </option>
+
+
+                <option value="da">
+                    Danish
+                </option>
+
+
+                <option value="ar">
+                    Arabic
+                </option>
+
+
+                <option value="nl">
+                    Dutch
+                </option>
+
+
+                <option value="sv">
+                    Swedish
+                </option>
+
+
+                <option value="no">
+                    Norwegian
+                </option>
+
+
+                <option value="fi">
+                    Finnish
+                </option>
+
+
             </select>
+
+
         </div>
+
+
     </header>
-    <!-- ================= MOBILE MENU ================= -->
+
+
+
+
+
+    <!-- MOBILE MENU -->
+
+
     <div id="mobileMenu" class="fixed top-0 right-0 h-full w-72 bg-darkbg/95 backdrop-blur
-            translate-x-full transition-transform duration-300
-            md:hidden border-l border-white/10 z-50">
+        translate-x-full transition-transform duration-300
+        md:hidden border-l border-white/10 z-50">
+
 
         <div class="p-6 space-y-6 text-sm">
 
-            <!-- CLOSE BUTTON -->
+
             <div class="flex justify-end">
-                <button id="closeMenu" class="text-xl text-gray-300">✕</button>
+
+                <button id="closeMenu" class="text-xl text-gray-300">
+                    ✕
+                </button>
+
             </div>
 
-            <a href="./dashboard.html" class="block text-accent">Dashboard</a>
-            <a href="./contracts.html" class="block">Contracts</a>
-            <a href="./transactions.html" class="block">Transactions</a>
-            <a href="./profile.html" class="block">Profile</a>
+
+
+            <a href="./dashboard.html" class="block text-accent">
+                Dashboard
+            </a>
+
+
+            <a href="./contracts.html" class="block">
+                Contracts
+            </a>
+
+
+            <a href="./transactions.html" class="block">
+                Transactions
+            </a>
+
+
+            <a href="./profile.html" class="block">
+                Profile
+            </a>
+
+
 
             <button id="logoutMobile" class="block text-red-400 pt-4">
                 Logout
             </button>
+
+
         </div>
+
+
     </div>
     <main class="max-w-7xl mx-auto px-4 pt-28 pb-24">
 
+
+        <!-- WELCOME -->
+
         <section class="mb-8">
+
             <h2 class="text-2xl font-semibold">
                 Good day, <span id="userName">User</span>
             </h2>
-            <p class="text-sm text-gray-300">Your financial overview</p>
+
+            <p class="text-sm text-gray-300">
+                Your financial overview
+            </p>
+
         </section>
 
         <!-- ACCOUNT RESTRICTION NOTICE -->
         <div id="restrictionBox"
             class="hidden mb-6 rounded-xl border border-yellow-200 bg-yellow-50 p-4 text-sm text-yellow-900">
 
-            <h3 class="font-semibold mb-1">Verification Required</h3>
+            <h3 id="restrictionTitle" class="font-semibold mb-1">
+                Account Restricted
+            </h3>
 
-            <p class="mb-2">
-                Your account is currently restricted because verification is pending.
+            <p id="restrictionMessage" class="mb-3">
+                Please contact support.
             </p>
 
-            <p class="mb-3">
-                To restore full access and unlock VIP features, your account must be verified.
-                This process requires a one-time verification fee.
-            </p>
-
-            <a href="/contact.html"
-                class="inline-block rounded-lg bg-accent px-4 py-2 text-sm font-medium text-black hover:opacity-90">
+            <a href="/contact.html" class="inline-block rounded-lg bg-accent px-4 py-2 text-sm font-medium text-black">
                 Contact Support
             </a>
+
         </div>
 
+
+
+
+
+
+
+
+
+
+
         <!-- BALANCE CARD -->
+
+
         <section class="mb-10">
+
+
             <div class="rounded-2xl p-6 shadow-2xl border border-white/15
             bg-gradient-to-br from-[#1b3b6f] via-[#1f447d] to-[#152c54]">
 
+
                 <div class="flex justify-between items-center mb-6">
+
+
                     <div>
-                        <p class="text-sm text-gray-300">Total Balance</p>
-                        <div class="flex items-center gap-3 mt-1 flex-nowrap">
+
+
+                        <p class="text-sm text-gray-300">
+                            Total Balance
+                        </p>
+
+
+
+                        <div class="flex items-center gap-3 mt-1">
+
+
                             <div class="flex flex-col sm:flex-row sm:items-end sm:gap-2">
-                                <span class="text-sm sm:text-base opacity-80" id="currencySymbol"></span>
+
+
+                                <span id="currencySymbol" class="text-sm sm:text-base opacity-80">
+                                </span>
+
+
 
                                 <span id="userBalance" data-visible="true"
-                                    class="text-2xl sm:text-3xl font-bold break-words leading-tight whitespace-normal">
+                                    class="text-2xl sm:text-3xl font-bold break-words">
                                     0
                                 </span>
+
+
                             </div>
+
+
+
+
+
                             <button id="toggleBalance" class="opacity-70 hover:opacity-100 transition">
+
+
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2">
+
+
                                     <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z" />
+
+
                                 </svg>
+
+
                             </button>
+
+
                         </div>
+
+
                     </div>
+
+
+
+
 
                     <button id="withdrawBtn"
                         class="bg-accent text-black px-5 py-2 rounded-xl font-medium hover:opacity-90">
+
+
                         Withdraw
+
+
                     </button>
+
+
+
                 </div>
+
+
+
+
 
                 <div class="border-t border-white/20 pt-4 grid grid-cols-2 gap-6 text-sm">
+
+
                     <div>
-                        <p class="text-gray-300">My Investment</p>
+
+                        <p class="text-gray-300">
+                            My Investment
+                        </p>
+
+
                         <p class="mt-1 text-lg font-semibold">
+
+
                             <span id="currencySymbolEntry"></span>
-                            <span id="entryCost">0</span>
+
+
+                            <span id="entryCost">
+                                0
+                            </span>
+
+
                         </p>
+
+
                     </div>
+
+
+
+
+
                     <div>
-                        <p class="text-gray-300">Total Earnings</p>
-                        <p class="mt-1 text-lg font-semibold">
-                            <span id="currencySymbolEarnings"></span>
-                            <span id="expectedEarnings">0</span>
+
+
+                        <p class="text-gray-300">
+                            Total Earnings
                         </p>
+
+
+
+                        <p class="mt-1 text-lg font-semibold">
+
+
+                            <span id="currencySymbolEarnings"></span>
+
+
+                            <span id="expectedEarnings">
+                                0
+                            </span>
+
+
+                        </p>
+
+
+
                     </div>
+
+
                 </div>
+
+
+
             </div>
+
+
         </section>
 
-        <!-- STATS -->
+
+
+
+
+
+
+        <!-- STAT CARDS -->
+
+
         <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-            <div class="rounded-2xl p-5 shadow-lg border border-white/10 bg-gradient-to-br from-[#1a355e] to-[#13274a]">
-                <p class="text-sm text-gray-300">Active Contracts</p>
-                <p class="text-3xl font-bold mt-2" id="activeCount">0</p>
-            </div>
+
 
             <div class="rounded-2xl p-5 shadow-lg border border-white/10 bg-gradient-to-br from-[#1a355e] to-[#13274a]">
-                <p class="text-sm text-gray-300">Pending Activation</p>
-                <p class="mt-2" id="pendingActivation">—</p>
-            </div>
 
-            <div class="rounded-2xl p-5 shadow-lg border border-white/10 bg-gradient-to-br from-[#1a355e] to-[#13274a]">
-                <p class="text-sm text-gray-300">Contract Countdown</p>
-                <p class="mt-2 font-medium notranslate" id="countdown">—</p>
-            </div>
-
-            <div class="rounded-2xl p-5 shadow-lg border border-white/10 bg-gradient-to-br from-[#1a355e] to-[#13274a]">
-                <p class="text-sm text-gray-300">Account Status</p>
-                <span id="accountStatus" class="inline-block mt-3 px-3 py-1 text-xs rounded-full bg-white/20">
-                    —
-                </span>
-            </div>
-        </section>
-
-        <!-- ACTIONS -->
-        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div
-                class="lg:col-span-2 rounded-2xl p-6 shadow-lg border border-white/10 bg-gradient-to-br from-[#152f57] to-[#102444]">
-                <h3 class="font-semibold mb-2">My Contracts</h3>
-                <p class="text-sm text-gray-300 mb-4">View and manage your contracts</p>
-                <a href="./contracts.html"
-                    class="inline-block px-5 py-2 bg-white text-primary rounded-xl text-sm font-medium hover:bg-gray-100 transition">
-                    View Contracts
-                </a>
-            </div>
-
-            <div class="rounded-2xl p-6 shadow-lg border border-white/10 bg-gradient-to-br from-[#152f57] to-[#102444]">
-                <h3 class="font-semibold mb-2">Profile</h3>
-
-                <p class="text-sm text-gray-300" id="userEmail">—</p>
-
-                <p class="text-sm text-gray-300 mt-1">
-                    Phone:
-                    <span id="userPhone" class="font-medium">—</span>
+                <p class="text-sm text-gray-300">
+                    Active Contracts
                 </p>
 
-                <a href="./profile.html" class="inline-block mt-3 text-accent text-sm font-medium">
-                    Manage profile →
-                </a>
+                <p id="activeCount" class="text-3xl font-bold mt-2">
+                    0
+                </p>
+
             </div>
+
+
+
+
+
+            <div class="rounded-2xl p-5 shadow-lg border border-white/10 bg-gradient-to-br from-[#1a355e] to-[#13274a]">
+
+
+                <p class="text-sm text-gray-300">
+                    Pending Activation
+                </p>
+
+
+                <p id="pendingActivation" class="mt-2">
+                    —
+                </p>
+
+
+            </div>
+
+
+
+
+
+            <div class="rounded-2xl p-5 shadow-lg border border-white/10 bg-gradient-to-br from-[#1a355e] to-[#13274a]">
+
+
+                <p class="text-sm text-gray-300">
+                    Contract Countdown
+                </p>
+
+
+                <p id="countdown" class="mt-2 font-medium notranslate">
+                    —
+                </p>
+
+
+            </div>
+
+
+
+
+
+            <div class="rounded-2xl p-5 shadow-lg border border-white/10 bg-gradient-to-br from-[#1a355e] to-[#13274a]">
+
+
+                <p class="text-sm text-gray-300">
+                    Account Status
+                </p>
+
+
+                <span id="accountStatus" class="inline-block mt-3 px-3 py-1 text-xs rounded-full bg-white/20">
+
+                    —
+
+                </span>
+
+
+            </div>
+
+
+
         </section>
+        <!-- ACTIONS -->
+
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+
+            <div
+                class="lg:col-span-2 rounded-2xl p-6 shadow-lg border border-white/10 bg-gradient-to-br from-[#152f57] to-[#102444]">
+
+
+                <h3 class="font-semibold mb-2">
+                    My Contracts
+                </h3>
+
+
+                <p class="text-sm text-gray-300 mb-4">
+                    View and manage your contracts
+                </p>
+
+
+
+                <a href="./contracts.html"
+                    class="inline-block px-5 py-2 bg-white text-primary rounded-xl text-sm font-medium hover:bg-gray-100">
+
+                    View Contracts
+
+                </a>
+
+
+            </div>
+
+
+
+
+
+            <div class="rounded-2xl p-6 shadow-lg border border-white/10 bg-gradient-to-br from-[#152f57] to-[#102444]">
+
+
+                <h3 class="font-semibold mb-2">
+                    Profile
+                </h3>
+
+
+                <p id="userEmail" class="text-sm text-gray-300">
+                    —
+                </p>
+
+
+                <p class="text-sm text-gray-300 mt-1">
+
+                    Phone:
+
+                    <span id="userPhone" class="font-medium">
+                        —
+                    </span>
+
+                </p>
+
+
+                <a href="./profile.html" class="inline-block mt-3 text-accent text-sm font-medium">
+
+                    Manage profile →
+
+                </a>
+
+
+            </div>
+
+
+        </section>
+
+
     </main>
 
+
+
+
+
     <footer class="mt-12 border-t border-white/10 text-center py-6 text-sm text-gray-300">
+
         © <span id="year"></span> Contract Marketing Hub
+
     </footer>
+
+
+
+
+
     <!-- GOOGLE TRANSLATE -->
+
     <div id="google_translate_element" style="display:none"></div>
+
+
     <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
+
+
+
+
     <script>
+
+
         const API_BASE_URL = window.location.origin;
-    </script>
 
-    <script>
+
         const token = localStorage.getItem('token');
-        if (!token) location.href = '../auth/login.html';
 
-        const authHeaders = { Authorization: 'Bearer ' + token };
 
-        // NAV ELEMENTS
-        const menuBtn = document.getElementById('menuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-        const closeMenu = document.getElementById('closeMenu');
-        const logoutDesktop = document.getElementById('logoutDesktop');
-        const logoutMobile = document.getElementById('logoutMobile');
+        if (!token) {
 
-        // FINANCIAL ELEMENTS
-        const entryCost = document.getElementById('entryCost');
-        const expectedEarnings = document.getElementById('expectedEarnings');
-        const currencySymbol = document.getElementById('currencySymbol');
-        const currencySymbolEntry = document.getElementById('currencySymbolEntry');
-        const currencySymbolEarnings = document.getElementById('currencySymbolEarnings');
+            localStorage.clear();
+
+            location.href = '../auth/login.html';
+
+        }
+
+
+
+        const authHeaders = {
+
+            Authorization: 'Bearer ' + token
+
+        };
+
+
+
+
+
+        const userName = document.getElementById('userName');
+
+        const userEmail = document.getElementById('userEmail');
+
+        const userPhone = document.getElementById('userPhone');
+
         const withdrawBtn = document.getElementById('withdrawBtn');
 
-        const toggleBtn = document.getElementById('toggleBalance');
-        const balanceEl = document.getElementById('userBalance');
+        const accountStatus = document.getElementById('accountStatus');
+
+        const restrictionBox = document.getElementById('restrictionBox');
+
+        const restrictionMessage = document.getElementById('restrictionMessage');
+
+
+
+        const entryCost = document.getElementById('entryCost');
+
+        const expectedEarnings = document.getElementById('expectedEarnings');
+
+        const userBalance = document.getElementById('userBalance');
+
+        const currencySymbol = document.getElementById('currencySymbol');
+
+        const currencySymbolEntry = document.getElementById('currencySymbolEntry');
+
+        const currencySymbolEarnings = document.getElementById('currencySymbolEarnings');
+
+
+
+        const activeCount = document.getElementById('activeCount');
+
+        const pendingActivation = document.getElementById('pendingActivation');
+
+        const countdown = document.getElementById('countdown');
+
+
 
         let realBalance = '';
 
+
+
+
+
         // MOBILE MENU
+
+        const menuBtn = document.getElementById('menuBtn');
+
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        const closeMenu = document.getElementById('closeMenu');
+
+
+
         menuBtn?.addEventListener('click', () => {
+
             mobileMenu.classList.toggle('translate-x-full');
-            document.body.classList.toggle('overflow-hidden');
+
         });
+
+
 
         closeMenu?.addEventListener('click', () => {
+
             mobileMenu.classList.add('translate-x-full');
-            document.body.classList.remove('overflow-hidden');
+
         });
+
+
+
+
 
         // LOGOUT
-        const logout = () => {
+
+        function logout() {
+
             localStorage.clear();
+
             location.href = '../auth/login.html';
-        };
 
-        logoutDesktop?.addEventListener('click', logout);
-        logoutMobile?.addEventListener('click', logout);
+        }
 
-        // DASHBOARD LOAD
+
+        document.getElementById('logoutDesktop')
+            ?.addEventListener('click', logout);
+
+
+        document.getElementById('logoutMobile')
+            ?.addEventListener('click', logout);
+
+
+
+
+
+
+
         async function loadDashboard() {
-            const userRes = await fetch(`${API_BASE_URL}/api/users/me`, {
-                headers: authHeaders
-            });
-            const { user } = await userRes.json();
-
-            const restrictionBox = document.getElementById('restrictionBox');
-
-            if (user.accountRestricted) {
-                restrictionBox.classList.remove('hidden');
-            }
 
 
+            try {
 
-            if (user.accountRestricted) {
-                withdrawBtn.disabled = true;
-                withdrawBtn.classList.add('opacity-50', 'cursor-not-allowed');
-            }
 
-            userName.textContent = user.name;
-            userEmail.textContent = user.email;
-            currencySymbol.textContent = user.currencySymbol || '';
+                const res = await fetch(
 
-            const phoneEl = document.getElementById('userPhone');
-            if (phoneEl) {
-                phoneEl.textContent = user.phone || 'Not set';
-            }
+                    `${API_BASE_URL}/api/users/me`,
 
-            realBalance = Number(user.balance || 0).toLocaleString(undefined, {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            });
+                    {
 
-            userBalance.textContent = realBalance;
-            userBalance.dataset.visible = 'true';
-            accountStatus.textContent = user.emailVerified ? 'Verified' : 'Verification pending';
+                        headers: authHeaders
 
-            const contractsRes = await fetch(`${API_BASE_URL}/api/contracts/my`, {
-                headers: authHeaders
-            });
-            const { contracts = [] } = await contractsRes.json();
-
-            const activeContract = contracts.find(c => c.status === 'active');
-
-            currencySymbolEntry.textContent = user.currencySymbol || '';
-            currencySymbolEarnings.textContent = user.currencySymbol || '';
-
-            const manualEntryCost = Number(user.entryCost || 0);
-            const manualExpectedEarnings = Number(user.expectedEarnings || 0);
-
-            if (manualEntryCost > 0 && manualExpectedEarnings > 0) {
-                // ✅ ADMIN MANUAL VALUES
-                entryCost.textContent = manualEntryCost.toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
-
-                expectedEarnings.textContent = manualExpectedEarnings.toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
-            } else if (activeContract) {
-                // 🔁 CONTRACT FALLBACK
-                entryCost.textContent = Number(activeContract.entryAmount || 0).toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
-
-                expectedEarnings.textContent = Number(activeContract.expectedPayout || 0).toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
-            } else {
-                entryCost.textContent = '0.00';
-                expectedEarnings.textContent = '0.00';
-            }
-
-            const pending = contracts.filter(c => c.status === 'pending');
-            const active = contracts.filter(c => c.status === 'active');
-
-            activeCount.textContent = active.length;
-            pendingActivation.textContent =
-                pending.length ? `${pending.length} awaiting activation` : 'No pending activation';
-
-            if (active.length && active[0].endDate) {
-                const end = new Date(active[0].endDate);
-
-                setInterval(() => {
-                    const diff = end - new Date();
-                    if (diff <= 0) {
-                        countdown.textContent = 'Completed';
-                        return;
                     }
 
-                    const d = Math.floor(diff / 86400000);
-                    const h = Math.floor(diff / 3600000) % 24;
-                    const m = Math.floor(diff / 60000) % 60;
-                    const s = Math.floor(diff / 1000) % 60;
+                );
 
-                    countdown.textContent = `${d}d ${h}h ${m}m ${s}s`;
-                }, 1000);
-            } else {
-                countdown.textContent = 'No active contract';
+
+
+                const data = await res.json();
+
+                const user = data.user;
+
+
+
+                userName.textContent = user.name || 'User';
+
+                userEmail.textContent = user.email || '—';
+
+                userPhone.textContent = user.phone || 'Not set';
+
+
+
+                currencySymbol.textContent = user.currencySymbol || '';
+
+                currencySymbolEntry.textContent = user.currencySymbol || '';
+
+                currencySymbolEarnings.textContent = user.currencySymbol || '';
+
+
+
+
+
+                realBalance = Number(user.balance || 0)
+                    .toLocaleString(undefined, {
+
+                        minimumFractionDigits: 2,
+
+                        maximumFractionDigits: 2
+
+                    });
+
+
+
+                userBalance.textContent = realBalance;
+
+
+
+
+                // RESTRICTION DISPLAY
+                if (user.accountRestricted) {
+
+                    restrictionBox.classList.remove('hidden');
+
+                    document.getElementById('restrictionTitle').textContent =
+                        user.restrictionTitle || 'Account Restricted';
+
+                    document.getElementById('restrictionMessage').textContent =
+                        user.restrictionMessage || 'Please contact support.';
+
+                    withdrawBtn.disabled = true;
+
+                    withdrawBtn.classList.add(
+                        'opacity-50',
+                        'cursor-not-allowed'
+                    );
+
+                    accountStatus.textContent = 'Restricted';
+
+                    accountStatus.className =
+                        'inline-block mt-3 px-3 py-1 text-xs rounded-full bg-red-500 text-white';
+
+                } else {
+
+                    accountStatus.textContent =
+                        user.announcement ||
+                        (user.emailVerified ? 'Verified' : 'Verification pending');
+
+                }
+
+
+
+
+
+                entryCost.textContent =
+                    Number(user.entryCost || 0).toLocaleString();
+
+
+
+                expectedEarnings.textContent =
+                    Number(user.expectedEarnings || 0).toLocaleString();
+
+
+
+
+
+                const contractsRes = await fetch(
+
+                    `${API_BASE_URL}/api/contracts/my`,
+
+                    {
+
+                        headers: authHeaders
+
+                    }
+
+                );
+
+
+                const contractData = await contractsRes.json();
+
+
+                const contracts = contractData.contracts || [];
+
+
+
+                const active = contracts.filter(
+
+                    c => c.status === 'active'
+
+                );
+
+
+                const pending = contracts.filter(
+
+                    c => c.status === 'pending'
+
+                );
+
+
+
+                activeCount.textContent = active.length;
+
+
+                pendingActivation.textContent = pending.length ?
+
+                    `${pending.length} awaiting activation`
+
+                    :
+
+                    'No pending activation';
+
+
+
+
+
+                if (active.length && active[0].endDate) {
+
+
+                    const end = new Date(active[0].endDate);
+
+
+
+                    setInterval(() => {
+
+
+                        const diff = end - new Date();
+
+
+
+                        if (diff <= 0) {
+
+                            countdown.textContent = 'Completed';
+
+                            return;
+
+                        }
+
+
+
+                        const d = Math.floor(diff / 86400000);
+
+                        const h = Math.floor(diff / 3600000) % 24;
+
+                        const m = Math.floor(diff / 60000) % 60;
+
+                        const s = Math.floor(diff / 1000) % 60;
+
+
+
+                        countdown.textContent =
+                            `${d}d ${h}h ${m}m ${s}s`;
+
+
+
+                    }, 1000);
+
+
+
+                }
+
+
+
+            } catch (error) {
+
+
+                console.error(
+
+                    'Dashboard error:',
+
+                    error
+
+                );
+
+
             }
+
+
         }
 
-        // BALANCE VISIBILITY
-        toggleBtn?.addEventListener('click', () => {
-            const isVisible = balanceEl.dataset.visible === 'true';
 
-            if (isVisible) {
-                realBalance = balanceEl.textContent;
-                balanceEl.textContent = '•••••';
-                balanceEl.dataset.visible = 'false';
-            } else {
-                balanceEl.textContent = realBalance;
-                balanceEl.dataset.visible = 'true';
-            }
-        });
 
-        // GOOGLE TRANSLATE
+
+
+
+
+
+        // BALANCE HIDE / SHOW
+
+
+        document.getElementById('toggleBalance')
+            ?.addEventListener('click', () => {
+
+
+                if (userBalance.dataset.visible === 'true') {
+
+
+                    userBalance.textContent = '•••••';
+
+                    userBalance.dataset.visible = 'false';
+
+
+                } else {
+
+
+                    userBalance.textContent = realBalance;
+
+                    userBalance.dataset.visible = 'true';
+
+
+                }
+
+
+            });
+
+
+
+
+
+
+
         function googleTranslateElementInit() {
+
+
             new google.translate.TranslateElement(
-                { pageLanguage: 'en', includedLanguages: 'en,pt,de,fr,es,da,ar,nl,sv,no,fi', autoDisplay: false },
+
+                {
+
+                    pageLanguage: 'en',
+
+                    autoDisplay: false
+
+                },
+
                 'google_translate_element'
+
             );
+
+
         }
 
-        function setLang(lang) {
-            if (!lang) return;
-            const val = lang === 'en' ? '' : `/en/${lang}`;
-            document.cookie = `googtrans=${val};path=/;`;
-            document.cookie = `googtrans=${val};path=/;domain=${location.hostname}`;
-            location.reload();
-        }
 
-        langSelect?.addEventListener('change', e => setLang(e.target.value));
-        langSelectMobile?.addEventListener('change', e => setLang(e.target.value));
 
-        document.getElementById('year').textContent = new Date().getFullYear();
+
+
+        document.getElementById('year').textContent =
+
+            new Date().getFullYear();
+
+
+
+
         loadDashboard();
 
 
 
+
+
+
         withdrawBtn?.addEventListener('click', () => {
+
+
             if (withdrawBtn.disabled) {
-                alert('Your account is currently restricted. Please contact support.');
+
+
+                alert(
+
+                    'Your account is currently restricted. Please contact support.'
+
+                );
+
+
                 return;
+
             }
 
-            // Loading state
-            withdrawBtn.textContent = 'Redirecting...';
-            withdrawBtn.classList.add('opacity-70');
-            withdrawBtn.disabled = true;
 
-            setTimeout(() => {
-                location.href = './withdraw.html';
-            }, 600);
+
+            location.href = './withdraw.html';
+
+
         });
+
+
+
     </script>
+
+
+
 </body>
 
 </html>

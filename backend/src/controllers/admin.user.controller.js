@@ -1,152 +1,307 @@
 const User = require('../models/User');
 const Transaction = require('../models/Transaction');
 
+
 /**
  * GET USERS WITH PENDING EMAIL VERIFICATION (ADMIN)
  */
 exports.getPendingVerifications = async (req, res) => {
     try {
+
         const users = await User.find({
             emailVerified: false,
             verificationRequested: true,
         }).select('name email createdAt');
 
+
         res.status(200).json({
             count: users.length,
             users,
         });
+
+
     } catch (error) {
+
         console.error('GET PENDING VERIFICATIONS ERROR:', error);
-        res.status(500).json({ message: 'Server error' });
+
+        res.status(500).json({
+            message: 'Server error'
+        });
+
     }
 };
+
+
+
+
 
 /**
  * VERIFY USER EMAIL (ADMIN)
  */
 exports.verifyUserEmail = async (req, res) => {
-    try {
-        const userId = req.params.id;
 
-        const user = await User.findById(userId);
+    try {
+
+        const user = await User.findById(req.params.id);
+
 
         if (!user) {
             return res.status(404).json({
-                message: 'User not found',
+                message: 'User not found'
             });
         }
 
+
         if (user.emailVerified) {
             return res.status(400).json({
-                message: 'User email already verified',
+                message: 'User email already verified'
             });
         }
+
 
         user.emailVerified = true;
         user.verificationRequested = false;
         user.verifiedAt = new Date();
+
+
         await user.save();
 
-        // Log transaction
+
+
         await Transaction.create({
+
             user: user._id,
+
             type: 'email_verified',
+
             title: 'Email Verified',
-            description: 'Email verified by admin',
+
+            description: 'Email verified by admin'
+
         });
 
+
+
         res.status(200).json({
-            message: 'User email verified successfully',
+
+            message: 'User email verified successfully'
+
         });
+
+
+
     } catch (error) {
+
+
         console.error('VERIFY EMAIL ERROR:', error);
-        res.status(500).json({ message: 'Server error' });
+
+
+        res.status(500).json({
+            message: 'Server error'
+        });
+
     }
+
 };
+
+
+
+
+
+
+
 
 /**
  * GET ALL USERS (ADMIN)
- * Minimal list for admin management
  */
 exports.getAllUsers = async (req, res) => {
+
     try {
+
+
         const users = await User.find()
+
             .select(`
-                name
-                email
-                phone
-                balance
-                entryCost
-                expectedEarnings
-                emailVerified
-                accountRestricted
-                createdAt
-            `)
-            .sort({ createdAt: -1 });
+            name
+            email
+            phone
+            balance
+            entryCost
+            expectedEarnings
+            emailVerified
+            accountRestricted
+            restrictionTitle
+            restrictionMessage
+            announcement
+            createdAt
+        `)
+
+            .sort({
+                createdAt: -1
+            });
+
+
 
         res.status(200).json({
+
             count: users.length,
-            users,
+
+            users
+
         });
+
+
+
     } catch (error) {
-        console.error('GET ALL USERS ERROR:', error);
-        res.status(500).json({ message: 'Server error' });
+
+
+        console.error(
+            'GET ALL USERS ERROR:',
+            error
+        );
+
+
+        res.status(500).json({
+            message: 'Server error'
+        });
+
+
     }
+
 };
+
+
+
+
+
+
+
 
 /**
  * UPDATE USER FINANCIALS (ADMIN)
- * Manual control of balance, entry cost, and expected earnings
  */
 exports.updateUserFinancials = async (req, res) => {
-    try {
-        const userId = req.params.id;
-        const { balance, entryCost, expectedEarnings } = req.body;
 
-        const user = await User.findById(userId);
+
+    try {
+
+
+        const user = await User.findById(req.params.id);
+
+
 
         if (!user) {
+
             return res.status(404).json({
-                message: 'User not found',
+                message: 'User not found'
             });
+
         }
 
-        // Manual updates only — no calculations
+
+
+        const {
+            balance,
+            entryCost,
+            expectedEarnings
+
+        } = req.body;
+
+
+
         if (balance !== undefined) {
+
             user.balance = Number(balance);
+
         }
+
 
         if (entryCost !== undefined) {
+
             user.entryCost = Number(entryCost);
+
         }
 
+
         if (expectedEarnings !== undefined) {
+
             user.expectedEarnings = Number(expectedEarnings);
+
         }
+
+
 
         await user.save();
 
-        // Log admin action
+
+
+
         await Transaction.create({
+
             user: user._id,
+
             type: 'admin_financial_update',
+
             title: 'Financials Updated',
-            description: 'Admin manually updated user financial values',
+
+            description:
+                'Admin manually updated user financial values'
+
         });
 
+
+
+
+
         res.status(200).json({
-            message: 'User financials updated successfully',
+
+            message:
+                'User financials updated successfully',
+
             data: {
+
                 balance: user.balance,
+
                 entryCost: user.entryCost,
-                expectedEarnings: user.expectedEarnings,
-            },
+
+                expectedEarnings: user.expectedEarnings
+
+            }
+
         });
+
+
+
     } catch (error) {
-        console.error('UPDATE USER FINANCIALS ERROR:', error);
-        res.status(500).json({ message: 'Server error' });
+
+
+        console.error(
+            'UPDATE FINANCIALS ERROR:',
+            error
+        );
+
+
+        res.status(500).json({
+            message: 'Server error'
+        });
+
     }
+
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /**
  * TOGGLE USER ACCOUNT RESTRICTION (ADMIN)
@@ -156,32 +311,165 @@ exports.toggleAccountRestriction = async (req, res) => {
         const user = await User.findById(req.params.id);
 
         if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+            return res.status(404).json({
+                message: 'User not found'
+            });
         }
 
-        // 🔁 TOGGLE VALUE
+        const {
+            restrictionTitle,
+            restrictionMessage
+        } = req.body;
+
+
+        // Toggle restriction status
         user.accountRestricted = !user.accountRestricted;
+
+
+        // Save restriction details only when restricting
+        if (user.accountRestricted) {
+
+            user.restrictionTitle =
+                restrictionTitle || 'Account Restricted';
+
+            user.restrictionMessage =
+                restrictionMessage ||
+                'Your account has been restricted. Please contact support.';
+
+        } else {
+
+            // Clear old restriction details when unrestricted
+            user.restrictionTitle = '';
+            user.restrictionMessage = '';
+
+        }
+
+
         await user.save();
 
+
+
         await Transaction.create({
+
             user: user._id,
+
             type: 'account_restriction_toggle',
+
             title: user.accountRestricted
                 ? 'Account Restricted'
                 : 'Account Unrestricted',
+
             description: user.accountRestricted
-                ? 'Admin restricted this account'
+                ? `${user.restrictionTitle}: ${user.restrictionMessage}`
                 : 'Admin lifted account restriction',
+
         });
 
+
+
         res.status(200).json({
+
             message: user.accountRestricted
                 ? 'User account restricted successfully'
                 : 'User account unrestricted successfully',
+
             accountRestricted: user.accountRestricted,
+
+            restrictionTitle: user.restrictionTitle,
+
+            restrictionMessage: user.restrictionMessage
+
         });
+
+
     } catch (error) {
-        console.error('TOGGLE ACCOUNT RESTRICTION ERROR:', error);
-        res.status(500).json({ message: 'Server error' });
+
+        console.error(
+            'TOGGLE ACCOUNT RESTRICTION ERROR:',
+            error
+        );
+
+        res.status(500).json({
+            message: 'Server error'
+        });
+
     }
+};
+
+
+
+
+
+
+
+
+
+/**
+ * UPDATE USER ANNOUNCEMENT / STATUS MESSAGE
+ */
+exports.updateUserAnnouncement = async (req, res) => {
+
+
+    try {
+
+
+        const user = await User.findById(req.params.id);
+
+
+
+        if (!user) {
+
+            return res.status(404).json({
+
+                message: 'User not found'
+
+            });
+
+        }
+
+
+
+        user.announcement =
+            req.body.announcement || '';
+
+
+
+        await user.save();
+
+
+
+
+        res.status(200).json({
+
+            message:
+                'User announcement updated successfully',
+
+
+            announcement:
+                user.announcement
+
+
+        });
+
+
+
+
+    } catch (error) {
+
+
+        console.error(
+            'UPDATE ANNOUNCEMENT ERROR:',
+            error
+        );
+
+
+        res.status(500).json({
+
+            message: 'Server error'
+
+        });
+
+
+    }
+
 };
