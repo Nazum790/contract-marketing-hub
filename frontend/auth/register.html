@@ -71,6 +71,13 @@
                         <option value="fr">French</option>
                         <option value="es">Spanish</option>
                         <option value="da">Danish</option>
+                        <option value="ar">Arabic</option>
+                        <option value="ms">Malay</option>
+                        <option value="tl">Filipino</option>
+                        <option value="nl">Dutch</option>
+                        <option value="sv">Swedish</option>
+                        <option value="no">Norwegian</option>
+                        <option value="fi">Finnish</option>
                     </select>
                 </nav>
 
@@ -84,21 +91,23 @@
 
             <!-- MOBILE LANGUAGE -->
             <div class="md:hidden mt-2">
-                <select id="langMobile" class="bg-brandDark text-white text-xs rounded px-2 py-1
+               <select id="langMobile" class="bg-brandDark text-white text-xs rounded px-2 py-1
                border border-white/20 max-w-[160px]">
-                    <option value="">Select Language</option>
-                    <option value="en">English</option>
-                    <option value="pt">Portuguese</option>
-                    <option value="de">German</option>
-                    <option value="fr">French</option>
-                    <option value="es">Spanish</option>
-                    <option value="da">Danish</option>
-                    <option value="ar">Arabic</option>
-                    <option value="nl">Dutch</option>
-                    <option value="sv">Swedish</option>
-                    <option value="no">Norwegian</option>
-                    <option value="fi">Finnish</option>
-                </select>
+                   <option value="">Select Language</option>
+                   <option value="en">English</option>
+                   <option value="pt">Portuguese</option>
+                   <option value="de">German</option>
+                   <option value="fr">French</option>
+                   <option value="es">Spanish</option>
+                   <option value="da">Danish</option>
+                   <option value="ar">Arabic</option>
+                   <option value="ms">Malay</option>
+                   <option value="tl">Filipino</option>
+                   <option value="nl">Dutch</option>
+                   <option value="sv">Swedish</option>
+                   <option value="no">Norwegian</option>
+                   <option value="fi">Finnish</option>
+               </select>
             </div>
         </div>
     </header>
@@ -166,6 +175,9 @@
                         <option value="Papua New Guinea">Papua New Guinea</option>
                         <option value="Saudi Arabia">Saudi Arabia</option>
                         <option value="United Arab Emirates">United Arab Emirates</option>
+                        <option value="Jordan">Jordan</option>
+                        <option value="Malaysia">Malaysia</option>
+                        <option value="Philippines">Philippines</option>
                         <option value="France">France</option>
                         <option value="Netherlands">Netherlands</option>
                         <option value="Sweden">Sweden</option>
@@ -249,7 +261,7 @@
         /* GOOGLE TRANSLATE */
         function googleTranslateElementInit() {
             new google.translate.TranslateElement(
-                { pageLanguage: 'en', includedLanguages: 'en,pt,de,fr,es,da,ar,nl,sv,no,fi', autoDisplay: false },
+                { pageLanguage: 'en', includedLanguages: 'en,pt,de,fr,es,da,ar,ms,tl,nl,sv,no,fi', autoDisplay: false },
                 'google_translate_element'
             );
         }
@@ -290,6 +302,9 @@
             'Papua New Guinea': { code: '+675', maxLength: 8 },
             'Saudi Arabia': { code: '+966', maxLength: 9 },
             'United Arab Emirates': { code: '+971', maxLength: 9 },
+            Jordan: { code: '+962', minLength: 8, maxLength: 9 },
+            Malaysia: { code: '+60', minLength: 9, maxLength: 10 },
+            Philippines: { code: '+63', minLength: 10, maxLength: 10 },
             France: { code: '+33', maxLength: 9 },
             Netherlands: { code: '+31', maxLength: 9 },
             Sweden: { code: '+46', maxLength: 9 },
@@ -322,15 +337,21 @@
             const config = phoneConfig[selectedCountry];
 
             if (!config) {
-                phoneCodeEl.textContent = '—';
+                phoneCodeEl.textContent = '?';
                 phoneInput.value = '';
                 phoneInput.removeAttribute('maxlength');
+                phoneInput.removeAttribute('minlength');
                 return;
             }
 
             phoneCodeEl.textContent = config.code;
             phoneInput.value = '';
             phoneInput.setAttribute('maxlength', config.maxLength);
+            if (config.minLength) {
+                phoneInput.setAttribute('minlength', config.minLength);
+            } else {
+                phoneInput.removeAttribute('minlength');
+            }
         });
 
         /* NUMBERS ONLY */

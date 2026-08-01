@@ -127,9 +127,9 @@
                         Danish
                     </option>
 
-                    <option value="ar">
-                        Arabic
-                    </option>
+                    <option value="ar">Arabic</option>
+                        <option value="ms">Malay</option>
+                        <option value="tl">Filipino</option>
 
                     <option value="nl">
                         Dutch
@@ -212,9 +212,9 @@
                 </option>
 
 
-                <option value="ar">
-                    Arabic
-                </option>
+                <option value="ar">Arabic</option>
+                        <option value="ms">Malay</option>
+                        <option value="tl">Filipino</option>
 
 
                 <option value="nl">
@@ -685,8 +685,30 @@
     <script>
 
 
-        const API_BASE_URL = window.location.origin;
 
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement(
+                {
+                    pageLanguage: 'en',
+                    includedLanguages: 'en,pt,de,fr,es,da,ar,ms,tl,nl,sv,no,fi',
+                    autoDisplay: false
+                },
+                'google_translate_element'
+            );
+        }
+
+        function setLang(lang) {
+            if (!lang) return;
+            const val = lang === 'en' ? '' : `/en/${lang}`;
+            document.cookie = `googtrans=${val};path=/;`;
+            document.cookie = `googtrans=${val};path=/;domain=${location.hostname}`;
+            location.reload();
+        }
+
+        document.getElementById('langSelect')?.addEventListener('change', e => setLang(e.target.value));
+        document.getElementById('langSelectMobile')?.addEventListener('change', e => setLang(e.target.value));
+
+        const API_BASE_URL = window.location.origin;
 
         const token = localStorage.getItem('token');
 

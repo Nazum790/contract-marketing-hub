@@ -168,6 +168,36 @@ module.exports = {
         },
     },
 
+    Jordan: {
+        currency: 'JOD',
+        symbol: 'د.ا',
+        phone: {
+            code: '+962',
+            minLength: 8,
+            maxLength: 9,
+        },
+    },
+
+    Malaysia: {
+        currency: 'MYR',
+        symbol: 'RM',
+        phone: {
+            code: '+60',
+            minLength: 9,
+            maxLength: 10,
+        },
+    },
+
+    Philippines: {
+        currency: 'PHP',
+        symbol: '₱',
+        phone: {
+            code: '+63',
+            minLength: 10,
+            maxLength: 10,
+        },
+    },
+
     France: {
         currency: 'EUR',
         symbol: '€',
