@@ -1,24 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+    <title>Withdraw | Contract Marketing Hub</title>
     <meta name="theme-color" content="#0B2C5F" />
     <meta name="apple-mobile-web-app-capable" content="yes">
 
-    <title>Withdraw | Contract Marketing Hub</title>
-
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome CDN for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
                         primary: '#0B2C5F',
                         darkbg: '#081A33',
-                        accent: '#F59E0B'
+                        darkcard: 'rgba(15, 34, 64, 0.7)',
+                        accent: '#F59E0B',
+                        accentHover: '#D97706',
+                        profit: '#10B981'
+                    },
+                    boxShadow: {
+                        'glow': '0 0 25px -5px rgba(245, 158, 11, 0.25)',
+                        'glow-blue': '0 0 30px -5px rgba(11, 44, 95, 0.5)',
+                        'card': '0 10px 30px -5px rgba(0, 0, 0, 0.3)'
                     }
                 }
             }
@@ -30,12 +42,64 @@
         body {
             width: 100%;
             overflow-x: hidden;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #081A33;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #1e3a6a;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2b4c80;
+        }
+
+        /* Glassmorphism utilities */
+        .glass-panel {
+            background: rgba(13, 29, 56, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-card {
+            background: linear-gradient(135deg, rgba(20, 42, 77, 0.8) 0%, rgba(10, 25, 48, 0.9) 100%);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
         }
 
         .notranslate {
             translate: no;
         }
 
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        /* Hide Google Translate overlay elements completely */
         .goog-logo-link,
         .goog-te-banner-frame,
         .goog-te-gadget,
@@ -43,48 +107,94 @@
         body>.skiptranslate {
             display: none !important;
         }
+
+        body {
+            top: 0px !important;
+        }
     </style>
 </head>
 
-<body class="min-h-screen flex flex-col bg-gradient-to-b from-darkbg to-primary text-gray-100">
+<body
+    class="min-h-screen bg-[#061427] text-gray-100 flex flex-col justify-between selection:bg-accent selection:text-black">
 
-    <!-- HEADER -->
-    <header class="fixed top-0 left-0 right-0 z-50 h-[72px]
-        bg-darkbg/95 backdrop-blur border-b border-white/10 notranslate">
-        <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-            <h1 class="font-bold text-lg whitespace-nowrap">
-                Contract Marketing Hub
-            </h1>
+    <!-- BACKGROUND GLOW EFFECTS -->
+    <div class="fixed top-0 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
+    <div class="fixed bottom-10 right-10 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none -z-10">
+    </div>
 
-            <div class="flex items-center gap-4">
-                <a href="./dashboard.html" class="text-sm text-accent whitespace-nowrap">
-                    ← Back to dashboard
+    <!-- NAVBAR -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass-panel border-b border-white/10 notranslate">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between">
+
+            <!-- BRAND LOGO -->
+            <a href="./dashboard.html" class="flex items-center gap-3">
+                <div
+                    class="w-10 h-10 rounded-xl bg-gradient-to-tr from-accent to-amber-300 flex items-center justify-center text-darkbg font-extrabold shadow-glow text-lg">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+                <h1 class="font-bold text-lg sm:text-xl tracking-tight text-white flex items-center gap-2">
+                    Contract Marketing <span class="text-accent">Hub</span>
+                </h1>
+            </a>
+
+            <!-- DESKTOP NAV -->
+            <nav class="hidden md:flex gap-1 lg:gap-2 text-sm items-center">
+                <a href="./dashboard.html"
+                    class="px-3.5 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/5 transition flex items-center gap-2">
+                    <i class="fa-solid fa-house text-xs"></i> Dashboard
+                </a>
+                <a href="./contracts.html"
+                    class="px-3.5 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/5 transition flex items-center gap-2">
+                    <i class="fa-solid fa-file-contract text-xs"></i> Contracts
+                </a>
+                <a href="./transactions.html"
+                    class="px-3.5 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/5 transition flex items-center gap-2">
+                    <i class="fa-solid fa-receipt text-xs"></i> Transactions
+                </a>
+                <a href="./profile.html"
+                    class="px-3.5 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/5 transition flex items-center gap-2">
+                    <i class="fa-solid fa-user text-xs"></i> Profile
                 </a>
 
-                <select id="langSelect"
-                    class="hidden md:block bg-darkbg border border-white/20 text-sm rounded px-2 py-1">
-                    <option value="">Select Language</option>
-                    <option selected>Select Language</option>
-                    <option value="en">English</option>
-                    <option value="pt">Portuguese</option>
-                    <option value="de">German</option>
-                    <option value="fr">French</option>
-                    <option value="es">Spanish</option>
-                    <option value="da">Danish</option>
-                    <option value="ar">Arabic</option>
+                <div class="h-4 w-px bg-white/10 mx-2"></div>
+
+                <!-- SELECT LANGUAGE DESKTOP -->
+                <div class="relative flex items-center">
+                    <i class="fa-solid fa-globe absolute left-2.5 text-xs text-gray-400 pointer-events-none"></i>
+                    <select id="langSelect"
+                        class="bg-darkbg/80 border border-white/15 text-xs rounded-lg pl-7 pr-3 py-2 text-gray-200 focus:outline-none focus:border-accent appearance-none cursor-pointer">
+                        <option value="">Select Language</option>
+                        <option value="en">English</option>
+                        <option value="pt">Portuguese</option>
+                        <option value="de">German</option>
+                        <option value="fr">French</option>
+                        <option value="es">Spanish</option>
+                        <option value="da">Danish</option>
+                        <option value="ar">Arabic</option>
                         <option value="ms">Malay</option>
                         <option value="tl">Filipino</option>
-                    <option value="nl">Dutch</option>
-                    <option value="sv">Swedish</option>
-                    <option value="no">Norwegian</option>
-                    <option value="fi">Finnish</option>
-                </select>
-            </div>
+                        <option value="nl">Dutch</option>
+                        <option value="sv">Swedish</option>
+                        <option value="no">Norwegian</option>
+                        <option value="fi">Finnish</option>
+                    </select>
+                </div>
+            </nav>
+
+            <!-- MOBILE MENU BUTTON -->
+            <button id="menuBtn"
+                class="md:hidden text-gray-200 hover:text-white p-2 rounded-lg bg-white/5 border border-white/10 text-xl focus:outline-none">
+                <i class="fa-solid fa-bars"></i>
+            </button>
         </div>
 
-        <div class="md:hidden px-4 pb-3">
+        <!-- MOBILE LANGUAGE PICKER BAR -->
+        <div class="md:hidden px-4 pb-3 border-t border-white/5 pt-2 flex items-center justify-between notranslate">
+            <span class="text-xs text-gray-400 flex items-center gap-1">
+                <i class="fa-solid fa-globe"></i> Language:
+            </span>
             <select id="langSelectMobile"
-                class="bg-darkbg border border-white/20 text-sm rounded px-3 py-2 w-full max-w-[240px]">
+                class="bg-darkbg border border-white/20 text-xs rounded-lg px-3 py-1.5 text-gray-200 w-auto max-w-[200px] focus:outline-none focus:border-accent">
                 <option value="">Select language</option>
                 <option value="en">English</option>
                 <option value="pt">Portuguese</option>
@@ -93,115 +203,277 @@
                 <option value="es">Spanish</option>
                 <option value="da">Danish</option>
                 <option value="ar">Arabic</option>
-                        <option value="ms">Malay</option>
-                        <option value="tl">Filipino</option>
+                <option value="ms">Malay</option>
+                <option value="tl">Filipino</option>
                 <option value="nl">Dutch</option>
                 <option value="sv">Swedish</option>
                 <option value="no">Norwegian</option>
                 <option value="fi">Finnish</option>
-
             </select>
         </div>
     </header>
 
-    <!-- MAIN -->
-    <main class="flex-1 max-w-xl mx-auto px-4 pt-36 pb-10 w-full">
+    <!-- MOBILE MENU OVERLAY & SIDEBAR -->
+    <div id="mobileOverlay"
+        class="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 hidden transition-opacity duration-300 md:hidden"></div>
 
-        <div class="bg-white text-gray-800 rounded-xl shadow p-6">
+    <div id="mobileMenu"
+        class="fixed top-0 right-0 h-full w-80 bg-[#081A33]/98 backdrop-blur-2xl translate-x-full transition-transform duration-300 md:hidden border-l border-white/10 z-50 flex flex-col justify-between p-6 shadow-2xl">
+        <div class="space-y-6 text-sm">
+            <div class="flex justify-between items-center pb-4 border-b border-white/10">
+                <span class="font-bold text-lg text-white">Menu Navigation</span>
+                <button id="closeMenu"
+                    class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
 
-            <h2 class="text-xl font-semibold mb-1">Withdraw Funds</h2>
-            <p class="text-sm text-gray-500 mb-4">
-                Available balance:
-                <strong>
-                    <span id="currencySymbol"></span>
-                    <span id="userBalance">0</span>
-                </strong>
-            </p>
-
-            <!-- IMPORTANT NOTICE -->
-            <div class="mb-6 p-4 rounded-lg bg-yellow-50 border border-yellow-200 text-sm text-yellow-800">
-                <p class="font-medium mb-2">⚠ Withdrawal ID Required</p>
-                <p class="mb-3">
-                    Please contact support to resolve any required charges and obtain a withdrawal ID before proceeding.
-                </p>
-                <a href="/contact.html" class="inline-block px-4 py-2 bg-accent text-black rounded-lg font-medium">
-                    Don’t have a withdrawal ID? Click here to Contact support
+            <nav class="space-y-3">
+                <a href="./dashboard.html"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white transition">
+                    <i class="fa-solid fa-house w-5"></i> Dashboard
                 </a>
+                <a href="./contracts.html"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white transition">
+                    <i class="fa-solid fa-file-contract w-5"></i> Contracts
+                </a>
+                <a href="./transactions.html"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white transition">
+                    <i class="fa-solid fa-receipt w-5"></i> Transactions
+                </a>
+                <a href="./profile.html"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white transition">
+                    <i class="fa-solid fa-user w-5"></i> Profile
+                </a>
+            </nav>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-2xl mx-auto px-4 sm:px-6 pt-32 pb-20 w-full animate-fade-in">
+
+        <!-- HEADER & BREADCRUMB -->
+        <div class="mb-6">
+            <a href="./dashboard.html"
+                class="inline-flex items-center gap-2 text-xs text-gray-400 hover:text-accent transition mb-3">
+                <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+            </a>
+            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white flex items-center gap-3">
+                <i class="fa-solid fa-wallet text-accent"></i> Withdraw Funds
+            </h2>
+        </div>
+
+        <!-- BALANCE SUMMARY CARD -->
+        <div class="glass-card p-6 rounded-3xl mb-6 relative overflow-hidden border border-white/10 shadow-glow-blue">
+            <div class="flex items-center justify-between relative z-10">
+                <div>
+                    <span
+                        class="text-xs uppercase tracking-wider font-semibold text-gray-400 flex items-center gap-1.5">
+                        <i class="fa-solid fa-piggy-bank text-accent"></i> Available Balance
+                    </span>
+                    <div class="text-3xl sm:text-4xl font-extrabold text-white mt-2 tracking-tight">
+                        <span id="currencySymbol" class="text-accent font-medium"></span><span id="userBalance">0</span>
+                    </div>
+                </div>
+                <div
+                    class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-accent/20 to-amber-300/10 border border-accent/30 flex items-center justify-center text-accent text-2xl shadow-glow">
+                    <i class="fa-solid fa-money-bill-transfer"></i>
+                </div>
+            </div>
+            <p class="text-xs text-gray-400 mt-4 pt-3 border-t border-white/10 flex items-center gap-2">
+                <i class="fa-solid fa-shield-halved text-profit"></i> Withdrawals are securely processed after standard
+                compliance verification.
+            </p>
+        </div>
+
+        <!-- SECURITY NOTICE CARD (WITHDRAWAL ID) -->
+        <div class="glass-card p-5 sm:p-6 rounded-2xl border-l-4 border-l-amber-500 mb-6 relative">
+            <div class="flex items-start gap-4">
+                <div
+                    class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-lg shrink-0 mt-0.5">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <div class="flex-1">
+                    <h3 class="font-bold text-sm text-white flex items-center gap-2">
+                        Withdrawal ID Required
+                    </h3>
+                    <p class="text-xs text-gray-300 mt-1 leading-relaxed">
+                        Contact support to resolve any required charges and obtain your withdrawal ID before requesting
+                        a withdrawal.
+                    </p>
+                    <a href="/contact.html"
+                        class="inline-flex items-center gap-2 mt-3.5 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-xs font-semibold text-accent hover:text-white transition">
+                        <i class="fa-solid fa-headset"></i> Don’t have a withdrawal ID? Contact Support
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- NOTIFICATION / MESSAGE BOX -->
+        <div id="messageBox" class="hidden mb-6 p-4 rounded-2xl text-xs sm:text-sm border transition-all duration-300">
+        </div>
+
+        <!-- MAIN FORM GLASS CARD CONTAINER -->
+        <div class="glass-card rounded-3xl p-6 sm:p-8 space-y-6">
+
+            <!-- WITHDRAWAL ID INPUT -->
+            <div>
+                <label for="withdrawalId"
+                    class="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-key text-accent"></i> Withdrawal ID
+                </label>
+                <input type="text" id="withdrawalId" placeholder=""
+                    class="w-full bg-darkbg/90 border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent font-mono uppercase tracking-wider transition" />
             </div>
 
-            <!-- WITHDRAWAL ID INPUT (ADDED) -->
-            <div class="mb-6">
-                <label class="block text-sm font-medium mb-2">
-                    Withdrawal ID
+            <!-- SELECT CONTRACT -->
+            <div>
+                <label for="contractSelect"
+                    class="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-file-contract text-accent"></i> Select Completed Contract
                 </label>
-                <input type="text" id="withdrawalId"
-                    class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary" />
-            </div>
-
-            <div id="messageBox" class="hidden mb-4 p-3 rounded text-sm"></div>
-
-            <!-- CONTRACT -->
-            <div class="mb-6">
-                <label class="block text-sm font-medium mb-2">
-                    Select completed contract
-                </label>
-                <select id="contractSelect" class="w-full px-4 py-2 border rounded-lg">
+                <select id="contractSelect"
+                    class="w-full bg-darkbg/90 border border-white/15 text-sm rounded-xl px-4 py-3 text-gray-200 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent appearance-none cursor-pointer transition">
                     <option value="">-- Select contract --</option>
                 </select>
+                <p class="text-[11px] text-gray-400 mt-1.5 flex items-center gap-1">
+                    <i class="fa-solid fa-circle-info"></i> Only completed and credited contracts are eligible for
+                    payout.
+                </p>
             </div>
 
-            <!-- METHOD -->
-            <div class="mb-6">
-                <label class="block text-sm font-medium mb-2">
-                    Select withdrawal method
+            <!-- WITHDRAWAL METHOD SELECTOR (CARDS) -->
+            <div>
+                <label
+                    class="block text-xs font-semibold uppercase tracking-wider text-gray-300 mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-credit-card text-accent"></i> Select Withdrawal Method
                 </label>
-                <select id="methodSelect" class="w-full px-4 py-2 border rounded-lg">
+
+                <!-- HIDDEN SELECTOR MAINTAINED FOR EXISTING JS LOGIC -->
+                <select id="methodSelect" class="hidden">
                     <option value="">-- Choose method --</option>
                     <option value="bank">Bank Transfer</option>
                     <option value="pix">PIX (Brazil)</option>
                     <option value="crypto">USDT (Crypto)</option>
                 </select>
+
+                <!-- VISUAL CARDS FOR METHOD SELECTION -->
+                <div class="grid grid-cols-3 gap-3">
+                    <button type="button" data-method="bank"
+                        class="method-card p-3 sm:p-4 rounded-2xl bg-darkbg/70 border border-white/10 hover:border-accent/50 flex flex-col items-center justify-center text-center transition gap-2 group focus:outline-none">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-white/5 text-gray-300 group-hover:text-accent group-hover:bg-accent/10 flex items-center justify-center text-lg transition shrink-0">
+                            <i class="fa-solid fa-building-columns"></i>
+                        </div>
+                        <span class="text-xs font-medium text-gray-300 group-hover:text-white">Bank Transfer</span>
+                    </button>
+
+                    <button type="button" data-method="pix"
+                        class="method-card p-3 sm:p-4 rounded-2xl bg-darkbg/70 border border-white/10 hover:border-accent/50 flex flex-col items-center justify-center text-center transition gap-2 group focus:outline-none">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-white/5 text-gray-300 group-hover:text-accent group-hover:bg-accent/10 flex items-center justify-center text-lg transition shrink-0">
+                            <i class="fa-solid fa-pix"></i>
+                        </div>
+                        <span class="text-xs font-medium text-gray-300 group-hover:text-white">PIX Transfer</span>
+                    </button>
+
+                    <button type="button" data-method="crypto"
+                        class="method-card p-3 sm:p-4 rounded-2xl bg-darkbg/70 border border-white/10 hover:border-accent/50 flex flex-col items-center justify-center text-center transition gap-2 group focus:outline-none">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-white/5 text-gray-300 group-hover:text-accent group-hover:bg-accent/10 flex items-center justify-center text-lg transition shrink-0">
+                            <i class="fa-solid fa-coins"></i>
+                        </div>
+                        <span class="text-xs font-medium text-gray-300 group-hover:text-white">USDT Crypto</span>
+                    </button>
+                </div>
             </div>
 
-            <!-- BANK -->
-            <form id="bankForm" class="hidden space-y-4">
-                <input type="number" min="1" id="bankAmount" placeholder="Amount"
-                    class="w-full px-4 py-2 border rounded-lg" />
-                <input type="text" id="bankName" placeholder="Bank name" class="w-full px-4 py-2 border rounded-lg" />
-                <input type="text" id="accountName" placeholder="Account holder name"
-                    class="w-full px-4 py-2 border rounded-lg" />
-                <input type="text" id="accountNumber" placeholder="Account number"
-                    class="w-full px-4 py-2 border rounded-lg" />
-                <button class="w-full bg-primary text-white py-2 rounded-lg">Submit Withdrawal</button>
+            <!-- DYNAMIC FORMS -->
+
+            <!-- 1. BANK FORM -->
+            <form id="bankForm" class="hidden space-y-4 pt-2 border-t border-white/10">
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1">Withdrawal Amount</label>
+                    <input type="number" min="1" id="bankAmount" placeholder="Amount to withdraw"
+                        class="w-full bg-darkbg/90 border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition" />
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1">Bank Name</label>
+                    <input type="text" id="bankName" placeholder="e.g. Chase, Barclays, Banco do Brasil"
+                        class="w-full bg-darkbg/90 border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition" />
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1">Account Holder Name</label>
+                    <input type="text" id="accountName" placeholder="Full legal name"
+                        class="w-full bg-darkbg/90 border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition" />
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1">Account Number / IBAN</label>
+                    <input type="text" id="accountNumber" placeholder="Account number or IBAN"
+                        class="w-full bg-darkbg/90 border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition" />
+                </div>
+                <button type="submit"
+                    class="submit-btn w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-accent to-amber-500 text-darkbg font-bold text-sm shadow-glow hover:brightness-110 active:scale-[0.99] transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-paper-plane"></i> <span>Submit Withdrawal</span>
+                </button>
             </form>
 
-            <!-- PIX -->
-            <form id="pixForm" class="hidden space-y-4">
-                <input type="number" min="1" id="pixAmount" placeholder="Amount"
-                    class="w-full px-4 py-2 border rounded-lg" />
-                <input type="text" id="pixKey" placeholder="PIX key" class="w-full px-4 py-2 border rounded-lg" />
-                <button class="w-full bg-primary text-white py-2 rounded-lg">Submit Withdrawal</button>
+            <!-- 2. PIX FORM -->
+            <form id="pixForm" class="hidden space-y-4 pt-2 border-t border-white/10">
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1">Withdrawal Amount</label>
+                    <input type="number" min="1" id="pixAmount" placeholder="Amount to withdraw"
+                        class="w-full bg-darkbg/90 border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition" />
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1">PIX Key</label>
+                    <input type="text" id="pixKey" placeholder="CPF, Email, Phone, or Random Key"
+                        class="w-full bg-darkbg/90 border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition font-mono" />
+                </div>
+                <button type="submit"
+                    class="submit-btn w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-accent to-amber-500 text-darkbg font-bold text-sm shadow-glow hover:brightness-110 active:scale-[0.99] transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-paper-plane"></i> <span>Submit Withdrawal</span>
+                </button>
             </form>
 
-            <!-- CRYPTO -->
-            <form id="usdtForm" class="hidden space-y-4">
-                <input type="number" min="1" id="usdtAmount" placeholder="Amount"
-                    class="w-full px-4 py-2 border rounded-lg" />
-                <input type="text" id="walletAddress" placeholder="USDT wallet address"
-                    class="w-full px-4 py-2 border rounded-lg" />
-                <button class="w-full bg-primary text-white py-2 rounded-lg">Submit Withdrawal</button>
+            <!-- 3. CRYPTO FORM -->
+            <form id="usdtForm" class="hidden space-y-4 pt-2 border-t border-white/10">
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1">Withdrawal Amount</label>
+                    <input type="number" min="1" id="usdtAmount" placeholder="Amount to withdraw"
+                        class="w-full bg-darkbg/90 border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition" />
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1">USDT Wallet Address</label>
+                    <input type="text" id="walletAddress" placeholder="TRC20 / ERC20 Wallet Address"
+                        class="w-full bg-darkbg/90 border border-white/15 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition font-mono" />
+                </div>
+                <button type="submit"
+                    class="submit-btn w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-accent to-amber-500 text-darkbg font-bold text-sm shadow-glow hover:brightness-110 active:scale-[0.99] transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-paper-plane"></i> <span>Submit Withdrawal</span>
+                </button>
             </form>
 
         </div>
+
     </main>
 
     <!-- FOOTER -->
-    <footer class="border-t border-white/10 text-center py-4 text-sm text-gray-300">
-        © <span id="year"></span> Contract Marketing Hub
+    <footer class="border-t border-white/10 bg-darkbg/50 backdrop-blur-md py-6 text-center text-xs text-gray-400">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p>© <span id="year"></span> Contract Marketing Hub. All rights reserved.</p>
+            <div class="flex items-center gap-4 text-gray-400">
+                <a href="../privacy.html" class="hover:text-accent transition">Privacy Policy</a>
+                <a href="../terms.html" class="hover:text-accent transition">Terms of Service</a>
+                <a href="../contact.html" class="hover:text-accent transition">Support</a>
+            </div>
+        </div>
     </footer>
 
-    <!-- GOOGLE TRANSLATE -->
+    <!-- GOOGLE TRANSLATE ELEMENT -->
     <div id="google_translate_element" style="display:none"></div>
+
+    <!-- TRANSLATION INITIALIZATION SCRIPT -->
     <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     <script>
@@ -225,39 +497,112 @@
         const pixForm = document.getElementById('pixForm');
         const usdtForm = document.getElementById('usdtForm');
         const messageBox = document.getElementById('messageBox');
+        const currencySymbol = document.getElementById('currencySymbol');
+        const userBalance = document.getElementById('userBalance');
 
-        function showMessage(msg, type = 'error') {
-            messageBox.textContent = msg;
-            messageBox.className =
-                'mb-4 p-3 rounded text-sm ' +
-                (type === 'success'
-                    ? 'bg-green-100 text-green-700'
-                    : 'bg-red-100 text-red-700');
-            messageBox.classList.remove('hidden');
+        // MOBILE MENU & OVERLAY TOGGLE
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const closeMenu = document.getElementById('closeMenu');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+
+        function openMobileNav() {
+            mobileMenu.classList.remove('translate-x-full');
+            mobileOverlay.classList.remove('hidden');
         }
 
-        methodSelect.onchange = () => {
+        function closeMobileNav() {
+            mobileMenu.classList.add('translate-x-full');
+            mobileOverlay.classList.add('hidden');
+        }
+
+        menuBtn?.addEventListener('click', openMobileNav);
+        closeMenu?.addEventListener('click', closeMobileNav);
+        mobileOverlay?.addEventListener('click', closeMobileNav);
+
+        // ENHANCED NOTIFICATION MESSAGES
+        function showMessage(msg, type = 'error') {
+            messageBox.innerHTML = type === 'success'
+                ? `<div class="flex items-center gap-3"><i class="fa-solid fa-circle-check text-profit text-lg"></i><span>${msg}</span></div>`
+                : `<div class="flex items-center gap-3"><i class="fa-solid fa-circle-exclamation text-red-400 text-lg"></i><span>${msg}</span></div>`;
+
+            messageBox.className = 'mb-6 p-4 rounded-2xl text-xs sm:text-sm border transition-all duration-300 ' +
+                (type === 'success'
+                    ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
+                    : 'bg-red-500/10 border-red-500/30 text-red-300');
+            messageBox.classList.remove('hidden');
+
+            messageBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // METHOD CARD SELECTION HANDLER
+        const methodCards = document.querySelectorAll('.method-card');
+
+        function updateSelectedMethod(val) {
+            methodSelect.value = val;
+
+            methodCards.forEach(card => {
+                if (card.dataset.method === val) {
+                    card.classList.add('border-accent', 'bg-accent/10');
+                    card.classList.remove('border-white/10', 'bg-darkbg/70');
+                    const iconBox = card.querySelector('div');
+                    iconBox.classList.add('text-accent', 'bg-accent/20');
+                } else {
+                    card.classList.remove('border-accent', 'bg-accent/10');
+                    card.classList.add('border-white/10', 'bg-darkbg/70');
+                    const iconBox = card.querySelector('div');
+                    iconBox.classList.remove('text-accent', 'bg-accent/20');
+                }
+            });
+
             bankForm.classList.add('hidden');
             pixForm.classList.add('hidden');
             usdtForm.classList.add('hidden');
 
-            if (methodSelect.value === 'bank') bankForm.classList.remove('hidden');
-            if (methodSelect.value === 'pix') pixForm.classList.remove('hidden');
-            if (methodSelect.value === 'crypto') usdtForm.classList.remove('hidden');
+            if (val === 'bank') bankForm.classList.remove('hidden');
+            if (val === 'pix') pixForm.classList.remove('hidden');
+            if (val === 'crypto') usdtForm.classList.remove('hidden');
+        }
+
+        methodCards.forEach(card => {
+            card.addEventListener('click', () => {
+                updateSelectedMethod(card.dataset.method);
+            });
+        });
+
+        methodSelect.onchange = () => {
+            updateSelectedMethod(methodSelect.value);
         };
 
         function validateWithdrawalId() {
             const value = withdrawalIdInput.value.trim();
             if (!/^WD\d{4}$/.test(value)) {
-                showMessage('Invalid Withdrawal ID.', 'error');
+                showMessage('Invalid Withdrawal ID format. ID must be in format WD0000 (e.g. WD1234).', 'error');
                 return null;
             }
             return value;
         }
 
-        async function submitWithdrawal(payload) {
+        function setSubmittingState(form, isSubmitting) {
+            const btn = form.querySelector('.submit-btn');
+            if (!btn) return;
+
+            if (isSubmitting) {
+                btn.disabled = true;
+                btn.classList.add('opacity-75', 'cursor-not-allowed');
+                btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> <span>Processing Request...</span>`;
+            } else {
+                btn.disabled = false;
+                btn.classList.remove('opacity-75', 'cursor-not-allowed');
+                btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> <span>Submit Withdrawal</span>`;
+            }
+        }
+
+        async function submitWithdrawal(payload, formElement) {
             const withdrawalId = validateWithdrawalId();
             if (!withdrawalId) return;
+
+            setSubmittingState(formElement, true);
 
             try {
                 const res = await fetch(`${API_BASE_URL}/api/withdrawals`, {
@@ -275,10 +620,13 @@
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.message);
 
-                showMessage('Withdrawal request submitted successfully', 'success');
+                showMessage('Withdrawal request submitted successfully. You will receive an update once verified.', 'success');
+                formElement.reset();
 
             } catch (err) {
-                showMessage(err.message);
+                showMessage(err.message || 'An error occurred while processing your withdrawal.');
+            } finally {
+                setSubmittingState(formElement, false);
             }
         }
 
@@ -292,11 +640,9 @@
 
                 // 🚫 BLOCK RESTRICTED USERS FROM WITHDRAW PAGE
                 if (user.accountRestricted) {
-                    alert(
-                        'Your account is currently restricted. Withdrawals are disabled. Please contact support.'
-                    );
+                    alert('Your account is currently restricted. Withdrawals are disabled. Please contact support.');
                     location.href = './dashboard.html';
-                    return; // stop further execution
+                    return;
                 }
 
                 currencySymbol.textContent = user.currencySymbol || '';
@@ -333,7 +679,7 @@
                     accountName: accountName.value,
                     accountNumber: accountNumber.value
                 }
-            });
+            }, bankForm);
         };
 
         pixForm.onsubmit = e => {
@@ -342,7 +688,7 @@
                 method: 'pix',
                 amount: Number(pixAmount.value),
                 methodDetails: { pixKey: pixKey.value }
-            });
+            }, pixForm);
         };
 
         usdtForm.onsubmit = e => {
@@ -351,7 +697,7 @@
                 method: 'crypto',
                 amount: Number(usdtAmount.value),
                 methodDetails: { walletAddress: walletAddress.value }
-            });
+            }, usdtForm);
         };
 
         function googleTranslateElementInit() {
@@ -369,8 +715,8 @@
             location.reload();
         }
 
-        langSelect?.addEventListener('change', e => setLang(e.target.value));
-        langSelectMobile?.addEventListener('change', e => setLang(e.target.value));
+        document.getElementById('langSelect')?.addEventListener('change', e => setLang(e.target.value));
+        document.getElementById('langSelectMobile')?.addEventListener('change', e => setLang(e.target.value));
 
         loadData();
     </script>

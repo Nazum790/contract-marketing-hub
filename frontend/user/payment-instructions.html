@@ -1,28 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+    <title>Payment Instructions | Contract Marketing Hub</title>
     <meta name="theme-color" content="#0B2C5F" />
     <meta name="apple-mobile-web-app-capable" content="yes">
 
-    <title>Payment Instructions | Contract Marketing Hub</title>
-
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome CDN for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
                         primary: '#0B2C5F',
                         darkbg: '#081A33',
-                        accent: '#F59E0B'
+                        darkcard: 'rgba(15, 34, 64, 0.7)',
+                        accent: '#F59E0B',
+                        accentHover: '#D97706',
+                        profit: '#10B981'
+                    },
+                    boxShadow: {
+                        'glow': '0 0 25px -5px rgba(245, 158, 11, 0.25)',
+                        'glow-blue': '0 0 30px -5px rgba(11, 44, 95, 0.5)',
+                        'card': '0 10px 30px -5px rgba(0, 0, 0, 0.3)'
                     }
                 }
             }
-        };
+        }
     </script>
 
     <style>
@@ -30,12 +42,64 @@
         body {
             width: 100%;
             overflow-x: hidden;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #081A33;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #1e3a6a;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2b4c80;
+        }
+
+        /* Glassmorphism utilities */
+        .glass-panel {
+            background: rgba(13, 29, 56, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-card {
+            background: linear-gradient(135deg, rgba(20, 42, 77, 0.8) 0%, rgba(10, 25, 48, 0.9) 100%);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
         }
 
         .notranslate {
             translate: no;
         }
 
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        /* Hide Google Translate overlay elements completely */
         .goog-logo-link,
         .goog-te-banner-frame,
         .goog-te-gadget,
@@ -43,132 +107,337 @@
         body>.skiptranslate {
             display: none !important;
         }
+
+        body {
+            top: 0px !important;
+        }
     </style>
 </head>
 
-<body class="min-h-screen bg-gradient-to-b from-darkbg to-primary text-gray-100">
+<body
+    class="min-h-screen bg-[#061427] text-gray-100 flex flex-col justify-between selection:bg-accent selection:text-black">
 
-    <!-- FIXED HEADER -->
-    <header class="fixed top-0 left-0 right-0 z-50
-        h-[72px]
-        bg-darkbg/95 backdrop-blur
-        border-b border-white/10
-        overflow-hidden
-        notranslate">
+    <!-- BACKGROUND GLOW EFFECTS -->
+    <div class="fixed top-0 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
+    <div class="fixed bottom-10 right-10 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none -z-10">
+    </div>
 
-        <div class="max-w-5xl mx-auto px-4 h-full flex items-center justify-between">
+    <!-- NAVBAR -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass-panel border-b border-white/10 notranslate">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between">
 
-            <h1 class="font-bold text-lg whitespace-nowrap">
-                Contract Marketing Hub
-            </h1>
+            <!-- BRAND LOGO -->
+            <a href="./dashboard.html" class="flex items-center gap-3">
+                <div
+                    class="w-10 h-10 rounded-xl bg-gradient-to-tr from-accent to-amber-300 flex items-center justify-center text-darkbg font-extrabold shadow-glow text-lg">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+                <h1 class="font-bold text-lg sm:text-xl tracking-tight text-white flex items-center gap-2">
+                    Contract Marketing <span class="text-accent">Hub</span>
+                </h1>
+            </a>
 
-            <div class="flex items-center gap-4">
-                <a href="./dashboard.html" class="text-sm text-accent whitespace-nowrap">
-                    ← Back to Dashboard
+            <!-- DESKTOP NAV -->
+            <nav class="hidden md:flex gap-1 lg:gap-2 text-sm items-center">
+                <a href="./dashboard.html"
+                    class="px-3.5 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/5 transition flex items-center gap-2">
+                    <i class="fa-solid fa-house text-xs"></i> Dashboard
+                </a>
+                <a href="./contracts.html"
+                    class="px-3.5 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/5 transition flex items-center gap-2">
+                    <i class="fa-solid fa-file-contract text-xs"></i> Contracts
+                </a>
+                <a href="./transactions.html"
+                    class="px-3.5 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/5 transition flex items-center gap-2">
+                    <i class="fa-solid fa-receipt text-xs"></i> Transactions
+                </a>
+                <a href="./profile.html"
+                    class="px-3.5 py-2 rounded-lg text-gray-300 hover:text-white hover:bg-white/5 transition flex items-center gap-2">
+                    <i class="fa-solid fa-user text-xs"></i> Profile
                 </a>
 
-                <!-- DESKTOP TRANSLATOR -->
-                <select id="langSelect"
-                    class="hidden sm:block bg-darkbg border border-white/20 text-sm rounded px-2 py-1">
-                    <option value="">Select Language</option>
-                    <option selected>Select Language</option>
-                    <option value="en">English</option>
-                    <option value="pt">Portuguese</option>
-                    <option value="de">German</option>
-                    <option value="fr">French</option>
-                    <option value="es">Spanish</option>
-                    <option value="da">Danish</option>
-                    <option value="ar">Arabic</option>
+                <div class="h-4 w-px bg-white/10 mx-2"></div>
+
+                <!-- SELECT LANGUAGE DESKTOP -->
+                <div class="relative flex items-center">
+                    <i class="fa-solid fa-globe absolute left-2.5 text-xs text-gray-400 pointer-events-none"></i>
+                    <select id="langSelect"
+                        class="bg-darkbg/80 border border-white/15 text-xs rounded-lg pl-7 pr-3 py-2 text-gray-200 focus:outline-none focus:border-accent appearance-none cursor-pointer">
+                        <option value="">Select Language</option>
+                        <option value="en">English</option>
+                        <option value="pt">Portuguese</option>
+                        <option value="de">German</option>
+                        <option value="fr">French</option>
+                        <option value="es">Spanish</option>
+                        <option value="da">Danish</option>
+                        <option value="ar">Arabic</option>
                         <option value="ms">Malay</option>
                         <option value="tl">Filipino</option>
-                    <option value="nl">Dutch</option>
-                    <option value="sv">Swedish</option>
-                    <option value="no">Norwegian</option>
-                    <option value="fi">Finnish</option>
-                </select>
-            </div>
+                        <option value="nl">Dutch</option>
+                        <option value="sv">Swedish</option>
+                        <option value="no">Norwegian</option>
+                        <option value="fi">Finnish</option>
+                    </select>
+                </div>
+            </nav>
 
+            <!-- MOBILE MENU BUTTON -->
+            <button id="menuBtn"
+                class="md:hidden text-gray-200 hover:text-white p-2 rounded-lg bg-white/5 border border-white/10 text-xl focus:outline-none">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- MOBILE LANGUAGE PICKER BAR -->
+        <div class="md:hidden px-4 pb-3 border-t border-white/5 pt-2 flex items-center justify-between notranslate">
+            <span class="text-xs text-gray-400 flex items-center gap-1">
+                <i class="fa-solid fa-globe"></i> Language:
+            </span>
+            <select id="langSelectMobile"
+                class="bg-darkbg border border-white/20 text-xs rounded-lg px-3 py-1.5 text-gray-200 w-auto max-w-[200px] focus:outline-none focus:border-accent">
+                <option value="">Select language</option>
+                <option value="en">English</option>
+                <option value="pt">Portuguese</option>
+                <option value="de">German</option>
+                <option value="fr">French</option>
+                <option value="es">Spanish</option>
+                <option value="da">Danish</option>
+                <option value="ar">Arabic</option>
+                <option value="ms">Malay</option>
+                <option value="tl">Filipino</option>
+                <option value="nl">Dutch</option>
+                <option value="sv">Swedish</option>
+                <option value="no">Norwegian</option>
+                <option value="fi">Finnish</option>
+            </select>
         </div>
     </header>
 
-    <!-- MOBILE TRANSLATOR (OUTSIDE HEADER HEIGHT) -->
-    <div class="fixed top-[72px] left-0 right-0 z-40 sm:hidden bg-darkbg/95 backdrop-blur px-4 py-2 notranslate">
-        <select id="langSelectMobile"
-            class="bg-darkbg border border-white/20 text-sm rounded px-3 py-2 w-full max-w-[240px]">
-            <option value="">Select language</option>
-            <option value="en">English</option>
-            <option value="pt">Portuguese</option>
-            <option value="de">German</option>
-            <option value="fr">French</option>
-            <option value="es">Spanish</option>
-            <option value="da">Danish</option>
-            <option value="ar">Arabic</option>
-                        <option value="ms">Malay</option>
-                        <option value="tl">Filipino</option>
-            <option value="nl">Dutch</option>
-            <option value="sv">Swedish</option>
-            <option value="no">Norwegian</option>
-            <option value="fi">Finnish</option>
-        </select>
+    <!-- MOBILE MENU OVERLAY & SIDEBAR -->
+    <div id="mobileOverlay"
+        class="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 hidden transition-opacity duration-300 md:hidden"></div>
+
+    <div id="mobileMenu"
+        class="fixed top-0 right-0 h-full w-80 bg-[#081A33]/98 backdrop-blur-2xl translate-x-full transition-transform duration-300 md:hidden border-l border-white/10 z-50 flex flex-col justify-between p-6 shadow-2xl">
+        <div class="space-y-6 text-sm">
+            <div class="flex justify-between items-center pb-4 border-b border-white/10">
+                <span class="font-bold text-lg text-white">Menu Navigation</span>
+                <button id="closeMenu"
+                    class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-gray-400 hover:text-white text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <nav class="space-y-3">
+                <a href="./dashboard.html"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white transition">
+                    <i class="fa-solid fa-house w-5"></i> Dashboard
+                </a>
+                <a href="./contracts.html"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white transition">
+                    <i class="fa-solid fa-file-contract w-5"></i> Contracts
+                </a>
+                <a href="./transactions.html"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white transition">
+                    <i class="fa-solid fa-receipt w-5"></i> Transactions
+                </a>
+                <a href="./profile.html"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white transition">
+                    <i class="fa-solid fa-user w-5"></i> Profile
+                </a>
+            </nav>
+        </div>
     </div>
 
-    <!-- MAIN -->
-    <main class="max-w-3xl mx-auto px-4 pt-[120px] pb-10">
+    <!-- MAIN CONTENT -->
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-20 w-full animate-fade-in">
 
-        <div class="bg-white text-gray-800 rounded-xl shadow p-6">
-
-            <h2 class="text-xl font-semibold mb-2">
-                Contract Payment Instructions
+        <!-- BREADCRUMB / HEADER -->
+        <div class="mb-8">
+            <a href="./dashboard.html"
+                class="inline-flex items-center gap-2 text-xs text-gray-400 hover:text-accent transition mb-3">
+                <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+            </a>
+            <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white flex items-center gap-3">
+                <i class="fa-solid fa-qrcode text-accent"></i> Contract Payment Instructions
             </h2>
-
-            <p class="text-sm text-gray-600 mb-6">
-                Your contract request is pending. Complete payment to proceed with activation.
+            <p class="text-xs sm:text-sm text-gray-400 mt-1">
+                Your contract request is pending. Follow the instructions below to complete your payment and proceed
+                with activation.
             </p>
-
-            <!-- STATUS BOX -->
-            <div id="paymentStatusBox" class="border border-yellow-200 bg-yellow-50 rounded-lg p-4 mb-6">
-
-                <p id="statusTitle" class="font-medium text-yellow-800 mb-1">
-                    Loading…
-                </p>
-
-                <p id="statusMessage" class="text-sm text-yellow-700">
-                    Loading payment instructions…
-                </p>
-            </div>
-
-            <!-- CONTACT -->
-            <div class="bg-gray-100 rounded-lg p-4 text-sm">
-                <p class="font-medium mb-1">Send payment proof to:</p>
-                <p>Email: <strong id="supportEmail">—</strong></p>
-                <p class="text-xs text-gray-500 mt-1">
-                    Payment details are managed by the admin.
-                </p>
-            </div>
-
-            <!-- NOTE -->
-            <div class="mt-6 text-xs text-gray-500">
-                Contracts are activated only after payment has been verified by the admin.
-            </div>
-
         </div>
+
+        <!-- PAYMENT INSTRUCTION NOTICES FLOW (3 CARDS) -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <!-- 1. PENDING VERIFICATION -->
+            <div class="p-4 rounded-2xl glass-card border-l-4 border-l-amber-500 flex flex-col justify-between">
+                <div class="flex items-center gap-3 mb-2">
+                    <div
+                        class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-sm shrink-0">
+                        <i class="fa-solid fa-clock"></i>
+                    </div>
+                    <h3 class="font-bold text-sm text-white">1. Verification Pending</h3>
+                </div>
+                <p class="text-xs text-gray-300 leading-relaxed">
+                    User payment is marked as pending verification until processing is confirmed.
+                </p>
+            </div>
+
+            <!-- 2. ADMIN ACTIVATION -->
+            <div class="p-4 rounded-2xl glass-card border-l-4 border-l-blue-500 flex flex-col justify-between">
+                <div class="flex items-center gap-3 mb-2">
+                    <div
+                        class="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center text-sm shrink-0">
+                        <i class="fa-solid fa-shield-check"></i>
+                    </div>
+                    <h3 class="font-bold text-sm text-white">2. Admin Activation</h3>
+                </div>
+                <p class="text-xs text-gray-300 leading-relaxed">
+                    Contract activation happens only after an admin confirms payment receipt.
+                </p>
+            </div>
+
+            <!-- 3. SEND PROOF -->
+            <div class="p-4 rounded-2xl glass-card border-l-4 border-l-profit flex flex-col justify-between">
+                <div class="flex items-center gap-3 mb-2">
+                    <div
+                        class="w-8 h-8 rounded-lg bg-profit/20 text-profit flex items-center justify-center text-sm shrink-0">
+                        <i class="fa-solid fa-file-invoice"></i>
+                    </div>
+                    <h3 class="font-bold text-sm text-white">3. Send Payment Proof</h3>
+                </div>
+                <p class="text-xs text-gray-300 leading-relaxed">
+                    Users should send payment proof to official support to expedite verification.
+                </p>
+            </div>
+        </section>
+
+        <!-- PAYMENT METHODS SECTION CONTAINER (EXPANDABLE) -->
+        <section class="space-y-6">
+
+            <div class="flex items-center justify-between">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-wallet text-accent"></i> Payment Method
+                </h3>
+                <span class="text-xs text-gray-400">Select & Transfer</span>
+            </div>
+
+            <!-- METHOD 1: PIX TRANSFER -->
+            <div class="p-6 sm:p-8 rounded-3xl glass-card border border-white/15 relative overflow-hidden">
+
+                <div
+                    class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/10 mb-6">
+                    <div class="flex items-center gap-4">
+                        <div
+                            class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center text-2xl shrink-0">
+                            <i class="fa-solid fa-pix"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h4 class="text-xl font-bold text-white tracking-tight">PIX Transfer</h4>
+                                <span
+                                    class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Active
+                                    Method</span>
+                            </div>
+                            <p class="text-xs text-gray-400 mt-0.5">Brazil instant bank transfer</p>
+                        </div>
+                    </div>
+
+                    <div
+                        class="text-xs text-gray-400 bg-white/5 px-3 py-2 rounded-xl border border-white/5 self-start sm:self-center">
+                        <i class="fa-solid fa-bolt text-accent mr-1"></i> Fast Automated Processing
+                    </div>
+                </div>
+
+                <!-- DYNAMIC STATUS & PAYMENT DETAILS -->
+                <div id="paymentStatusBox" class="space-y-4">
+                    <div class="flex items-center justify-between">
+                        <label id="statusTitle"
+                            class="block text-xs font-semibold uppercase tracking-wider text-amber-400">
+                            Loading Status...
+                        </label>
+                    </div>
+
+                    <div
+                        class="relative bg-darkbg/90 border border-white/15 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div class="w-full overflow-hidden">
+                            <pre id="statusMessage"
+                                class="text-sm font-mono text-emerald-300 whitespace-pre-wrap break-all leading-relaxed">Loading payment details...</pre>
+                        </div>
+
+                        <button id="copyPaymentBtn"
+                            class="w-full sm:w-auto shrink-0 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-accent hover:bg-accentHover text-darkbg font-bold text-xs transition duration-200 active:scale-95 shadow-glow">
+                            <i class="fa-solid fa-copy"></i> <span id="copyBtnText">Copy Details</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FUTURE PAYMENT METHODS (METHOD 2 & 3) CAN BE UNCOMMENTED HERE -->
+            <!--
+            <div class="p-6 rounded-3xl glass-card border border-white/5 opacity-50 relative overflow-hidden">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-white/5 text-gray-400 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-building-columns"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white">Payment Method 2</h4>
+                            <p class="text-xs text-gray-400">Description here</p>
+                        </div>
+                    </div>
+                    <span class="text-xs text-gray-500 italic">Coming Soon</span>
+                </div>
+            </div>
+            -->
+
+            <!-- SUPPORT & PROOF SUBMISSION CARD -->
+            <div
+                class="p-6 rounded-2xl glass-card border border-white/10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-8">
+                <div class="flex items-center gap-3">
+                    <div class="p-3 rounded-xl bg-accent/10 text-accent text-xl shrink-0">
+                        <i class="fa-solid fa-headset"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm text-white">Send payment proof to:</h4>
+                        <p class="text-xs text-gray-400 mt-0.5">Email: <strong id="supportEmail"
+                                class="text-accent font-mono font-medium">—</strong></p>
+                    </div>
+                </div>
+
+                <a id="supportEmailLink" href="#"
+                    class="w-full sm:w-auto text-center px-5 py-2.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-xs font-semibold text-white transition shrink-0">
+                    <i class="fa-solid fa-envelope mr-1.5"></i> Email Support
+                </a>
+            </div>
+
+        </section>
 
     </main>
 
     <!-- FOOTER -->
-    <footer class="mt-12 border-t border-white/10 text-center py-6 text-sm text-gray-300">
-        © <span id="year"></span> Contract Marketing Hub
+    <footer class="border-t border-white/10 bg-darkbg/50 backdrop-blur-md py-6 text-center text-xs text-gray-400">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p>© <span id="year"></span> Contract Marketing Hub. All rights reserved.</p>
+            <div class="flex items-center gap-4 text-gray-400">
+                <a href="../privacy.html" class="hover:text-accent transition">Privacy Policy</a>
+                <a href="../terms.html" class="hover:text-accent transition">Terms of Service</a>
+                <a href="../contact.html" class="hover:text-accent transition">Support</a>
+            </div>
+        </div>
     </footer>
 
-    <!-- GOOGLE TRANSLATE -->
+    <!-- GOOGLE TRANSLATE ELEMENT -->
     <div id="google_translate_element" style="display:none"></div>
+
+    <!-- TRANSLATION INITIALIZATION SCRIPT -->
     <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
     <script>
         const API_BASE_URL = window.location.origin;
     </script>
 
-    <!-- LOGIC -->
+    <!-- PAGE LOGIC -->
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -178,6 +447,67 @@
             location.href = '../auth/login.html';
         }
 
+        const statusTitle = document.getElementById('statusTitle');
+        const statusMessage = document.getElementById('statusMessage');
+        const supportEmail = document.getElementById('supportEmail');
+        const supportEmailLink = document.getElementById('supportEmailLink');
+
+        // MOBILE MENU & OVERLAY TOGGLE
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const closeMenu = document.getElementById('closeMenu');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+
+        function openMobileNav() {
+            mobileMenu.classList.remove('translate-x-full');
+            mobileOverlay.classList.remove('hidden');
+        }
+
+        function closeMobileNav() {
+            mobileMenu.classList.add('translate-x-full');
+            mobileOverlay.classList.add('hidden');
+        }
+
+        menuBtn?.addEventListener('click', openMobileNav);
+        closeMenu?.addEventListener('click', closeMobileNav);
+        mobileOverlay?.addEventListener('click', closeMobileNav);
+
+        // COPY TO CLIPBOARD LOGIC
+        const copyBtn = document.getElementById('copyPaymentBtn');
+        const copyBtnText = document.getElementById('copyBtnText');
+
+        copyBtn?.addEventListener('click', async () => {
+            const textToCopy = statusMessage.textContent;
+            if (!textToCopy || textToCopy.includes('Loading')) return;
+
+            try {
+                await navigator.clipboard.writeText(textToCopy);
+                copyBtnText.textContent = 'Copied!';
+                copyBtn.classList.remove('bg-accent', 'hover:bg-accentHover');
+                copyBtn.classList.add('bg-emerald-500', 'text-white');
+
+                setTimeout(() => {
+                    copyBtnText.textContent = 'Copy Details';
+                    copyBtn.classList.remove('bg-emerald-500', 'text-white');
+                    copyBtn.classList.add('bg-accent', 'hover:bg-accentHover');
+                }, 2500);
+            } catch (err) {
+                // Fallback for older mobile browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = textToCopy;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+
+                copyBtnText.textContent = 'Copied!';
+                setTimeout(() => {
+                    copyBtnText.textContent = 'Copy Details';
+                }, 2500);
+            }
+        });
+
+        // FETCH PAYMENT SETTINGS & POPULATE DATA
         async function loadPaymentSettings() {
             try {
                 const res = await fetch(`${API_BASE_URL}/api/payment-settings`);
@@ -187,27 +517,32 @@
 
                 if (!settings.isActive) {
                     statusTitle.textContent = 'Payment Temporarily Unavailable';
-                    statusMessage.textContent =
-                        'Payment instructions are currently disabled. Please check back later.';
-                    supportEmail.textContent =
-                        settings.supportEmail || 'support@contractmarketinghub.com';
+                    statusTitle.className = 'block text-xs font-semibold uppercase tracking-wider text-red-400';
+                    statusMessage.textContent = 'Payment instructions are currently disabled. Please check back later.';
+
+                    const mail = settings.supportEmail || 'support@contractmarketinghub.com';
+                    supportEmail.textContent = mail;
+                    if (supportEmailLink) supportEmailLink.href = `mailto:${mail}`;
                     return;
                 }
 
-                statusTitle.textContent =
-                    settings.statusTitle || 'Payment Required';
+                statusTitle.textContent = settings.statusTitle || 'PIX Payment Information';
+                statusTitle.className = 'block text-xs font-semibold uppercase tracking-wider text-amber-400';
 
-                statusMessage.textContent =
-                    settings.statusMessage ||
-                    'Please complete payment and send proof for verification.';
+                // Display payment details (supports pixDetails or statusMessage from backend)
+                statusMessage.textContent = settings.pixDetails || settings.statusMessage || 'Please complete payment and send proof for verification.';
 
-                supportEmail.textContent =
-                    settings.supportEmail || 'support@contractmarketinghub.com';
+                const mail = settings.supportEmail || 'support@contractmarketinghub.com';
+                supportEmail.textContent = mail;
+                if (supportEmailLink) supportEmailLink.href = `mailto:${mail}`;
 
             } catch {
                 statusTitle.textContent = 'Unable to load payment details';
+                statusTitle.className = 'block text-xs font-semibold uppercase tracking-wider text-red-400';
                 statusMessage.textContent = 'Please contact support for assistance.';
+
                 supportEmail.textContent = 'support@contractmarketinghub.com';
+                if (supportEmailLink) supportEmailLink.href = 'mailto:support@contractmarketinghub.com';
             }
         }
 
@@ -226,8 +561,8 @@
             location.reload();
         }
 
-        langSelect?.addEventListener('change', e => setLang(e.target.value));
-        langSelectMobile?.addEventListener('change', e => setLang(e.target.value));
+        document.getElementById('langSelect')?.addEventListener('change', e => setLang(e.target.value));
+        document.getElementById('langSelectMobile')?.addEventListener('change', e => setLang(e.target.value));
 
         loadPaymentSettings();
     </script>
