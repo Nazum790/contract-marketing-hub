@@ -37,6 +37,11 @@ const userSchema = new mongoose.Schema(
             required: true,
         },
 
+        mustChangePassword: {
+            type: Boolean,
+            default: false,
+        },
+
         role: {
             type: String,
             enum: ['user', 'admin'],
@@ -124,6 +129,16 @@ const userSchema = new mongoose.Schema(
         accountRestricted: {
             type: Boolean,
             default: false,
+        },
+
+        accountDeleted: {
+            type: Boolean,
+            default: false,
+        },
+
+        deletedAt: {
+            type: Date,
+            default: null,
         },
 
         restrictionTitle: {

@@ -142,7 +142,12 @@ exports.loginUser = async (req, res) => {
             });
         }
 
-        const user = await User.findOne({ email });
+        const user = await User.findOne({
+            email,
+            accountDeleted: {
+                $ne: true
+            }
+        });
         if (!user) {
             return res.status(400).json({
                 message: 'Invalid email or password',

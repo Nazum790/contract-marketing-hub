@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 
 <head>
     <meta charset="UTF-8" />
@@ -7,15 +7,25 @@
     <meta name="theme-color" content="#0B2C5F" />
     <title>Admin Dashboard | Contract Marketing Hub</title>
 
+    <!-- Tailwind CSS & Font Awesome -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
                         primary: '#0B2C5F',
                         darkbg: '#081A33',
-                        accent: '#F59E0B'
+                        darkcard: 'rgba(15, 34, 64, 0.75)',
+                        accent: '#F59E0B',
+                        accentHover: '#D97706'
+                    },
+                    boxShadow: {
+                        'glow': '0 0 25px -5px rgba(245, 158, 11, 0.25)',
+                        'card': '0 10px 30px -5px rgba(0, 0, 0, 0.35)'
                     }
                 }
             }
@@ -26,163 +36,400 @@
         html,
         body {
             overflow-x: hidden;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #081A33;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #1e3a6a;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2b4c80;
+        }
+
+        .glass-panel {
+            background: rgba(8, 26, 51, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-card {
+            background: linear-gradient(135deg, rgba(20, 42, 77, 0.8) 0%, rgba(10, 25, 48, 0.9) 100%);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
         }
     </style>
 </head>
 
-<body class="min-h-screen flex flex-col bg-gradient-to-b from-darkbg to-primary text-gray-100">
+<body class="min-h-screen flex flex-col bg-[#061427] text-gray-100 selection:bg-accent selection:text-black">
+
+    <!-- BACKGROUND GLOW EFFECTS -->
+    <div class="fixed top-0 left-1/3 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
+    <div class="fixed bottom-10 right-10 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none -z-10">
+    </div>
 
     <!-- ================= NAVBAR ================= -->
-    <header class="fixed top-0 left-0 w-full z-50 bg-darkbg shadow-md">
-        <div class="max-w-7xl mx-auto px-4 py-4">
+    <header class="fixed top-0 left-0 w-full z-40 glass-panel">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
             <div class="flex items-center justify-between">
-                <h1 class="font-bold text-lg">Admin Dashboard</h1>
+
+                <!-- BRANDING -->
+                <div class="flex items-center gap-3">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-gradient-to-tr from-accent to-amber-300 flex items-center justify-center text-darkbg font-extrabold shadow-glow text-lg">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-lg tracking-tight text-white flex items-center gap-2">
+                            Admin <span class="text-accent">OS</span>
+                        </h1>
+                        <p class="text-[11px] text-gray-400">Contract Marketing Hub</p>
+                    </div>
+                </div>
 
                 <!-- DESKTOP NAV -->
-                <nav class="hidden md:flex items-center gap-6 text-sm">
-                    <a href="/admin/dashboard.html">Dashboard</a>
-                    <a href="/admin/users.html">Users</a>
-                    <a href="/admin/contracts-pending.html">Pending Contracts</a>
-                    <a href="/admin/active-contracts.html">Active Contracts</a>
-                    <a href="/admin/completed-contracts.html">Completed Contracts</a>
-                    <a href="/admin/email-verification.html">Email Verifications</a>
-                    <a href="/admin/withdrawal.html">Withdrawals</a>
-                    <a href="/admin/payment-settings.html">Payment Settings</a>
-                    <button id="logoutBtnDesktop" class="text-red-400 ml-4">Logout</button>
+                <nav class="hidden xl:flex items-center gap-1.5 text-xs font-medium">
+                    <a href="/admin/dashboard.html"
+                        class="px-3 py-2 rounded-xl bg-accent/10 text-accent font-semibold border border-accent/20 transition flex items-center gap-2">
+                        <i class="fa-solid fa-house text-xs"></i> Dashboard
+                    </a>
+                    <a href="/admin/users.html"
+                        class="px-3 py-2 rounded-xl text-gray-300 hover:text-white hover:bg-white/5 transition flex items-center gap-2">
+                        <i class="fa-solid fa-users text-xs"></i> Users
+                    </a>
+                    <a href="/admin/contracts-pending.html"
+                        class="px-3 py-2 rounded-xl text-gray-300 hover:text-white hover:bg-white/5 transition flex items-center gap-2">
+                        <i class="fa-solid fa-clock text-xs"></i> Pending Contracts
+                    </a>
+                    <a href="/admin/active-contracts.html"
+                        class="px-3 py-2 rounded-xl text-gray-300 hover:text-white hover:bg-white/5 transition flex items-center gap-2">
+                        <i class="fa-solid fa-bolt text-xs"></i> Active Contracts
+                    </a>
+                    <a href="/admin/completed-contracts.html"
+                        class="px-3 py-2 rounded-xl text-gray-300 hover:text-white hover:bg-white/5 transition flex items-center gap-2">
+                        <i class="fa-solid fa-circle-check text-xs"></i> Completed
+                    </a>
+                    <a href="/admin/email-verification.html"
+                        class="px-3 py-2 rounded-xl text-gray-300 hover:text-white hover:bg-white/5 transition flex items-center gap-2">
+                        <i class="fa-solid fa-envelope-circle-check text-xs"></i> Verifications
+                    </a>
+                    <a href="/admin/withdrawal.html"
+                        class="px-3 py-2 rounded-xl text-gray-300 hover:text-white hover:bg-white/5 transition flex items-center gap-2">
+                        <i class="fa-solid fa-money-bill-transfer text-xs"></i> Withdrawals
+                    </a>
+                    <a href="/admin/payment-settings.html"
+                        class="px-3 py-2 rounded-xl text-gray-300 hover:text-white hover:bg-white/5 transition flex items-center gap-2">
+                        <i class="fa-solid fa-gear text-xs"></i> Settings
+                    </a>
                 </nav>
 
+                <!-- DESKTOP LOGOUT -->
+                <div class="hidden xl:flex items-center">
+                    <button id="logoutBtnDesktop"
+                        class="px-3.5 py-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-xs font-semibold text-red-400 transition flex items-center gap-2">
+                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                    </button>
+                </div>
+
                 <!-- MOBILE MENU BUTTON -->
-                <button id="menuBtn" class="md:hidden flex flex-col gap-1.5">
-                    <span class="w-6 h-0.5 bg-accent"></span>
-                    <span class="w-6 h-0.5 bg-accent"></span>
-                    <span class="w-6 h-0.5 bg-accent"></span>
+                <button id="menuBtn"
+                    class="xl:hidden w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-accent hover:bg-white/10 transition">
+                    <i class="fa-solid fa-bars text-lg"></i>
                 </button>
             </div>
         </div>
     </header>
 
     <!-- MOBILE MENU OVERLAY -->
-    <div id="menuOverlay" class="fixed inset-0 bg-black/50 hidden z-40"></div>
+    <div id="menuOverlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden z-50 transition-opacity"></div>
 
     <!-- MOBILE MENU PANEL -->
-    <div id="mobileMenu" class="fixed top-0 right-0 h-full w-72 bg-darkbg text-white
-        translate-x-full transition-transform duration-300 z-50">
+    <aside id="mobileMenu"
+        class="fixed top-0 right-0 h-full w-80 bg-[#081A33] border-l border-white/10 text-white translate-x-full transition-transform duration-300 z-50 flex flex-col justify-between shadow-2xl">
+        <div class="p-6 space-y-6">
+            <div class="flex items-center justify-between pb-4 border-b border-white/10">
+                <div class="flex items-center gap-2.5">
+                    <div
+                        class="w-8 h-8 rounded-lg bg-accent text-darkbg flex items-center justify-center font-bold text-sm">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <span class="font-bold text-sm tracking-tight">Navigation OS</span>
+                </div>
+                <button id="closeMenu"
+                    class="w-8 h-8 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white flex items-center justify-center transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
 
-        <div class="p-6 space-y-6 text-sm">
-            <button id="closeMenu" class="text-right w-full text-xl text-accent font-bold">
-                ✕
-            </button>
+            <nav class="space-y-1.5 text-xs font-medium">
+                <a href="dashboard.html"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl bg-accent/10 text-accent font-semibold border border-accent/20">
+                    <i class="fa-solid fa-house w-4 text-center"></i> Dashboard Overview
+                </a>
+                <a href="users.html"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition">
+                    <i class="fa-solid fa-users w-4 text-center"></i> User Management
+                </a>
+                <a href="contracts-pending.html"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition">
+                    <i class="fa-solid fa-clock w-4 text-center"></i> Pending Contracts
+                </a>
+                <a href="active-contracts.html"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition">
+                    <i class="fa-solid fa-bolt w-4 text-center"></i> Active Contracts
+                </a>
+                <a href="completed-contracts.html"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition">
+                    <i class="fa-solid fa-circle-check w-4 text-center"></i> Completed Contracts
+                </a>
+                <a href="email-verification.html"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition">
+                    <i class="fa-solid fa-envelope-circle-check w-4 text-center"></i> Email Verifications
+                </a>
+                <a href="withdrawal.html"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition">
+                    <i class="fa-solid fa-money-bill-transfer w-4 text-center"></i> Withdrawals
+                </a>
+                <a href="payment-settings.html"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 transition">
+                    <i class="fa-solid fa-gear w-4 text-center"></i> Payment Settings
+                </a>
+            </nav>
+        </div>
 
-            <a href="dashboard.html" class="block text-accent">Dashboard</a>
-            <a href="users.html" class="block">Users</a>
-            <a href="contracts-pending.html" class="block">Pending Contracts</a>
-            <a href="active-contracts.html" class="block">Active Contracts</a>
-            <a href="completed-contracts.html" class="block">Completed Contracts</a>
-            <a href="email-verification.html" class="block">Email Verifications</a>
-            <a href="withdrawal.html" class="block">Withdrawals</a>
-            <a href="payment-settings.html" class="block">Payment Settings</a>
-
-            <button id="logoutBtnMobile" class="block mt-6 px-4 py-3 bg-red-500/10 text-red-400 rounded-lg text-left">
-                Logout
+        <div class="p-6 border-t border-white/10">
+            <button id="logoutBtnMobile"
+                class="w-full py-3 rounded-xl bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-xs font-semibold text-red-400 transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-right-from-bracket"></i> Sign Out of Admin
             </button>
         </div>
-    </div>
+    </aside>
 
-    <!-- ================= MAIN ================= -->
-    <main class="flex-1 max-w-7xl mx-auto px-4 pt-28 pb-8 w-full">
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-12 w-full space-y-8">
 
-        <section class="mb-6">
-            <h2 class="text-2xl font-semibold">Overview</h2>
-            <p class="text-sm text-gray-300">Administrative summary and controls</p>
+        <!-- EXECUTIVE PAGE HEADER -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <div class="flex items-center gap-2 mb-1">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span class="text-[11px] font-mono text-emerald-400 uppercase tracking-widest font-semibold">System
+                        Operational</span>
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                    Executive Dashboard
+                </h2>
+                <p class="text-xs sm:text-sm text-gray-400 mt-0.5">
+                    Platform stats, metrics summary, and immediate quick-actions.
+                </p>
+            </div>
+
+            <button onclick="loadAdminStats()"
+                class="self-start sm:self-auto px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-gray-300 hover:text-white transition flex items-center gap-2 shadow-sm">
+                <i class="fa-solid fa-rotate-right"></i> Refresh Stats
+            </button>
+        </div>
+
+        <!-- STAT CARDS METRICS GRID -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+
+            <!-- TOTAL USERS CARD -->
+            <div class="p-6 rounded-2xl glass-card transition-all duration-300 hover:-translate-y-1">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Total System Users</span>
+                    <div
+                        class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center text-base">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                </div>
+                <div class="flex items-baseline justify-between">
+                    <p id="totalUsers" class="text-3xl font-extrabold text-white font-mono tracking-tight">—</p>
+                    <span
+                        class="text-[11px] text-gray-400 bg-white/5 px-2 py-0.5 rounded-md border border-white/5">Registered</span>
+                </div>
+            </div>
+
+            <!-- TOTAL CONTRACTS CARD -->
+            <div class="p-6 rounded-2xl glass-card transition-all duration-300 hover:-translate-y-1">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Total Contracts</span>
+                    <div
+                        class="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center text-base">
+                        <i class="fa-solid fa-file-contract"></i>
+                    </div>
+                </div>
+                <div class="flex items-baseline justify-between">
+                    <p id="totalContracts" class="text-3xl font-extrabold text-white font-mono tracking-tight">—</p>
+                    <span class="text-[11px] text-gray-400 bg-white/5 px-2 py-0.5 rounded-md border border-white/5">All
+                        Time</span>
+                </div>
+            </div>
+
+            <!-- PENDING WITHDRAWALS CARD -->
+            <div
+                class="p-6 rounded-2xl glass-card transition-all duration-300 hover:-translate-y-1 border-amber-500/20">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-semibold text-amber-400/90 uppercase tracking-wider">Pending
+                        Withdrawals</span>
+                    <div
+                        class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-base">
+                        <i class="fa-solid fa-hourglass-half"></i>
+                    </div>
+                </div>
+                <div class="flex items-baseline justify-between">
+                    <p id="pendingWithdrawals" class="text-3xl font-extrabold text-amber-400 font-mono tracking-tight">—
+                    </p>
+                    <span
+                        class="text-[11px] text-amber-400/80 bg-amber-500/10 px-2 py-0.5 rounded-md border border-amber-500/20">Action
+                        Req.</span>
+                </div>
+            </div>
+
+            <!-- APPROVED WITHDRAWALS CARD -->
+            <div class="p-6 rounded-2xl glass-card transition-all duration-300 hover:-translate-y-1">
+                <div class="flex items-center justify-between mb-4">
+                    <span class="text-xs font-semibold text-emerald-400/90 uppercase tracking-wider">Approved
+                        (Unpaid)</span>
+                    <div
+                        class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-base">
+                        <i class="fa-solid fa-circle-dollar-to-slot"></i>
+                    </div>
+                </div>
+                <div class="flex items-baseline justify-between">
+                    <p id="approvedWithdrawals"
+                        class="text-3xl font-extrabold text-emerald-400 font-mono tracking-tight">—</p>
+                    <span
+                        class="text-[11px] text-emerald-400/80 bg-emerald-500/10 px-2 py-0.5 rounded-md border border-emerald-500/20">Ready</span>
+                </div>
+            </div>
+
         </section>
 
-        <!-- STATS -->
-        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
-            <div class="bg-white text-gray-800 rounded-xl p-5 shadow">
-                <p class="text-sm text-gray-500">Total Users</p>
-                <p id="totalUsers" class="text-2xl font-bold">—</p>
+        <!-- QUICK ACTION OPERATING CARDS -->
+        <section class="space-y-4">
+            <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-compass text-accent text-sm"></i> Core Operations
+                </h3>
+                <span class="text-xs text-gray-400">Quick Navigation Modules</span>
             </div>
 
-            <div class="bg-white text-gray-800 rounded-xl p-5 shadow">
-                <p class="text-sm text-gray-500">Total Contracts</p>
-                <p id="totalContracts" class="text-2xl font-bold">—</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+
+                <!-- CARD 1: PENDING CONTRACTS -->
+                <div
+                    class="p-6 rounded-2xl glass-card flex flex-col justify-between group hover:border-accent/40 transition-all duration-300">
+                    <div class="space-y-3 mb-6">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-base border border-amber-500/20 group-hover:bg-accent group-hover:text-darkbg transition-colors duration-300">
+                            <i class="fa-solid fa-clipboard-check"></i>
+                        </div>
+                        <h4 class="font-bold text-base text-white group-hover:text-accent transition">Pending Contracts
+                        </h4>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            Review submitted contract proof payments to approve or reject requests.
+                        </p>
+                    </div>
+                    <a href="contracts-pending.html"
+                        class="w-full py-2.5 rounded-xl bg-white/5 hover:bg-accent hover:text-darkbg border border-white/10 text-xs font-semibold text-gray-200 transition-all flex items-center justify-center gap-2 shadow-sm">
+                        Review Approvals <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </a>
+                </div>
+
+                <!-- CARD 2: ACTIVE CONTRACTS -->
+                <div
+                    class="p-6 rounded-2xl glass-card flex flex-col justify-between group hover:border-blue-500/40 transition-all duration-300">
+                    <div class="space-y-3 mb-6">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-base border border-blue-500/20 group-hover:bg-blue-500 group-hover:text-white transition-colors duration-300">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <h4 class="font-bold text-base text-white group-hover:text-blue-400 transition">Active Contracts
+                        </h4>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            Monitor running marketing contracts and check live user positions.
+                        </p>
+                    </div>
+                    <a href="active-contracts.html"
+                        class="w-full py-2.5 rounded-xl bg-white/5 hover:bg-blue-600 hover:text-white border border-white/10 text-xs font-semibold text-gray-200 transition-all flex items-center justify-center gap-2 shadow-sm">
+                        View Active <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </a>
+                </div>
+
+                <!-- CARD 3: COMPLETED CONTRACTS -->
+                <div
+                    class="p-6 rounded-2xl glass-card flex flex-col justify-between group hover:border-emerald-500/40 transition-all duration-300">
+                    <div class="space-y-3 mb-6">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-base border border-emerald-500/20 group-hover:bg-emerald-500 group-hover:text-white transition-colors duration-300">
+                            <i class="fa-solid fa-box-archive"></i>
+                        </div>
+                        <h4 class="font-bold text-base text-white group-hover:text-emerald-400 transition">Completed
+                            Contracts</h4>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            Inspect finished investments, credited earnings, and historic records.
+                        </p>
+                    </div>
+                    <a href="completed-contracts.html"
+                        class="w-full py-2.5 rounded-xl bg-white/5 hover:bg-emerald-600 hover:text-white border border-white/10 text-xs font-semibold text-gray-200 transition-all flex items-center justify-center gap-2 shadow-sm">
+                        View History <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </a>
+                </div>
+
+                <!-- CARD 4: WITHDRAWAL MANAGEMENT -->
+                <div
+                    class="p-6 rounded-2xl glass-card flex flex-col justify-between group hover:border-purple-500/40 transition-all duration-300">
+                    <div class="space-y-3 mb-6">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-base border border-purple-500/20 group-hover:bg-purple-500 group-hover:text-white transition-colors duration-300">
+                            <i class="fa-solid fa-wallet"></i>
+                        </div>
+                        <h4 class="font-bold text-base text-white group-hover:text-purple-400 transition">Withdrawal
+                            Desk</h4>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            Process user payout requests, review wallet details, and authorize releases.
+                        </p>
+                    </div>
+                    <a href="withdrawal.html"
+                        class="w-full py-2.5 rounded-xl bg-white/5 hover:bg-purple-600 hover:text-white border border-white/10 text-xs font-semibold text-gray-200 transition-all flex items-center justify-center gap-2 shadow-sm">
+                        Manage Payouts <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                    </a>
+                </div>
+
             </div>
-
-            <div class="bg-white text-gray-800 rounded-xl p-5 shadow">
-                <p class="text-sm text-gray-500">Pending Withdrawals</p>
-                <p id="pendingWithdrawals" class="text-2xl font-bold text-yellow-600">—</p>
-            </div>
-
-            <div class="bg-white text-gray-800 rounded-xl p-5 shadow">
-                <p class="text-sm text-gray-500">Approved (Unpaid)</p>
-                <p id="approvedWithdrawals" class="text-2xl font-bold text-primary">—</p>
-            </div>
-        </section>
-
-        <!-- QUICK ACTIONS -->
-        <section class="grid grid-cols-1 md:grid-cols-4 gap-6">
-
-            <div class="bg-white text-gray-800 rounded-xl p-6 shadow">
-                <h3 class="font-semibold mb-2">Pending Contracts</h3>
-                <p class="text-sm text-gray-600 mb-4">
-                    Review payments and approve or reject contracts.
-                </p>
-                <a href="contracts-pending.html"
-                    class="inline-block px-4 py-2 bg-primary text-white rounded-lg text-sm">
-                    Review →
-                </a>
-            </div>
-
-            <div class="bg-white text-gray-800 rounded-xl p-6 shadow">
-                <h3 class="font-semibold mb-2">Active Contracts</h3>
-                <p class="text-sm text-gray-600 mb-4">
-                    View running contracts.
-                </p>
-                <a href="active-contracts.html" class="inline-block px-4 py-2 bg-primary text-white rounded-lg text-sm">
-                    View →
-                </a>
-            </div>
-
-            <div class="bg-white text-gray-800 rounded-xl p-6 shadow">
-                <h3 class="font-semibold mb-2">Completed Contracts</h3>
-                <p class="text-sm text-gray-600 mb-4">
-                    View finished and credited contracts.
-                </p>
-                <a href="completed-contracts.html"
-                    class="inline-block px-4 py-2 bg-primary text-white rounded-lg text-sm">
-                    View →
-                </a>
-            </div>
-
-            <div class="bg-white text-gray-800 rounded-xl p-6 shadow">
-                <h3 class="font-semibold mb-2">Withdrawals</h3>
-                <p class="text-sm text-gray-600 mb-4">
-                    Review and manage withdrawals.
-                </p>
-                <a href="withdrawal.html" class="inline-block px-4 py-2 bg-primary text-white rounded-lg text-sm">
-                    Manage →
-                </a>
-            </div>
-
         </section>
     </main>
 
     <!-- ================= FOOTER ================= -->
-    <footer class="border-t border-white/10 text-center py-4 text-sm text-gray-300">
-        © <span id="year"></span> Contract Marketing Hub
+    <footer class="border-t border-white/10 bg-darkbg/50 py-6 text-center text-xs text-gray-400">
+        © <span id="year"></span> Contract Marketing Hub · Internal Operating System
     </footer>
 
-    <!-- ================= LOGIC ================= -->
+    <!-- ================= UNTOUCHED JAVASCRIPT LOGIC ================= -->
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
 
         const token = localStorage.getItem('token');
 
-
         if (!token) {
             localStorage.clear();
             window.location.href = '../auth/login.html';
         }
+
         async function loadAdminStats() {
             try {
                 const res = await fetch('/api/admin/stats', {
@@ -193,10 +440,10 @@
 
                 const data = await res.json();
 
-                totalUsers.textContent = data.totalUsers ?? '0';
-                totalContracts.textContent = data.totalContracts ?? '0';
-                pendingWithdrawals.textContent = data.pendingWithdrawals ?? '0';
-                approvedWithdrawals.textContent = data.approvedWithdrawals ?? '0';
+                document.getElementById('totalUsers').textContent = data.totalUsers ?? '0';
+                document.getElementById('totalContracts').textContent = data.totalContracts ?? '0';
+                document.getElementById('pendingWithdrawals').textContent = data.pendingWithdrawals ?? '0';
+                document.getElementById('approvedWithdrawals').textContent = data.approvedWithdrawals ?? '0';
 
             } catch (err) {
                 console.error('Failed to load admin stats');

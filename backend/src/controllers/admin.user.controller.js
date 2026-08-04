@@ -1,5 +1,7 @@
 const User = require('../models/User');
 const Transaction = require('../models/Transaction');
+const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 
 
 /**
@@ -119,7 +121,12 @@ exports.getAllUsers = async (req, res) => {
     try {
 
 
-        const users = await User.find()
+        const users = await User.find({
+            $or: [
+                { accountDeleted: false },
+                { accountDeleted: { $exists: false } }
+            ]
+        })
 
             .select(`
             name
@@ -471,5 +478,110 @@ exports.updateUserAnnouncement = async (req, res) => {
 
 
     }
+};
 
+/**
+ * RESET USER PASSWORD (ADMIN)
+ */
+exports.resetUserPassword = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+
+        if (!user) {
+            return res.status(404).json({
+                message: 'User not found'
+            });
+        }
+
+        // Generate temporary password
+        const temporaryPassword =
+            crypto.randomBytes(4).toString('hex');
+
+        // Hash before saving
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(
+            temporaryPassword,
+            salt
+        );
+
+        // Force user to create a new password later
+        user.mustChangePassword = true;
+
+        await user.save();
+
+
+        await Transaction.create({
+            user: user._id,
+            type: 'admin_password_reset',
+            title: 'Password Reset',
+            description: 'Admin reset user password'
+        });
+
+
+        res.status(200).json({
+            message: 'Password reset successfully',
+            temporaryPassword
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            'RESET USER PASSWORD ERROR:',
+            error
+        );
+
+        res.status(500).json({
+            message: 'Server error'
+        });
+
+    }
+}
+/**
+ * SOFT DELETE USER ACCOUNT (ADMIN)
+ */
+exports.deleteUser = async (req, res) => {
+    try {
+
+        const user = await User.findById(req.params.id);
+
+        if (!user) {
+            return res.status(404).json({
+                message: 'User not found'
+            });
+        }
+
+
+        // Mark account as deleted
+        user.accountDeleted = true;
+        user.deletedAt = new Date();
+
+        await user.save();
+
+
+        await Transaction.create({
+            user: user._id,
+            type: 'account_deleted',
+            title: 'Account Deleted',
+            description: 'Admin soft deleted user account'
+        });
+
+
+        res.status(200).json({
+            message: 'User account deleted successfully'
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            'DELETE USER ERROR:',
+            error
+        );
+
+        res.status(500).json({
+            message: 'Server error'
+        });
+
+    }
 };

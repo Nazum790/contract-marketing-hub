@@ -280,7 +280,7 @@
         <section class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
                 <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-white flex items-center gap-2">
-                    <span id="dynamicGreeting">Good day</span>, <span id="userName"
+                    <span id="dynamicGreeting">Hello</span>, <span id="userName"
                         class="text-transparent bg-clip-text bg-gradient-to-r from-accent to-amber-200">User</span>
                 </h2>
                 <p class="text-xs sm:text-sm text-gray-400 mt-1 flex items-center gap-2">
@@ -614,22 +614,15 @@
 
     <!-- DASHBOARD LOGIC (FULLY PRESERVED) -->
     <script>
-            // Dynamic Greeting & Date Logic
+            // Header Greeting & Date Logic
             (function setupDynamicHeader() {
                 const greetingEl = document.getElementById('dynamicGreeting');
                 const dateEl = document.getElementById('currentDateDisplay');
 
-                const now = new Date();
-                const hours = now.getHours();
-
-                let greeting = "Good day";
-                if (hours < 12) greeting = "Good morning";
-                else if (hours < 18) greeting = "Good afternoon";
-                else greeting = "Good evening";
-
-                if (greetingEl) greetingEl.textContent = greeting;
+                if (greetingEl) greetingEl.textContent = "Hello";
 
                 if (dateEl) {
+                    const now = new Date();
                     const options = { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' };
                     dateEl.textContent = now.toLocaleDateString(undefined, options);
                 }

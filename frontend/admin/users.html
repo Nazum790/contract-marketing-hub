@@ -1,24 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <meta name="theme-color" content="#0B2C5F" />
+    <title>User Management · Control Panel</title>
 
-    <title>Admin · Users</title>
-
+    <!-- Tailwind CSS & Font Awesome -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
                         primary: '#0B2C5F',
                         darkbg: '#081A33',
-                        accent: '#F59E0B'
+                        darkcard: 'rgba(15, 34, 64, 0.75)',
+                        accent: '#F59E0B',
+                        accentHover: '#D97706',
+                        profit: '#10B981'
+                    },
+                    boxShadow: {
+                        'glow': '0 0 25px -5px rgba(245, 158, 11, 0.25)',
+                        'card': '0 10px 30px -5px rgba(0, 0, 0, 0.35)'
                     }
                 }
             }
@@ -29,789 +37,701 @@
         html,
         body {
             overflow-x: hidden;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #081A33;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #1e3a6a;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2b4c80;
+        }
+
+        .glass-panel {
+            background: rgba(13, 29, 56, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-card {
+            background: linear-gradient(135deg, rgba(20, 42, 77, 0.8) 0%, rgba(10, 25, 48, 0.9) 100%);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
         }
     </style>
-
 </head>
 
+<body class="min-h-screen flex flex-col bg-[#061427] text-gray-100 selection:bg-accent selection:text-black">
 
-<body class="min-h-screen flex flex-col bg-gradient-to-b from-darkbg to-primary text-gray-100">
+    <!-- BACKGROUND GLOW EFFECTS -->
+    <div class="fixed top-0 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
+    <div class="fixed bottom-10 right-10 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none -z-10">
+    </div>
 
+    <!-- HEADER NAVIGATION -->
+    <header class="sticky top-0 z-40 glass-panel border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-10 h-10 rounded-xl bg-gradient-to-tr from-accent to-amber-300 flex items-center justify-center text-darkbg font-extrabold shadow-glow text-lg">
+                    <i class="fa-solid fa-users-gear"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg tracking-tight text-white flex items-center gap-2">
+                        Admin <span class="text-accent">Control OS</span>
+                    </h1>
+                    <p class="text-[11px] text-gray-400">User Management System</p>
+                </div>
+            </div>
 
-    <header class="sticky top-0 z-50 bg-darkbg/90 backdrop-blur border-b border-white/10">
-
-        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
-
-            <h1 class="font-bold text-lg">
-                Admin · Users
-            </h1>
-
-
-            <a href="/admin/dashboard.html" class="text-sm text-accent">
-                ← Back to Dashboard
+            <a href="/admin/dashboard.html"
+                class="px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-accent transition flex items-center gap-2">
+                <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
             </a>
-
         </div>
-
     </header>
 
+    <!-- NOTIFICATION / TOAST BOX -->
+    <div id="messageBox"
+        class="fixed top-20 right-5 z-50 hidden max-w-md p-4 rounded-xl text-sm shadow-2xl backdrop-blur-lg border transition-all duration-300 flex items-center gap-3">
+    </div>
 
+    <!-- MAIN OPERATING SYSTEM WORKSPACE -->
+    <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-6">
 
-    <main class="flex-1 max-w-7xl mx-auto px-4 py-10 w-full">
-
-
-        <div class="mb-4">
-
-            <input id="searchInput" type="text" placeholder="Search by name, email, phone..."
-                class="w-full md:w-1/2 px-4 py-2 rounded-lg text-gray-800 outline-none" />
-
+        <!-- TITLE BLOCK -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+                <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-2">
+                    User Management
+                </h2>
+                <p class="text-xs sm:text-sm text-gray-400 mt-1">
+                    Manage financial limits, system restrictions, announcements, and user credentials.
+                </p>
+            </div>
+            <button onclick="loadUsers()"
+                class="self-start sm:self-auto px-4 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs text-gray-300 hover:text-white transition flex items-center gap-2">
+                <i class="fa-solid fa-rotate-right"></i> Refresh Table
+            </button>
         </div>
 
+        <!-- 1. USER STATS SUMMARY CARDS -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="p-5 rounded-2xl glass-card">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Total Users</span>
+                    <div
+                        class="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-sm">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                </div>
+                <p id="statTotal" class="text-2xl font-extrabold text-white font-mono">0</p>
+            </div>
 
+            <div class="p-5 rounded-2xl glass-card">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Active Accounts</span>
+                    <div
+                        class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-sm">
+                        <i class="fa-solid fa-user-check"></i>
+                    </div>
+                </div>
+                <p id="statActive" class="text-2xl font-extrabold text-emerald-400 font-mono">0</p>
+            </div>
 
-        <div id="messageBox" class="hidden mb-4 p-3 rounded text-sm"></div>
+            <div class="p-5 rounded-2xl glass-card">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Restricted Users</span>
+                    <div
+                        class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-sm">
+                        <i class="fa-solid fa-user-slash"></i>
+                    </div>
+                </div>
+                <p id="statRestricted" class="text-2xl font-extrabold text-amber-400 font-mono">0</p>
+            </div>
 
+            <div class="p-5 rounded-2xl glass-card">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Deleted Records</span>
+                    <div class="w-9 h-9 rounded-xl bg-red-500/10 text-red-400 flex items-center justify-center text-sm">
+                        <i class="fa-solid fa-user-xmark"></i>
+                    </div>
+                </div>
+                <p id="statDeleted" class="text-2xl font-extrabold text-red-400 font-mono">0</p>
+            </div>
+        </section>
 
+        <!-- 2. ADVANCED SEARCH & FILTER PANEL -->
+        <section class="p-5 rounded-2xl glass-card space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                <!-- Search Input -->
+                <div class="md:col-span-6 relative">
+                    <i
+                        class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                    <input id="searchInput" type="text" placeholder="Search by name, email, phone number..."
+                        class="w-full bg-darkbg/90 border border-white/10 rounded-xl pl-11 pr-4 py-2.5 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-accent transition" />
+                </div>
 
+                <!-- Status Filter -->
+                <div class="md:col-span-3">
+                    <select id="statusFilter"
+                        class="w-full bg-darkbg/90 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-gray-200 focus:outline-none focus:border-accent transition appearance-none cursor-pointer">
+                        <option value="all">All Statuses</option>
+                        <option value="active">Active Only</option>
+                        <option value="restricted">Restricted Only</option>
+                        <option value="deleted">Deleted Only</option>
+                    </select>
+                </div>
 
-        <div class="bg-white text-gray-800 rounded-xl shadow overflow-x-auto">
+                <!-- Sort Filter -->
+                <div class="md:col-span-3">
+                    <select id="sortFilter"
+                        class="w-full bg-darkbg/90 border border-white/10 rounded-xl px-3 py-2.5 text-sm text-gray-200 focus:outline-none focus:border-accent transition appearance-none cursor-pointer">
+                        <option value="newest">Sort: Newest First</option>
+                        <option value="oldest">Sort: Oldest First</option>
+                        <option value="highestBalance">Sort: Highest Balance</option>
+                    </select>
+                </div>
+            </div>
+        </section>
 
-
-            <table class="w-full text-sm border">
-
-
-                <thead class="bg-gray-100">
-
-
-                    <tr>
-
-                        <th class="p-2 border">Name</th>
-
-                        <th class="p-2 border">Email</th>
-
-                        <th class="p-2 border">Phone</th>
-
-                        <th class="p-2 border">Balance</th>
-
-                        <th class="p-2 border">Entry Cost</th>
-
-                        <th class="p-2 border">Expected Earnings</th>
-
-                        <th class="p-2 border">Announcement</th>
-
-                        <th class="p-2 border">Status</th>
-
-                        <th class="p-2 border">Action</th>
-
-                    </tr>
-
-
-                </thead>
-
-
-
-                <tbody id="usersBody">
-
-                    <tr>
-
-                        <td colspan="9" class="p-4 text-center text-gray-500">
-                            Loading users...
-                        </td>
-
-                    </tr>
-
-
-                </tbody>
-
-
-            </table>
-
-
-        </div>
-
-
+        <!-- 3. REDESIGNED USER TABLE -->
+        <section class="rounded-2xl glass-card overflow-hidden border border-white/10 shadow-2xl">
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-gray-300">
+                    <thead
+                        class="bg-darkbg/80 text-xs uppercase font-semibold text-gray-400 border-b border-white/10 tracking-wider">
+                        <tr>
+                            <th class="p-4">User</th>
+                            <th class="p-4">Status</th>
+                            <th class="p-4">Balance</th>
+                            <th class="p-4">Entry Cost</th>
+                            <th class="p-4">Expected Earnings</th>
+                            <th class="p-4">Announcement</th>
+                            <th class="p-4 text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersBody" class="divide-y divide-white/5">
+                        <tr>
+                            <td colspan="7" class="p-8 text-center text-gray-400">
+                                <i class="fa-solid fa-circle-notch fa-spin text-xl text-accent mb-2"></i>
+                                <p>Loading user management data...</p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
     </main>
 
+    <!-- 4. USER DETAILS MODAL / SIDE PANEL -->
+    <div id="userModal"
+        class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div
+            class="w-full max-w-2xl bg-[#081A33] border border-white/15 rounded-3xl p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeUserModal()"
+                class="absolute top-5 right-5 w-9 h-9 rounded-full bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white flex items-center justify-center transition">
+                <i class="fa-solid fa-xmark text-base"></i>
+            </button>
 
+            <div class="flex items-center gap-3 pb-6 border-b border-white/10 mb-6">
+                <div
+                    class="w-12 h-12 rounded-2xl bg-accent/10 border border-accent/20 text-accent flex items-center justify-center text-xl font-bold">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <div>
+                    <h3 id="modalUserName" class="text-xl font-bold text-white">User Inspector</h3>
+                    <p id="modalUserEmail" class="text-xs text-gray-400">—</p>
+                </div>
+            </div>
 
-    <footer class="border-t border-white/10 text-center py-4 text-sm text-gray-300">
+            <div class="space-y-6 text-sm">
+                <!-- Profile Block -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-white/5 p-4 rounded-2xl border border-white/5">
+                    <div>
+                        <span class="text-xs text-gray-400 font-medium">Phone Number</span>
+                        <p id="modalUserPhone" class="text-white font-mono mt-0.5">—</p>
+                    </div>
+                    <div>
+                        <span class="text-xs text-gray-400 font-medium">Registration Date</span>
+                        <p id="modalUserDate" class="text-white mt-0.5">—</p>
+                    </div>
+                    <div>
+                        <span class="text-xs text-gray-400 font-medium">Current Status</span>
+                        <p id="modalUserStatus" class="mt-0.5">—</p>
+                    </div>
+                    <div>
+                        <span class="text-xs text-gray-400 font-medium">User ID</span>
+                        <p id="modalUserId" class="text-gray-400 font-mono text-xs mt-0.5 truncate">—</p>
+                    </div>
+                </div>
 
-        © <span id="year"></span> Contract Marketing Hub
+                <!-- Financial Controls -->
+                <div class="space-y-3">
+                    <h4 class="text-xs uppercase font-bold text-accent tracking-wider">Financial Overview</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div>
+                            <label class="text-[11px] text-gray-400 block mb-1">Balance</label>
+                            <input type="number" id="modalBal"
+                                class="w-full bg-darkbg border border-white/10 rounded-xl px-3 py-2 text-white font-mono focus:border-accent focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="text-[11px] text-gray-400 block mb-1">Entry Cost</label>
+                            <input type="number" id="modalEntry"
+                                class="w-full bg-darkbg border border-white/10 rounded-xl px-3 py-2 text-white font-mono focus:border-accent focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="text-[11px] text-gray-400 block mb-1">Expected Earnings</label>
+                            <input type="number" id="modalEarn"
+                                class="w-full bg-darkbg border border-white/10 rounded-xl px-3 py-2 text-white font-mono focus:border-accent focus:outline-none">
+                        </div>
+                    </div>
+                    <button id="modalSaveFinancialsBtn"
+                        class="w-full py-2.5 rounded-xl bg-primary hover:bg-blue-900 text-white font-medium text-xs transition border border-blue-500/30">
+                        Update Financials
+                    </button>
+                </div>
 
+                <!-- Announcement Controls -->
+                <div class="space-y-3">
+                    <h4 class="text-xs uppercase font-bold text-accent tracking-wider">System Announcement</h4>
+                    <textarea id="modalAnnouncement" rows="3"
+                        class="w-full bg-darkbg border border-white/10 rounded-xl p-3 text-xs text-white placeholder-gray-500 focus:border-accent focus:outline-none"
+                        placeholder="Broadcast message to user dashboard..."></textarea>
+                    <button id="modalSaveAnnouncementBtn"
+                        class="w-full py-2.5 rounded-xl bg-accent hover:bg-accentHover text-darkbg font-bold text-xs transition shadow-glow">
+                        Broadcast Message
+                    </button>
+                </div>
+
+                <!-- Danger Zone Controls -->
+                <div class="space-y-3 pt-4 border-t border-white/10">
+                    <h4 class="text-xs uppercase font-bold text-red-400 tracking-wider">Administrative Actions</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <button id="modalRestrictBtn"
+                            class="py-2.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 font-medium text-xs transition">
+                            Restrict Access
+                        </button>
+                        <button id="modalResetPassBtn"
+                            class="py-2.5 rounded-xl bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-300 border border-yellow-500/30 font-medium text-xs transition">
+                            Reset Password
+                        </button>
+                        <button id="modalDeleteBtn"
+                            class="py-2.5 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/30 font-medium text-xs transition">
+                            Delete Account
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. CONFIRMATION MODAL -->
+    <div id="confirmModal"
+        class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div
+            class="w-full max-w-md bg-[#081A33] border border-white/15 rounded-3xl p-6 shadow-2xl text-center space-y-4">
+            <div
+                class="w-12 h-12 rounded-2xl bg-red-500/10 text-red-400 border border-red-500/20 mx-auto flex items-center justify-center text-xl">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 id="confirmTitle" class="text-lg font-bold text-white">Confirm Action</h3>
+            <p id="confirmMessage" class="text-xs text-gray-400">Are you sure you want to perform this operation?</p>
+            <div class="flex items-center gap-3 pt-2">
+                <button onclick="closeConfirmModal()"
+                    class="flex-1 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-gray-300 transition">
+                    Cancel
+                </button>
+                <button id="confirmSubmitBtn"
+                    class="flex-1 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-xs font-semibold text-white transition">
+                    Confirm
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-white/10 bg-darkbg/50 py-6 text-center text-xs text-gray-400">
+        © <span id="year"></span> Contract Marketing Hub · Internal Operating System
     </footer>
+
+    <!-- LOGIC PRESERVING FULL BACKEND APIS -->
     <script>
-
         const API_BASE_URL = window.location.origin;
-
-
-        document.getElementById('year').textContent =
-            new Date().getFullYear();
-
-
+        document.getElementById('year').textContent = new Date().getFullYear();
 
         const token = localStorage.getItem('token');
-
-
         if (!token) {
-
             localStorage.clear();
-
             location.href = '/auth/login.html';
-
         }
-
-
 
         const usersBody = document.getElementById('usersBody');
-
         const messageBox = document.getElementById('messageBox');
-
         const searchInput = document.getElementById('searchInput');
-
+        const statusFilter = document.getElementById('statusFilter');
+        const sortFilter = document.getElementById('sortFilter');
 
         let allUsers = [];
+        let activeUserIdInModal = null;
+        let confirmCallback = null;
 
-
-
-
-
+        // Custom Toast Notifications
         function showMessage(text, type = 'success') {
+            messageBox.innerHTML = type === 'success'
+                ? `<i class="fa-solid fa-circle-check text-emerald-400 text-lg"></i> <span>${text}</span>`
+                : `<i class="fa-solid fa-triangle-exclamation text-red-400 text-lg"></i> <span>${text}</span>`;
 
-
-            messageBox.textContent = text;
-
-
-            messageBox.className =
-                'mb-4 p-3 rounded text-sm';
-
+            messageBox.className = `fixed top-20 right-5 z-50 max-w-md p-4 rounded-xl text-sm shadow-2xl backdrop-blur-lg border transition-all duration-300 flex items-center gap-3 ${type === 'success'
+                    ? 'bg-emerald-950/80 border-emerald-500/30 text-emerald-200'
+                    : 'bg-red-950/80 border-red-500/30 text-red-200'
+                }`;
 
             messageBox.classList.remove('hidden');
-
-
-            if (type === 'success') {
-
-                messageBox.classList.add(
-                    'bg-green-100',
-                    'text-green-700'
-                );
-
-            } else {
-
-                messageBox.classList.add(
-                    'bg-red-100',
-                    'text-red-700'
-                );
-
-            }
-
-
-
-            setTimeout(() => {
-
-                messageBox.classList.add('hidden');
-
-            }, 4000);
-
-
+            setTimeout(() => messageBox.classList.add('hidden'), 4000);
         }
 
+        // Stats Counter Update
+        function updateStats(users) {
+            document.getElementById('statTotal').textContent = users.length;
+            document.getElementById('statActive').textContent = users.filter(u => !u.accountRestricted && !u.isDeleted).length;
+            document.getElementById('statRestricted').textContent = users.filter(u => u.accountRestricted).length;
+            document.getElementById('statDeleted').textContent = users.filter(u => u.isDeleted).length;
+        }
 
-
-
-
+        // Render Refactored User Row Design
         function renderUsers(users) {
-
-
             usersBody.innerHTML = '';
 
-
-
             if (!users.length) {
-
-
                 usersBody.innerHTML = `
-
-        <tr>
-
-            <td colspan="9" class="p-4 text-center text-gray-500">
-
-                No users found
-
-            </td>
-
-        </tr>
-
-        `;
-
-
+                <tr>
+                    <td colspan="7" class="p-8 text-center text-gray-500">
+                        <i class="fa-solid fa-user-slash text-2xl mb-2 opacity-40"></i>
+                        <p>No matching users found</p>
+                    </td>
+                </tr>`;
                 return;
-
             }
-
-
-
-
 
             users.forEach(u => {
-
-
                 const tr = document.createElement('tr');
-
-
+                tr.className = "hover:bg-white/[0.02] transition";
 
                 tr.innerHTML = `
-
-
-<td class="p-2 border">
-${u.name || '—'}
-</td>
-
-
-
-<td class="p-2 border">
-${u.email || '—'}
-</td>
-
-
-
-<td class="p-2 border">
-${u.phone || '—'}
-</td>
-
-
-
-
-<td class="p-2 border">
-
-<input
-
-type="number"
-
-id="bal-${u._id}"
-
-value="${u.balance ?? 0}"
-
-class="w-24 border px-2 py-1 rounded"
-
->
-
-</td>
-
-
-
-
-<td class="p-2 border">
-
-<input
-
-type="number"
-
-id="entry-${u._id}"
-
-value="${u.entryCost ?? 0}"
-
-class="w-24 border px-2 py-1 rounded"
-
->
-
-</td>
-
-
-
-
-<td class="p-2 border">
-
-<input
-
-type="number"
-
-id="earn-${u._id}"
-
-value="${u.expectedEarnings ?? 0}"
-
-class="w-24 border px-2 py-1 rounded"
-
->
-
-</td>
-
-
-
-
-
-<td class="p-2 border">
-
-
-<textarea
-
-id="announce-${u._id}"
-
-rows="3"
-
-class="w-40 border rounded p-2 text-xs"
-
-placeholder="Type message..."
-
->${u.announcement || ''}</textarea>
-
-
-
-<button
-
-onclick="saveAnnouncement('${u._id}')"
-
-class="mt-2 bg-accent text-white px-3 py-1 rounded text-xs">
-
-Save Message
-
-</button>
-
-
-</td>
-
-
-
-
-
-<td class="p-2 border text-center font-semibold
-${u.accountRestricted ? 'text-red-600' : 'text-green-600'}">
-
-
-${u.accountRestricted ? 'Restricted' : 'Active'}
-
-
-</td>
-
-
-
-
-
-<td class="p-2 border">
-
-
-<div class="flex flex-col gap-2">
-
-
-<button
-
-onclick="saveUser('${u._id}')"
-
-class="bg-primary text-white px-3 py-1 rounded text-xs">
-
-Save Financials
-
-</button>
-
-
-
-
-<button
-
-onclick="toggleRestriction('${u._id}')"
-
-class="px-3 py-1 rounded text-xs text-white
-${u.accountRestricted ? 'bg-green-600' : 'bg-red-600'}">
-
-${u.accountRestricted ? 'Unrestrict' : 'Restrict'}
-
-</button>
-
-
-</div>
-
-
-</td>
-
-
-`;
-
-
-
+                <td class="p-4">
+                    <div class="font-bold text-white">${u.name || '—'}</div>
+                    <div class="text-xs text-gray-400">${u.email || '—'}</div>
+                    <div class="text-[11px] text-gray-500">${u.phone || '—'}</div>
+                </td>
+                <td class="p-4">
+                    <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold border ${u.isDeleted
+                        ? 'bg-gray-500/10 text-gray-400 border-gray-500/20'
+                        : u.accountRestricted
+                            ? 'bg-red-500/10 text-red-400 border-red-500/20'
+                            : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
+                    }">
+                        ${u.isDeleted ? 'Deleted' : u.accountRestricted ? 'Restricted' : 'Active'}
+                    </span>
+                </td>
+                <td class="p-4">
+                    <input type="number" id="bal-${u._id}" value="${u.balance ?? 0}" class="w-24 bg-darkbg border border-white/10 px-2 py-1 rounded-lg text-xs font-mono text-white focus:border-accent focus:outline-none">
+                </td>
+                <td class="p-4">
+                    <input type="number" id="entry-${u._id}" value="${u.entryCost ?? 0}" class="w-24 bg-darkbg border border-white/10 px-2 py-1 rounded-lg text-xs font-mono text-white focus:border-accent focus:outline-none">
+                </td>
+                <td class="p-4">
+                    <input type="number" id="earn-${u._id}" value="${u.expectedEarnings ?? 0}" class="w-24 bg-darkbg border border-white/10 px-2 py-1 rounded-lg text-xs font-mono text-white focus:border-accent focus:outline-none">
+                </td>
+                <td class="p-4">
+                    <div class="flex flex-col gap-1.5">
+                        <textarea id="announce-${u._id}" rows="1" class="w-36 bg-darkbg border border-white/10 rounded-lg p-1.5 text-xs text-white focus:border-accent focus:outline-none" placeholder="Broadcast message...">${u.announcement || ''}</textarea>
+                        <button onclick="saveAnnouncement('${u._id}')" class="bg-accent/10 hover:bg-accent/20 text-accent border border-accent/20 px-2 py-0.5 rounded text-[10px] font-medium transition self-start">
+                            Save Message
+                        </button>
+                    </div>
+                </td>
+                <td class="p-4 text-right">
+                    <div class="flex items-center justify-end gap-1.5">
+                        <button onclick="openUserModal('${u._id}')" title="Inspect User" class="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white transition">
+                            <i class="fa-solid fa-eye text-xs"></i>
+                        </button>
+                        <button onclick="saveUser('${u._id}')" title="Save Financials" class="p-2 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/20 transition">
+                            <i class="fa-solid fa-floppy-disk text-xs"></i>
+                        </button>
+                        <button onclick="toggleRestriction('${u._id}')" title="Toggle Restriction" class="p-2 rounded-lg ${u.accountRestricted ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'} border border-white/10 transition">
+                            <i class="fa-solid ${u.accountRestricted ? 'fa-user-check' : 'fa-user-slash'} text-xs"></i>
+                        </button>
+                        <button onclick="resetPassword('${u._id}')" title="Reset Password" class="p-2 rounded-lg bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-300 border border-yellow-500/20 transition">
+                            <i class="fa-solid fa-key text-xs"></i>
+                        </button>
+                        <button onclick="deleteUser('${u._id}')" title="Delete User" class="p-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 transition">
+                            <i class="fa-solid fa-trash text-xs"></i>
+                        </button>
+                    </div>
+                </td>
+                `;
                 usersBody.appendChild(tr);
+            });
+        }
 
+        // Filtering & Sorting Controller
+        function applyFilters() {
+            const query = searchInput.value.toLowerCase();
+            const status = statusFilter.value;
+            const sortBy = sortFilter.value;
 
+            let filtered = allUsers.filter(u => {
+                const matchesQuery = (u.name || '').toLowerCase().includes(query) ||
+                    (u.email || '').toLowerCase().includes(query) ||
+                    (u.phone || '').toLowerCase().includes(query);
+
+                let matchesStatus = true;
+                if (status === 'active') matchesStatus = !u.accountRestricted && !u.isDeleted;
+                if (status === 'restricted') matchesStatus = u.accountRestricted;
+                if (status === 'deleted') matchesStatus = u.isDeleted;
+
+                return matchesQuery && matchesStatus;
             });
 
+            if (sortBy === 'newest') {
+                filtered.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+            } else if (sortBy === 'oldest') {
+                filtered.sort((a, b) => new Date(a.createdAt || 0) - new Date(b.createdAt || 0));
+            } else if (sortBy === 'highestBalance') {
+                filtered.sort((a, b) => (b.balance || 0) - (a.balance || 0));
+            }
 
+            renderUsers(filtered);
         }
 
+        // Modal Controls
+        function openUserModal(id) {
+            const user = allUsers.find(u => u._id === id);
+            if (!user) return;
 
+            activeUserIdInModal = id;
+            document.getElementById('modalUserName').textContent = user.name || '—';
+            document.getElementById('modalUserEmail').textContent = user.email || '—';
+            document.getElementById('modalUserPhone').textContent = user.phone || 'Not set';
+            document.getElementById('modalUserDate').textContent = user.createdAt ? new Date(user.createdAt).toLocaleDateString() : '—';
+            document.getElementById('modalUserId').textContent = user._id;
 
+            document.getElementById('modalUserStatus').className = `font-semibold ${user.accountRestricted ? 'text-red-400' : 'text-emerald-400'}`;
+            document.getElementById('modalUserStatus').textContent = user.accountRestricted ? 'Restricted' : 'Active';
 
+            document.getElementById('modalBal').value = user.balance ?? 0;
+            document.getElementById('modalEntry').value = user.entryCost ?? 0;
+            document.getElementById('modalEarn').value = user.expectedEarnings ?? 0;
+            document.getElementById('modalAnnouncement').value = user.announcement || '';
 
+            // Wire Modal Actions
+            document.getElementById('modalSaveFinancialsBtn').onclick = () => {
+                document.getElementById(`bal-${id}`).value = document.getElementById('modalBal').value;
+                document.getElementById(`entry-${id}`).value = document.getElementById('modalEntry').value;
+                document.getElementById(`earn-${id}`).value = document.getElementById('modalEarn').value;
+                saveUser(id);
+            };
 
+            document.getElementById('modalSaveAnnouncementBtn').onclick = () => {
+                document.getElementById(`announce-${id}`).value = document.getElementById('modalAnnouncement').value;
+                saveAnnouncement(id);
+            };
 
+            document.getElementById('modalRestrictBtn').onclick = () => toggleRestriction(id);
+            document.getElementById('modalResetPassBtn').onclick = () => resetPassword(id);
+            document.getElementById('modalDeleteBtn').onclick = () => deleteUser(id);
+
+            document.getElementById('userModal').classList.remove('hidden');
+        }
+
+        function closeUserModal() {
+            document.getElementById('userModal').classList.add('hidden');
+            activeUserIdInModal = null;
+        }
+
+        // Custom Confirmation Dialog
+        function showConfirmModal(title, message, callback) {
+            document.getElementById('confirmTitle').textContent = title;
+            document.getElementById('confirmMessage').textContent = message;
+            confirmCallback = callback;
+            document.getElementById('confirmModal').classList.remove('hidden');
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('confirmModal').classList.add('hidden');
+            confirmCallback = null;
+        }
+
+        document.getElementById('confirmSubmitBtn').addEventListener('click', () => {
+            if (confirmCallback) confirmCallback();
+            closeConfirmModal();
+        });
+
+        // Load Users API
         async function loadUsers() {
-
-
             try {
-
-
-                const res = await fetch(
-
-                    `${API_BASE_URL}/api/admin/users`,
-
-                    {
-
-                        headers: {
-
-                            Authorization: 'Bearer ' + token
-
-                        }
-
-                    }
-
-                );
-
-
+                const res = await fetch(`${API_BASE_URL}/api/admin/users`, {
+                    headers: { Authorization: 'Bearer ' + token }
+                });
 
                 if (!res.ok) throw new Error();
-
-
-
                 const data = await res.json();
-
-
-
                 allUsers = data.users || [];
 
-
-
-                renderUsers(allUsers);
-
-
-
+                updateStats(allUsers);
+                applyFilters();
             } catch (error) {
-
-
                 usersBody.innerHTML = `
-
-        <tr>
-
-            <td colspan="9" class="p-4 text-center text-red-500">
-
-                Failed to load users
-
-            </td>
-
-        </tr>
-
-        `;
-
+                <tr>
+                    <td colspan="7" class="p-8 text-center text-red-400">
+                        <i class="fa-solid fa-triangle-exclamation text-2xl mb-2"></i>
+                        <p>Failed to load users from admin API</p>
+                    </td>
+                </tr>`;
             }
-
-
         }
+
+        // API Action Calls (Fully Preserved Logic)
         async function saveUser(id) {
-
-
             try {
-
-
                 const body = {
-
-                    balance:
-                        document.getElementById(`bal-${id}`).value,
-
-
-                    entryCost:
-                        document.getElementById(`entry-${id}`).value,
-
-
-                    expectedEarnings:
-                        document.getElementById(`earn-${id}`).value
-
+                    balance: document.getElementById(`bal-${id}`).value,
+                    entryCost: document.getElementById(`entry-${id}`).value,
+                    expectedEarnings: document.getElementById(`earn-${id}`).value
                 };
 
-
-
-                const res = await fetch(
-
-                    `${API_BASE_URL}/api/admin/users/${id}/financials`,
-
-                    {
-
-                        method: 'PUT',
-
-                        headers: {
-
-                            'Content-Type': 'application/json',
-
-                            Authorization: 'Bearer ' + token
-
-                        },
-
-                        body: JSON.stringify(body)
-
-                    }
-
-                );
-
-
+                const res = await fetch(`${API_BASE_URL}/api/admin/users/${id}/financials`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Bearer ' + token
+                    },
+                    body: JSON.stringify(body)
+                });
 
                 if (!res.ok) throw new Error();
-
-
-
-                showMessage(
-                    'User financials updated successfully'
-                );
-
-
+                showMessage('User financials updated successfully');
+                loadUsers();
             } catch {
-
-
-                showMessage(
-                    'Failed to update user',
-                    'error'
-                );
-
-
+                showMessage('Failed to update user financials', 'error');
             }
-
-
         }
-
-
-
-
-
-
-
 
         async function saveAnnouncement(id) {
-
-
             try {
-
-
-                const announcement =
-                    document.getElementById(`announce-${id}`).value.trim();
-
-
-
-                const res = await fetch(
-
-                    `${API_BASE_URL}/api/admin/users/${id}/announcement`,
-
-                    {
-
-                        method: 'PUT',
-
-                        headers: {
-
-                            'Content-Type': 'application/json',
-
-                            Authorization: 'Bearer ' + token
-
-                        },
-
-                        body: JSON.stringify({
-
-                            announcement
-
-                        })
-
-                    }
-
-                );
-
-
+                const announcement = document.getElementById(`announce-${id}`).value.trim();
+                const res = await fetch(`${API_BASE_URL}/api/admin/users/${id}/announcement`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Bearer ' + token
+                    },
+                    body: JSON.stringify({ announcement })
+                });
 
                 if (!res.ok) throw new Error();
-
-
-
-                showMessage(
-                    'User announcement updated successfully'
-                );
-
-
+                showMessage('User announcement updated successfully');
+                loadUsers();
             } catch {
-
-
-                showMessage(
-                    'Failed to update announcement',
-                    'error'
-                );
-
-
+                showMessage('Failed to update announcement', 'error');
             }
-
-
         }
 
-
-
-
-
-
         async function toggleRestriction(id) {
-
             try {
-
-                const user = allUsers.find(
-                    u => u._id === id
-                );
-
-
+                const user = allUsers.find(u => u._id === id);
                 let restrictionTitle = '';
                 let restrictionMessage = '';
 
-
-
-                // Ask details only when restricting
                 if (user && !user.accountRestricted) {
+                    restrictionTitle = prompt('Enter restriction title:');
+                    if (restrictionTitle === null) return;
 
-
-                    restrictionTitle = prompt(
-                        'Enter restriction title:'
-                    );
-
-
-                    if (restrictionTitle === null) {
-                        return;
-                    }
-
-
-
-                    restrictionMessage = prompt(
-                        'Enter restriction message:'
-                    );
-
-
-                    if (restrictionMessage === null) {
-                        return;
-                    }
-
+                    restrictionMessage = prompt('Enter restriction message:');
+                    if (restrictionMessage === null) return;
                 }
 
-
-
-                const res = await fetch(
-
-                    `${API_BASE_URL}/api/admin/users/${id}/restrict`,
-
-                    {
-
-                        method: 'PUT',
-
-                        headers: {
-
-                            'Content-Type': 'application/json',
-
-                            Authorization: 'Bearer ' + token
-
-                        },
-
-                        body: JSON.stringify({
-
-                            restrictionTitle,
-
-                            restrictionMessage
-
-                        })
-
-                    }
-
-                );
-
-
+                const res = await fetch(`${API_BASE_URL}/api/admin/users/${id}/restrict`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: 'Bearer ' + token
+                    },
+                    body: JSON.stringify({ restrictionTitle, restrictionMessage })
+                });
 
                 if (!res.ok) throw new Error();
-
-
-
-                showMessage(
-                    'Account restriction updated'
-                );
-
-
+                showMessage('Account restriction status updated');
+                if (activeUserIdInModal) closeUserModal();
                 loadUsers();
-
-
-
             } catch (error) {
-
-
-                console.error(error);
-
-
-                showMessage(
-                    'Failed to update account restriction',
-                    'error'
-                );
-
-
+                showMessage('Failed to update account restriction', 'error');
             }
-
         }
 
+        async function resetPassword(id) {
+            showConfirmModal('Reset Password', 'Are you sure you want to reset this user password?', async () => {
+                try {
+                    const res = await fetch(`${API_BASE_URL}/api/admin/users/${id}/reset-password`, {
+                        method: 'PUT',
+                        headers: { Authorization: 'Bearer ' + token }
+                    });
 
+                    const data = await res.json();
+                    if (!res.ok) throw new Error(data.message);
 
+                    showMessage(`Temporary Password: ${data.temporaryPassword}`, 'success');
+                    if (activeUserIdInModal) closeUserModal();
+                } catch (error) {
+                    showMessage(error.message || 'Failed to reset password', 'error');
+                }
+            });
+        }
 
+        async function deleteUser(id) {
+            showConfirmModal('Delete User Account', 'Are you sure you want to delete this user account? This action cannot be undone.', async () => {
+                try {
+                    const res = await fetch(`${API_BASE_URL}/api/admin/users/${id}`, {
+                        method: 'DELETE',
+                        headers: { Authorization: 'Bearer ' + token }
+                    });
 
+                    const data = await res.json();
+                    if (!res.ok) throw new Error(data.message);
 
+                    showMessage('User account deleted successfully');
+                    if (activeUserIdInModal) closeUserModal();
+                    loadUsers();
+                } catch (error) {
+                    showMessage(error.message || 'Failed to delete user', 'error');
+                }
+            });
+        }
 
+        // Event Listeners for Filters
+        searchInput.addEventListener('input', applyFilters);
+        statusFilter.addEventListener('change', applyFilters);
+        sortFilter.addEventListener('change', applyFilters);
 
-
-        searchInput.addEventListener(
-            'input',
-            e => {
-
-
-                const q =
-                    e.target.value.toLowerCase();
-
-
-
-                const filtered =
-                    allUsers.filter(u =>
-
-
-                        (u.name || '')
-                            .toLowerCase()
-                            .includes(q)
-
-
-                        ||
-
-
-                        (u.email || '')
-                            .toLowerCase()
-                            .includes(q)
-
-
-                        ||
-
-
-                        (u.phone || '')
-                            .toLowerCase()
-                            .includes(q)
-
-
-                    );
-
-
-
-                renderUsers(filtered);
-
-
-            }
-
-        );
-
-
-
-
-
+        // Initial Load
         loadUsers();
-
-
-
     </script>
-
-
 </body>
 
 </html>
