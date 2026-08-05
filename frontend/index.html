@@ -1,22 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Contract Marketing Hub</title>
+    <title>Contract Marketing Hub | Verified Contract Platform</title>
 
     <meta name="theme-color" content="#0B2C5F" />
 
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome CDN for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
                         brand: '#0B2C5F',
                         brandDark: '#081A33',
-                        accent: '#F59E0B'
+                        accent: '#F59E0B',
+                        accentHover: '#D97706',
+                        zangiBlue: '#3B82F6',
+                        zangiDark: '#1D4ED8'
+                    },
+                    boxShadow: {
+                        'glow': '0 0 25px -5px rgba(245, 158, 11, 0.25)',
+                        'zangi': '0 10px 25px -5px rgba(59, 130, 246, 0.4)',
+                        'card': '0 10px 30px -5px rgba(0, 0, 0, 0.3)'
                     }
                 }
             }
@@ -27,11 +40,12 @@
         /* ===== GLOBAL SAFETY ===== */
         html,
         body {
-            background: #f5f7fb;
+            background: #061427;
             overflow-x: hidden;
             display: block !important;
             visibility: visible !important;
             opacity: 1 !important;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
         }
 
         /* ===== GOOGLE TRANSLATE — FULL NEUTRALIZATION ===== */
@@ -47,83 +61,175 @@
             visibility: hidden !important;
         }
 
-        /* ===== HERO ===== */
+        body {
+            top: 0px !important;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #081A33;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #1e3a6a;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2b4c80;
+        }
+
+        /* ===== HERO & BACKGROUND IMAGES ===== */
         .hero-bg {
             background-image:
-                linear-gradient(rgba(8, 26, 51, .75), rgba(8, 26, 51, .85)),
-                url("https://images.unsplash.com/photo-1556745757-8d76bdb6984b");
+                radial-gradient(circle at 50% 0%, rgba(11, 44, 95, 0.75) 0%, rgba(8, 26, 51, 0.95) 80%),
+                linear-gradient(rgba(8, 26, 51, 0.85), rgba(6, 20, 39, 0.95)),
+                url("https://images.unsplash.com/photo-1551836022-d5d88e9218df?q=80&w=2070&auto=format&fit=crop");
+            background-size: cover;
+            background-position: center;
+        }
+
+        .support-bg {
+            background-image:
+                linear-gradient(rgba(8, 26, 51, 0.92), rgba(6, 20, 39, 0.96)),
+                url("https://images.unsplash.com/photo-1534536281715-e28d76689b4d?q=80&w=2070&auto=format&fit=crop");
             background-size: cover;
             background-position: center;
         }
 
         .hero-glass {
-            background: rgba(11, 44, 95, .65);
-            backdrop-filter: blur(10px);
-            border-radius: 1.25rem;
-            box-shadow: 0 25px 60px rgba(0, 0, 0, .35);
+            background: rgba(13, 29, 56, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.45);
+        }
+
+        .glass-card {
+            background: linear-gradient(135deg, rgba(20, 42, 77, 0.75) 0%, rgba(10, 25, 48, 0.9) 100%);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.36);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(245, 158, 11, 0.35);
+            transform: translateY(-4px);
         }
 
         /* ===== ANIMATIONS ===== */
         .fade-up {
             opacity: 0;
             transform: translateY(30px);
-            transition: opacity .8s ease, transform .8s ease;
+            transition: opacity 0.8s ease, transform 0.8s ease;
         }
 
         .fade-up.show {
             opacity: 1;
             transform: translateY(0);
         }
+
+        @keyframes pulseGlow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.6);
+            }
+
+            50% {
+                box-shadow: 0 0 0 14px rgba(59, 130, 246, 0);
+            }
+        }
+
+        .animate-zangi-pulse {
+            animation: pulseGlow 2.5s infinite;
+        }
     </style>
 </head>
 
-<body class="text-gray-100 pt-[72px]">
+<body class="text-gray-100 pt-[76px] selection:bg-accent selection:text-black">
+
+    <!-- BACKGROUND GLOW EFFECTS -->
+    <div class="fixed top-0 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
+    <div class="fixed bottom-10 right-10 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none -z-10">
+    </div>
 
     <!-- HEADER -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-brand shadow-md">
-        <div class="max-w-7xl mx-auto px-4 py-4">
+    <header
+        class="fixed top-0 left-0 right-0 z-50 bg-brand/90 backdrop-blur-md border-b border-white/10 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
             <div class="flex items-center justify-between">
-                <h1 class="font-extrabold text-lg text-white">Contract Marketing Hub</h1>
 
+                <!-- BRAND LOGO -->
+                <a href="/" class="flex items-center gap-3">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-gradient-to-tr from-accent to-amber-300 flex items-center justify-center text-brandDark font-extrabold shadow-glow text-lg">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <h1 class="font-bold text-lg sm:text-xl tracking-tight text-white flex items-center gap-2">
+                        Contract Marketing <span class="text-accent">Hub</span>
+                    </h1>
+                </a>
+
+                <!-- DESKTOP NAV -->
                 <nav class="hidden md:flex items-center gap-6 text-sm font-medium">
-                    <a href="/" class="text-accent">Home</a>
-                    <a href="/contact.html" class="hover:text-accent">Contact</a>
-                    <a href="/faq.html" class="hover:text-accent">FAQs</a>
-                    <a href="/auth/login.html" class="hover:text-accent">Login</a>
-                    <a href="/auth/register.html" class="px-4 py-2 bg-accent text-brand rounded-lg font-semibold">
+                    <a href="/" class="text-accent font-semibold transition">Home</a>
+                    <a href="/contact.html" class="text-gray-300 hover:text-white transition">Contact</a>
+                    <a href="/faq.html" class="text-gray-300 hover:text-white transition">FAQs</a>
+                    <a href="/auth/login.html" class="text-gray-300 hover:text-white transition">Login</a>
+
+                    <a href="/auth/register.html"
+                        class="px-5 py-2.5 bg-gradient-to-r from-accent to-amber-500 text-brandDark rounded-xl font-bold shadow-glow hover:brightness-110 active:scale-95 transition">
                         Get Started
                     </a>
-                    <select id="langDesktop" class="bg-brandDark text-white text-sm rounded-lg px-3 py-1.5
-                 border border-white/20 cursor-pointer">
-                        <option selected>Select Language</option>
-                        <option value="en">English</option>
-                        <option value="pt">Portuguese</option>
-                        <option value="de">German</option>
-                        <option value="fr">French</option>
-                        <option value="es">Spanish</option>
-                        <option value="da">Danish</option>
-                        <option value="ar">Arabic</option>
-                        <option value="ms">Malay</option>
-                        <option value="tl">Filipino</option>
-                        <option value="nl">Dutch</option>
-                        <option value="sv">Swedish</option>
-                        <option value="no">Norwegian</option>
-                        <option value="fi">Finnish</option>
 
-                    </select>
+                    <!-- DESKTOP LANGUAGE PICKER -->
+                    <div class="relative flex items-center">
+                        <i class="fa-solid fa-globe absolute left-2.5 text-xs text-gray-400 pointer-events-none"></i>
+                        <select id="langDesktop"
+                            class="bg-brandDark/90 text-white text-xs rounded-lg pl-7 pr-3 py-2 border border-white/20 cursor-pointer focus:outline-none focus:border-accent appearance-none">
+                            <option selected value="">Select Language</option>
+                            <option value="en">English</option>
+                            <option value="pt">Portuguese</option>
+                            <option value="de">German</option>
+                            <option value="fr">French</option>
+                            <option value="es">Spanish</option>
+                            <option value="da">Danish</option>
+                            <option value="ar">Arabic</option>
+                            <option value="ms">Malay</option>
+                            <option value="tl">Filipino</option>
+                            <option value="nl">Dutch</option>
+                            <option value="sv">Swedish</option>
+                            <option value="no">Norwegian</option>
+                            <option value="fi">Finnish</option>
+                        </select>
+                    </div>
                 </nav>
 
-                <button id="menuBtn" class="md:hidden flex flex-col gap-1.5">
-                    <span class="w-6 h-0.5 bg-accent"></span>
-                    <span class="w-6 h-0.5 bg-accent"></span>
-                    <span class="w-6 h-0.5 bg-accent"></span>
+                <!-- MOBILE MENU BUTTON -->
+                <button id="menuBtn"
+                    class="md:hidden p-2 rounded-xl bg-white/5 border border-white/10 text-gray-200 focus:outline-none">
+                    <div class="flex flex-col gap-1.5">
+                        <span class="w-6 h-0.5 bg-accent rounded-full"></span>
+                        <span class="w-6 h-0.5 bg-accent rounded-full"></span>
+                        <span class="w-6 h-0.5 bg-accent rounded-full"></span>
+                    </div>
                 </button>
             </div>
 
-            <div class="md:hidden mt-2">
-                <select id="langMobile" class="bg-brandDark text-white text-xs rounded px-2 py-1
-               border border-white/20 max-w-[150px]">
-                    <option selected>Select Language</option>
+            <!-- MOBILE LANGUAGE BAR -->
+            <div class="md:hidden mt-3 pt-2 border-t border-white/10 flex justify-between items-center">
+                <span class="text-xs text-gray-400 flex items-center gap-1.5">
+                    <i class="fa-solid fa-globe"></i> Language:
+                </span>
+                <select id="langMobile"
+                    class="bg-brandDark text-white text-xs rounded-lg px-3 py-1.5 border border-white/20 max-w-[170px] focus:outline-none focus:border-accent">
+                    <option selected value="">Select Language</option>
                     <option value="en">English</option>
                     <option value="pt">Portuguese</option>
                     <option value="de">German</option>
@@ -131,15 +237,8 @@
                     <option value="es">Spanish</option>
                     <option value="da">Danish</option>
                     <option value="ar">Arabic</option>
-                        <option value="ms">Malay</option>
-                        <option value="tl">Filipino</option>
-                    <option value="nl">Dutch</option>
-                    <option value="sv">Swedish</option>
-                    <option value="no">Norwegian</option>
-                    <option value="fi">Finnish</option>
-                    <option value="ar">Arabic</option>
-                        <option value="ms">Malay</option>
-                        <option value="tl">Filipino</option>
+                    <option value="ms">Malay</option>
+                    <option value="tl">Filipino</option>
                     <option value="nl">Dutch</option>
                     <option value="sv">Swedish</option>
                     <option value="no">Norwegian</option>
@@ -148,127 +247,351 @@
             </div>
         </div>
     </header>
+
     <!-- MOBILE MENU OVERLAY -->
-    <div id="menuOverlay" class="fixed inset-0 bg-black/50 hidden z-40"></div>
+    <div id="menuOverlay" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden z-40 transition-opacity"></div>
 
     <!-- MOBILE MENU PANEL -->
-    <div id="mobileMenu" class="fixed top-0 right-0 h-full w-72 bg-brandDark text-white
-            translate-x-full transition-transform duration-300 z-50">
+    <div id="mobileMenu"
+        class="fixed top-0 right-0 h-full w-80 bg-brandDark/98 backdrop-blur-2xl text-white translate-x-full transition-transform duration-300 z-50 flex flex-col justify-between p-6 shadow-2xl border-l border-white/10">
+        <div class="space-y-6 text-sm">
+            <div class="flex justify-between items-center pb-4 border-b border-white/10">
+                <span class="font-bold text-lg text-white">Navigation</span>
+                <button id="closeMenu"
+                    class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-accent hover:text-white text-lg font-bold">
+                    ✕
+                </button>
+            </div>
 
-        <div class="p-6 space-y-6 text-sm">
-            <button id="closeMenu" class="text-right w-full text-xl text-accent font-bold">
-                ✕
-            </button>
-
-            <a href="/" class="block text-accent">Home</a>
-            <a href="/contact.html" class="block">Contact</a>
-            <a href="/faq.html" class="block">FAQs</a>
-            <a href="/auth/login.html" class="block">Login</a>
-            <a href="/auth/register.html" class="block mt-4 px-4 py-3 bg-accent text-brand
-          rounded-lg text-center font-semibold">
-                Get Started
-            </a>
+            <nav class="space-y-3">
+                <a href="/"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl bg-accent/10 text-accent font-semibold border border-accent/20">
+                    <i class="fa-solid fa-house w-5"></i> Home
+                </a>
+                <a href="/contact.html"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white transition">
+                    <i class="fa-solid fa-headset w-5"></i> Contact
+                </a>
+                <a href="/faq.html"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white transition">
+                    <i class="fa-solid fa-circle-question w-5"></i> FAQs
+                </a>
+                <a href="/auth/login.html"
+                    class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-300 hover:bg-white/5 hover:text-white transition">
+                    <i class="fa-solid fa-right-to-bracket w-5"></i> Login
+                </a>
+                <a href="/auth/register.html"
+                    class="block mt-4 px-4 py-3 bg-gradient-to-r from-accent to-amber-500 text-brandDark rounded-xl text-center font-bold shadow-glow">
+                    Get Started Free
+                </a>
+            </nav>
         </div>
     </div>
-    <!-- HERO -->
-    <section class="hero-bg min-h-[70vh] md:min-h-[85vh] flex items-center">
-        <div class="max-w-7xl mx-auto px-4 w-full text-center">
-            <div class="max-w-3xl mx-auto hero-glass p-6 md:p-10 fade-up">
-                <span class="uppercase tracking-widest text-sm text-accent font-semibold">
-                    Welcome to Contract Marketing Hub
-                </span>
 
-                <h2 class="text-3xl md:text-6xl font-extrabold mt-4 mb-6 text-white">
-                    Grow Smarter With<br>Verified Contracts
+    <!-- HERO SECTION WITH UNSPLASH BACKGROUND IMAGE -->
+    <section class="hero-bg min-h-[80vh] md:min-h-[90vh] flex items-center py-16 md:py-24 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center relative z-10">
+            <div class="max-w-3xl mx-auto hero-glass p-8 sm:p-12 md:p-14 rounded-3xl fade-up border border-white/15">
+
+                <div
+                    class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent/10 border border-accent/20 mb-6">
+                    <span class="w-2 h-2 rounded-full bg-accent animate-ping"></span>
+                    <span class="uppercase tracking-widest text-xs text-accent font-bold">
+                        Welcome to Contract Marketing Hub
+                    </span>
+                </div>
+
+                <h2
+                    class="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white leading-tight mb-6">
+                    Grow Smarter With <br>
+                    <span
+                        class="text-transparent bg-clip-text bg-gradient-to-r from-accent via-amber-200 to-amber-400">Verified
+                        Contracts</span>
                 </h2>
 
-                <p class="text-lg text-gray-200 mb-10">
-                    A transparent, admin-approved contract investment platform built
-                    for clarity, control, and confidence.
+                <p class="text-base sm:text-lg text-gray-300 mb-10 max-w-2xl mx-auto leading-relaxed">
+                    A transparent, admin-approved contract investment platform built for clarity, control, and long-term
+                    financial confidence.
                 </p>
 
-                <div class="flex justify-center gap-4 flex-wrap">
-                    <a href="/auth/register.html" class="px-8 py-4 bg-accent text-brand rounded-xl font-semibold">
-                        Create Free Account
+                <div class="flex justify-center items-center gap-4 flex-wrap">
+                    <a href="/auth/register.html"
+                        class="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-accent to-amber-500 text-brandDark rounded-2xl font-bold shadow-glow hover:brightness-110 active:scale-95 transition text-base">
+                        Create Free Account <i class="fa-solid fa-arrow-right ml-2 text-sm"></i>
                     </a>
-                    <a href="/auth/login.html" class="px-8 py-4 border border-white/30 rounded-xl font-semibold">
-                        Login
+                    <a href="/auth/login.html"
+                        class="w-full sm:w-auto px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/20 hover:border-accent/40 rounded-2xl font-bold text-white transition text-base">
+                        Access Portal
                     </a>
                 </div>
+
+                <!-- TRUST BADGES -->
+                <div class="mt-10 pt-8 border-t border-white/10 grid grid-cols-3 gap-4 text-center">
+                    <div>
+                        <div class="text-xl sm:text-2xl font-extrabold text-white">100%</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-wider mt-1">Verified</div>
+                    </div>
+                    <div>
+                        <div class="text-xl sm:text-2xl font-extrabold text-accent">24/7</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-wider mt-1">Control</div>
+                    </div>
+                    <div>
+                        <div class="text-xl sm:text-2xl font-extrabold text-white">Secure</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-wider mt-1">Platform</div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
 
-    <!-- HOW IT WORKS -->
-    <section class="bg-white text-gray-800 py-24">
-        <div class="max-w-7xl mx-auto px-4">
-            <h3 class="text-3xl font-bold text-center mb-14 fade-up">
-                How It Works
-            </h3>
+    <!-- HOW IT WORKS SECTION -->
+    <section class="bg-[#081A33] text-gray-100 py-24 relative border-t border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16 fade-up">
+                <span class="text-accent uppercase tracking-widest text-xs font-bold">Simple Process</span>
+                <h3 class="text-3xl sm:text-4xl font-extrabold mt-2 text-white">
+                    How It Works
+                </h3>
+                <p class="text-sm text-gray-400 mt-3">Start managing verified marketing contracts in three seamless
+                    steps.</p>
+            </div>
 
-            <div class="grid md:grid-cols-3 gap-10 text-center">
-                <div class="bg-gray-50 rounded-2xl p-8 shadow fade-up">
-                    <h4 class="font-semibold mb-2">Create Account</h4>
-                    <p class="text-sm text-gray-600">
-                        Register and request email verification.
+            <div class="grid md:grid-cols-3 gap-8">
+
+                <div class="glass-card rounded-3xl p-8 fade-up relative transition duration-300">
+                    <div
+                        class="w-14 h-14 rounded-2xl bg-accent/10 border border-accent/20 text-accent flex items-center justify-center text-2xl font-bold mb-6">
+                        <i class="fa-solid fa-user-plus"></i>
+                    </div>
+                    <span class="text-xs font-bold font-mono text-accent uppercase tracking-widest">Step 01</span>
+                    <h4 class="text-xl font-bold text-white mt-1 mb-3">Create Account</h4>
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        Register your profile and request fast email verification to unlock your personal dashboard.
                     </p>
                 </div>
 
-                <div class="bg-gray-50 rounded-2xl p-8 shadow fade-up">
-                    <h4 class="font-semibold mb-2">Request Contract</h4>
-                    <p class="text-sm text-gray-600">
-                        Choose an admin-approved contract plan.
+                <div class="glass-card rounded-3xl p-8 fade-up relative transition duration-300">
+                    <div
+                        class="w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center text-2xl font-bold mb-6">
+                        <i class="fa-solid fa-file-contract"></i>
+                    </div>
+                    <span class="text-xs font-bold font-mono text-blue-400 uppercase tracking-widest">Step 02</span>
+                    <h4 class="text-xl font-bold text-white mt-1 mb-3">Request Contract</h4>
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        Choose an admin-approved contract plan tailored to your investment target and timeline.
                     </p>
                 </div>
 
-                <div class="bg-gray-50 rounded-2xl p-8 shadow fade-up">
-                    <h4 class="font-semibold mb-2">Earn & Withdraw</h4>
-                    <p class="text-sm text-gray-600">
-                        Complete contracts and withdraw securely.
+                <div class="glass-card rounded-3xl p-8 fade-up relative transition duration-300">
+                    <div
+                        class="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-2xl font-bold mb-6">
+                        <i class="fa-solid fa-wallet"></i>
+                    </div>
+                    <span class="text-xs font-bold font-mono text-emerald-400 uppercase tracking-widest">Step 03</span>
+                    <h4 class="text-xl font-bold text-white mt-1 mb-3">Earn & Withdraw</h4>
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        Track your contract progress in real time and initiate payouts directly to your preferred wallet
+                        or account.
                     </p>
                 </div>
+
             </div>
         </div>
     </section>
 
-    <!-- WHY CHOOSE US -->
-    <section class="bg-gray-100 text-gray-800 py-24">
-        <div class="max-w-7xl mx-auto px-4">
-            <h3 class="text-3xl font-bold text-center mb-14 fade-up">
-                Why Choose Contract Marketing Hub?
-            </h3>
+    <!-- WHY CHOOSE CONTRACT MARKETING HUB SECTION -->
+    <section class="py-24 relative bg-[#061427]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16 fade-up">
+                <span class="text-accent uppercase tracking-widest text-xs font-bold">Built For Excellence</span>
+                <h3 class="text-3xl sm:text-4xl font-extrabold mt-2 text-white">
+                    Why Choose Contract Marketing Hub?
+                </h3>
+                <p class="text-sm text-gray-400 mt-3">A robust financial technology foundation designed to provide
+                    complete transparency and control.</p>
+            </div>
 
-            <div class="grid md:grid-cols-3 gap-10 text-center">
-                <div class="fade-up">
-                    <h4 class="font-semibold mb-2">Admin Controlled</h4>
-                    <p class="text-sm text-gray-600">
-                        Every contract and withdrawal is reviewed for safety.
+            <div class="grid md:grid-cols-3 gap-8">
+
+                <div class="glass-card rounded-3xl p-8 fade-up transition duration-300">
+                    <div
+                        class="w-12 h-12 rounded-2xl bg-accent/10 text-accent flex items-center justify-center text-xl mb-6">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">Secure Platform</h4>
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        Built with a security-first architecture to protect user records, contract logs, and payout
+                        credentials at all times.
                     </p>
                 </div>
 
-                <div class="fade-up">
-                    <h4 class="font-semibold mb-2">Transparent System</h4>
-                    <p class="text-sm text-gray-600">
-                        Track contracts, balances, and transactions clearly.
+                <div class="glass-card rounded-3xl p-8 fade-up transition duration-300">
+                    <div
+                        class="w-12 h-12 rounded-2xl bg-accent/10 text-accent flex items-center justify-center text-xl mb-6">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">Fast Processing</h4>
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        Optimized contract deployment and streamlined transaction workflows ensure rapid execution
+                        without delays.
                     </p>
                 </div>
 
-                <div class="fade-up">
-                    <h4 class="font-semibold mb-2">Secure Platform</h4>
-                    <p class="text-sm text-gray-600">
-                        Built with security-first architecture.
+                <div class="glass-card rounded-3xl p-8 fade-up transition duration-300">
+                    <div
+                        class="w-12 h-12 rounded-2xl bg-accent/10 text-accent flex items-center justify-center text-xl mb-6">
+                        <i class="fa-solid fa-chart-pie"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">Transparent Contracts</h4>
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        Track active balances, contract duration, expected earnings, and full ledger history with
+                        complete visual clarity.
                     </p>
                 </div>
+
+                <div class="glass-card rounded-3xl p-8 fade-up transition duration-300">
+                    <div
+                        class="w-12 h-12 rounded-2xl bg-accent/10 text-accent flex items-center justify-center text-xl mb-6">
+                        <i class="fa-solid fa-globe"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">Global Access</h4>
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        Fully accessible worldwide with integrated multi-language support and flexible global withdrawal
+                        choices.
+                    </p>
+                </div>
+
+                <div class="glass-card rounded-3xl p-8 fade-up transition duration-300">
+                    <div
+                        class="w-12 h-12 rounded-2xl bg-accent/10 text-accent flex items-center justify-center text-xl mb-6">
+                        <i class="fa-solid fa-headset"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">Reliable Support</h4>
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        Dedicated customer assistance ready to support you with registration, contract updates, and
+                        general enquiries.
+                    </p>
+                </div>
+
+                <div class="glass-card rounded-3xl p-8 fade-up transition duration-300">
+                    <div
+                        class="w-12 h-12 rounded-2xl bg-accent/10 text-accent flex items-center justify-center text-xl mb-6">
+                        <i class="fa-solid fa-sliders"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white mb-3">Full Control</h4>
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        Intuitive dashboard tools that let you review active packages, track balances, and manage your
+                        account seamlessly.
+                    </p>
+                </div>
+
             </div>
         </div>
     </section>
 
-    <!-- FOOTER -->
-    <footer class="bg-brandDark text-white text-center py-6 text-sm">
-        © <span id="year"></span> Contract Marketing Hub ·
-        <a href="/terms.html" class="underline ml-1">Terms</a> ·
-        <a href="/privacy.html" class="underline ml-1">Privacy</a>
+    <!-- ZANGI SUPPORT SECTION WITH UNSPLASH BACKGROUND IMAGE -->
+    <section class="support-bg py-24 border-t border-white/10 relative overflow-hidden">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div
+                class="glass-card rounded-3xl p-8 sm:p-12 border border-zangiBlue/40 text-center relative overflow-hidden shadow-zangi">
+
+                <!-- BACKGROUND GLOW -->
+                <div
+                    class="absolute -top-10 -right-10 w-48 h-48 bg-zangiBlue/15 rounded-full blur-2xl pointer-events-none">
+                </div>
+
+                <!-- EXACT ZANGI ICON (WHITE SQUARED CONTAINER WITH BLUE CIRCLE & TELEPHONE HANDSET) -->
+                <div
+                    class="w-16 h-16 sm:w-20 sm:h-20 bg-white rounded-2xl border border-white/40 mx-auto flex items-center justify-center p-2.5 mb-6 shadow-zangi hover:scale-105 transition-transform duration-300">
+                    <div
+                        class="w-full h-full rounded-full bg-zangiBlue flex items-center justify-center text-white text-xl sm:text-2xl">
+                        <i class="fa-solid fa-phone"></i>
+                    </div>
+                </div>
+
+                <h3 class="text-2xl sm:text-4xl font-extrabold text-white mb-4">
+                    Need Assistance?
+                </h3>
+
+                <p class="text-sm sm:text-base text-gray-200 max-w-2xl mx-auto mb-8 leading-relaxed">
+                    Our support team is available to assist you with account registration, deposit updates, withdrawal
+                    verifications, contract details, and general platform enquiries.
+                </p>
+
+                <a href="https://services.zangi.com/dl/conversation/3950459557" target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center justify-center gap-3 px-8 py-4 bg-zangiBlue hover:bg-zangiDark text-white font-bold rounded-2xl shadow-zangi hover:scale-105 active:scale-95 transition-all duration-200 text-base">
+                    <!-- ICON CONTAINER -->
+                    <div class="w-7 h-7 bg-white rounded-lg flex items-center justify-center shrink-0">
+                        <div
+                            class="w-5 h-5 rounded-full bg-zangiBlue flex items-center justify-center text-white text-[10px]">
+                            <i class="fa-solid fa-phone"></i>
+                        </div>
+                    </div>
+                    <span>Chat on Zangi</span>
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FLOATING ZANGI SUPPORT BUTTON WITH NATIVE TRANSLATABLE TOOLTIP -->
+    <div class="fixed bottom-6 right-6 z-50 flex items-center group">
+
+        <!-- TRANSLATABLE HTML TOOLTIP -->
+        <div
+            class="mr-3 hidden sm:block opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-brandDark text-white text-xs font-medium px-3.5 py-2 rounded-xl border border-white/15 shadow-2xl pointer-events-none whitespace-nowrap">
+            <span>Need Help? Chat with Support</span>
+        </div>
+
+        <!-- EXACT ZANGI FLOATING ACTION BUTTON -->
+        <a href="https://services.zangi.com/dl/conversation/3950459557" target="_blank" rel="noopener noreferrer"
+            aria-label="Support Chat"
+            class="w-14 h-14 bg-white rounded-2xl p-1.5 shadow-zangi animate-zangi-pulse hover:scale-110 active:scale-95 transition-transform duration-200 border border-white/40 flex items-center justify-center">
+            <div class="w-full h-full rounded-full bg-zangiBlue text-white flex items-center justify-center text-xl">
+                <i class="fa-solid fa-phone"></i>
+            </div>
+        </a>
+    </div>
+
+    <!-- FOOTER WITH INTEGRATED ZANGI LINK -->
+    <footer class="bg-brandDark text-white py-10 text-sm border-t border-white/10">
+        <div
+            class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-3">
+                <div
+                    class="w-8 h-8 rounded-lg bg-gradient-to-tr from-accent to-amber-300 flex items-center justify-center text-brandDark font-extrabold text-sm">
+                    <i class="fa-solid fa-chart-line"></i>
+                </div>
+                <p class="text-gray-400 text-xs sm:text-sm">
+                    © <span id="year"></span> Contract Marketing Hub. All rights reserved.
+                </p>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-center gap-6 text-xs text-gray-300">
+                <a href="/terms.html" class="hover:text-accent transition underline">Terms of Service</a>
+                <a href="/privacy.html" class="hover:text-accent transition underline">Privacy Policy</a>
+                <a href="/faq.html" class="hover:text-accent transition underline">FAQs</a>
+                <a href="/contact.html" class="hover:text-accent transition underline">Contact</a>
+
+                <!-- ZANGI FOOTER SUPPORT BUTTON -->
+                <a href="https://services.zangi.com/dl/conversation/3950459557" target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-zangiBlue/10 hover:bg-zangiBlue/20 text-zangiBlue border border-zangiBlue/30 font-semibold transition">
+                    <div class="w-4 h-4 bg-white rounded-md flex items-center justify-center">
+                        <div
+                            class="w-3 h-3 rounded-full bg-zangiBlue flex items-center justify-center text-white text-[6px]">
+                            <i class="fa-solid fa-phone"></i>
+                        </div>
+                    </div>
+                    <span>Zangi Support</span>
+                </a>
+            </div>
+        </div>
     </footer>
+
+    <!-- MOBILE MENU SCRIPT -->
     <script>
         /* MOBILE MENU TOGGLE — REQUIRED */
         const menuBtn = document.getElementById('menuBtn');
@@ -292,9 +615,10 @@
         menuOverlay.addEventListener('click', closeMobileMenu);
     </script>
 
-    <!-- GOOGLE TRANSLATE -->
+    <!-- GOOGLE TRANSLATE ELEMENT -->
     <div id="google_translate_element" style="display:none"></div>
 
+    <!-- TRANSLATION INITIALIZATION & INTERSECTION OBSERVER SCRIPT -->
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
 
@@ -303,7 +627,7 @@
             entries.forEach(e => {
                 if (e.isIntersecting) e.target.classList.add('show');
             });
-        }, { threshold: 0.2 });
+        }, { threshold: 0.15 });
 
         document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
@@ -319,15 +643,20 @@
             if (!lang || lang === 'Select Language') return;
             if (lang === 'en') {
                 document.cookie = 'googtrans=;path=/;';
+                document.cookie = `googtrans=;path=/;domain=${location.hostname}`;
                 location.reload();
                 return;
             }
             document.cookie = `googtrans=/en/${lang};path=/;`;
+            document.cookie = `googtrans=/en/${lang};path=/;domain=${location.hostname}`;
             location.reload();
         }
 
-        langDesktop.onchange = e => setLanguage(e.target.value);
-        langMobile.onchange = e => setLanguage(e.target.value);
+        const langDesktop = document.getElementById('langDesktop');
+        const langMobile = document.getElementById('langMobile');
+
+        if (langDesktop) langDesktop.onchange = e => setLanguage(e.target.value);
+        if (langMobile) langMobile.onchange = e => setLanguage(e.target.value);
     </script>
 
     <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
