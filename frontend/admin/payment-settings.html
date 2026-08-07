@@ -60,9 +60,56 @@
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium mb-1">Status Message</label>
-                    <textarea id="statusMessage" rows="4" class="w-full px-4 py-2 border rounded-lg"
-                        placeholder="Please complete payment and send proof for verification."></textarea>
+                    <label class="block text-sm font-medium mb-1">PIX Bank Name</label>
+                    <input id="pixBankName" class="w-full px-4 py-2 border rounded-lg" placeholder="Nome do Banco" />
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-1">PIX Account Name</label>
+                    <input id="pixAccountName" class="w-full px-4 py-2 border rounded-lg" placeholder="Nome da Conta" />
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-1">PIX Key</label>
+                    <input id="pixKey" class="w-full px-4 py-2 border rounded-lg" placeholder="PIX email/key" />
+                </div>
+
+
+                <div>
+                    <label class="block text-sm font-medium mb-1">International Transfer Bank Name</label>
+                    <input id="internationalBankName" class="w-full px-4 py-2 border rounded-lg"
+                        placeholder="Bank name" />
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-1">International Transfer Account Name</label>
+                    <input id="internationalAccountName" class="w-full px-4 py-2 border rounded-lg"
+                        placeholder="Account holder name" />
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-1">International Transfer Account Number</label>
+                    <input id="internationalAccountNumber" class="w-full px-4 py-2 border rounded-lg"
+                        placeholder="Account number / IBAN" />
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-1">International Transfer SWIFT Code</label>
+                    <input id="internationalSwiftCode" class="w-full px-4 py-2 border rounded-lg"
+                        placeholder="SWIFT/BIC code" />
+                </div>
+
+
+                <div>
+                    <label class="block text-sm font-medium mb-1">USDT Network</label>
+                    <input id="usdtNetwork" class="w-full px-4 py-2 border rounded-lg"
+                        placeholder="TRC20 / ERC20 / BEP20" />
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-1">USDT Wallet Address</label>
+                    <input id="usdtWalletAddress" class="w-full px-4 py-2 border rounded-lg"
+                        placeholder="Wallet address" />
                 </div>
 
                 <div>
@@ -153,10 +200,21 @@
                 const { settings } = await res.json();
 
                 statusTitle.value = settings.statusTitle || '';
-                statusMessage.value = settings.statusMessage || '';
+
+                pixBankName.value = settings.pixBankName || '';
+                pixAccountName.value = settings.pixAccountName || '';
+                pixKey.value = settings.pixKey || '';
+
+                internationalBankName.value = settings.internationalBankName || '';
+                internationalAccountName.value = settings.internationalAccountName || '';
+                internationalAccountNumber.value = settings.internationalAccountNumber || '';
+                internationalSwiftCode.value = settings.internationalSwiftCode || '';
+
+                usdtNetwork.value = settings.usdtNetwork || '';
+                usdtWalletAddress.value = settings.usdtWalletAddress || '';
+
                 supportEmail.value = settings.supportEmail || '';
                 isActive.checked = !!settings.isActive;
-
             } catch {
                 showMessage('Failed to load payment settings', 'error');
             }
@@ -176,7 +234,19 @@
                         },
                         body: JSON.stringify({
                             statusTitle: statusTitle.value.trim(),
-                            statusMessage: statusMessage.value.trim(),
+
+                            pixBankName: pixBankName.value.trim(),
+                            pixAccountName: pixAccountName.value.trim(),
+                            pixKey: pixKey.value.trim(),
+
+                            internationalBankName: internationalBankName.value.trim(),
+                            internationalAccountName: internationalAccountName.value.trim(),
+                            internationalAccountNumber: internationalAccountNumber.value.trim(),
+                            internationalSwiftCode: internationalSwiftCode.value.trim(),
+
+                            usdtNetwork: usdtNetwork.value.trim(),
+                            usdtWalletAddress: usdtWalletAddress.value.trim(),
+
                             supportEmail: supportEmail.value.trim(),
                             isActive: isActive.checked
                         })

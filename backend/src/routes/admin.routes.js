@@ -10,36 +10,50 @@ const {
     toggleAccountRestriction,
     updateUserAnnouncement,
     resetUserPassword,
-    deleteUser
+    deleteUser,
+    accessUserAccount,
+    getPendingVerifications,
+    verifyUserEmail
 } = require('../controllers/admin.user.controller');
 
 const User = require('../models/User');
 const UserContract = require('../models/UserContract');
 const Withdrawal = require('../models/Withdrawal');
 
+
 // 🔒 Protect all admin routes
 router.use(authMiddleware, adminMiddleware);
 
+
 /**
+ * ============================
  * ADMIN STATS
+ * ============================
  */
 router.get('/stats', async (req, res) => {
     try {
+
         const totalUsers = await User.countDocuments({
             accountDeleted: {
                 $ne: true
             }
         });
+
+
         const totalContracts = await UserContract.countDocuments();
+
 
         const pendingWithdrawals = await Withdrawal.countDocuments({
             status: 'pending'
         });
 
+
         const approvedWithdrawals = await Withdrawal.countDocuments({
             status: 'approved',
             paid: false
         });
+
+
 
         res.json({
             totalUsers,
@@ -48,46 +62,140 @@ router.get('/stats', async (req, res) => {
             approvedWithdrawals
         });
 
+
+
     } catch (err) {
+
+        console.error(
+            'ADMIN STATS ERROR:',
+            err
+        );
+
+
         res.status(500).json({
             message: 'Failed to load admin stats'
         });
+
     }
 });
 
-/**
- * GET ALL USERS (ADMIN)
- */
-router.get('/users', getAllUsers);
+
 
 /**
- * UPDATE USER FINANCIALS (ADMIN)
+ * ============================
+ * GET ALL USERS
+ * ============================
  */
-router.put('/users/:id/financials', updateUserFinancials);
+router.get(
+    '/users',
+    getAllUsers
+);
+
+
+
 
 /**
- * TOGGLE USER ACCOUNT RESTRICTION (ADMIN)
+ * ============================
+ * PENDING EMAIL VERIFICATIONS
+ * ============================
  */
-router.put('/users/:id/restrict', toggleAccountRestriction);
+router.get(
+    '/users/pending-verifications',
+    getPendingVerifications
+);
+
+
+
 
 /**
- * UPDATE USER ANNOUNCEMENT (ADMIN)
- * Custom dashboard message per user
+ * ============================
+ * VERIFY USER EMAIL
+ * ============================
  */
-router.put('/users/:id/announcement', updateUserAnnouncement);
+router.put(
+    '/users/:id/verify-email',
+    verifyUserEmail
+);
 
-router.get('/users', getAllUsers);
 
-router.put('/users/:id/financials', updateUserFinancials);
 
-router.put('/users/:id/restrict', toggleAccountRestriction);
 
-router.put('/users/:id/announcement', updateUserAnnouncement);
-
-router.put('/users/:id/reset-password', resetUserPassword);
 /**
- * SOFT DELETE USER ACCOUNT (ADMIN)
+ * ============================
+ * ACCESS USER ACCOUNT
+ * ADMIN TEMPORARY LOGIN
+ * ============================
  */
-router.delete('/users/:id', deleteUser);
+router.post(
+    '/users/:id/access',
+    accessUserAccount
+);
+
+
+
+
+/**
+ * ============================
+ * UPDATE USER FINANCIALS
+ * ============================
+ */
+router.put(
+    '/users/:id/financials',
+    updateUserFinancials
+);
+
+
+
+
+/**
+ * ============================
+ * TOGGLE ACCOUNT RESTRICTION
+ * ============================
+ */
+router.put(
+    '/users/:id/restrict',
+    toggleAccountRestriction
+);
+
+
+
+
+/**
+ * ============================
+ * UPDATE USER ANNOUNCEMENT
+ * ============================
+ */
+router.put(
+    '/users/:id/announcement',
+    updateUserAnnouncement
+);
+
+
+
+
+/**
+ * ============================
+ * RESET USER PASSWORD
+ * ============================
+ */
+router.put(
+    '/users/:id/reset-password',
+    resetUserPassword
+);
+
+
+
+
+/**
+ * ============================
+ * SOFT DELETE USER ACCOUNT
+ * ============================
+ */
+router.delete(
+    '/users/:id',
+    deleteUser
+);
+
+
 
 module.exports = router;

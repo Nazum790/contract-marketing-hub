@@ -398,8 +398,8 @@
                 : `<i class="fa-solid fa-triangle-exclamation text-red-400 text-lg"></i> <span>${text}</span>`;
 
             messageBox.className = `fixed top-20 right-5 z-50 max-w-md p-4 rounded-xl text-sm shadow-2xl backdrop-blur-lg border transition-all duration-300 flex items-center gap-3 ${type === 'success'
-                    ? 'bg-emerald-950/80 border-emerald-500/30 text-emerald-200'
-                    : 'bg-red-950/80 border-red-500/30 text-red-200'
+                ? 'bg-emerald-950/80 border-emerald-500/30 text-emerald-200'
+                : 'bg-red-950/80 border-red-500/30 text-red-200'
                 }`;
 
             messageBox.classList.remove('hidden');
@@ -409,9 +409,9 @@
         // Stats Counter Update
         function updateStats(users) {
             document.getElementById('statTotal').textContent = users.length;
-            document.getElementById('statActive').textContent = users.filter(u => !u.accountRestricted && !u.isDeleted).length;
+            document.getElementById('statActive').textContent = users.filter(u => !u.accountRestricted && !u.accountDeleted).length;
             document.getElementById('statRestricted').textContent = users.filter(u => u.accountRestricted).length;
-            document.getElementById('statDeleted').textContent = users.filter(u => u.isDeleted).length;
+            document.getElementById('statDeleted').textContent = users.filter(u => u.accountDeleted).length;
         }
 
         // Render Refactored User Row Design
@@ -440,13 +440,13 @@
                     <div class="text-[11px] text-gray-500">${u.phone || '—'}</div>
                 </td>
                 <td class="p-4">
-                    <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold border ${u.isDeleted
+                    <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold border ${u.accountDeleted
                         ? 'bg-gray-500/10 text-gray-400 border-gray-500/20'
                         : u.accountRestricted
                             ? 'bg-red-500/10 text-red-400 border-red-500/20'
                             : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
                     }">
-                        ${u.isDeleted ? 'Deleted' : u.accountRestricted ? 'Restricted' : 'Active'}
+                        ${u.accountDeleted ? 'Deleted' : u.accountRestricted ? 'Restricted' : 'Active'}
                     </span>
                 </td>
                 <td class="p-4">
@@ -470,6 +470,9 @@
                     <div class="flex items-center justify-end gap-1.5">
                         <button onclick="openUserModal('${u._id}')" title="Inspect User" class="p-2 rounded-lg bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white transition">
                             <i class="fa-solid fa-eye text-xs"></i>
+                        </button>
+                        <button onclick="accessUserAccount('${u._id}')" title="Access Account" class="p-2 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 border border-purple-500/20 transition">
+                            <i class="fa-solid fa-right-to-bracket text-xs"></i>
                         </button>
                         <button onclick="saveUser('${u._id}')" title="Save Financials" class="p-2 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/20 transition">
                             <i class="fa-solid fa-floppy-disk text-xs"></i>
@@ -502,9 +505,9 @@
                     (u.phone || '').toLowerCase().includes(query);
 
                 let matchesStatus = true;
-                if (status === 'active') matchesStatus = !u.accountRestricted && !u.isDeleted;
+                if (status === 'active') matchesStatus = !u.accountRestricted && !u.accountDeleted;
                 if (status === 'restricted') matchesStatus = u.accountRestricted;
-                if (status === 'deleted') matchesStatus = u.isDeleted;
+                if (status === 'deleted') matchesStatus = u.accountDeleted;
 
                 return matchesQuery && matchesStatus;
             });
@@ -608,6 +611,26 @@
         }
 
         // API Action Calls (Fully Preserved Logic)
+        async function accessUserAccount(id) {
+            try {
+                const res = await fetch(`${API_BASE_URL}/api/admin/users/${id}/access`, {
+                    method: 'POST',
+                    headers: { Authorization: 'Bearer ' + token }
+                });
+
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.message || 'Failed to access user account');
+
+                if (data.token) {
+                    localStorage.setItem('user_access_token', data.token);
+                    window.open(`/user/dashboard.html?token=${encodeURIComponent(data.token)}`, '_blank');
+                    showMessage(data.message || 'Access token generated successfully');
+                }
+            } catch (error) {
+                showMessage(error.message || 'Failed to access user account', 'error');
+            }
+        }
+
         async function saveUser(id) {
             try {
                 const body = {

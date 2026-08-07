@@ -7,10 +7,52 @@ const PaymentSettingsSchema = new mongoose.Schema(
             default: 'Payment Required',
         },
 
-        statusMessage: {
+        // PIX Transfer
+        pixBankName: {
             type: String,
-            default:
-                'Please complete payment and send proof for verification. Your contract will be activated after confirmation.',
+            default: '',
+        },
+
+        pixAccountName: {
+            type: String,
+            default: '',
+        },
+
+        pixKey: {
+            type: String,
+            default: '',
+        },
+
+        // International Transfer USD
+        internationalBankName: {
+            type: String,
+            default: '',
+        },
+
+        internationalAccountName: {
+            type: String,
+            default: '',
+        },
+
+        internationalAccountNumber: {
+            type: String,
+            default: '',
+        },
+
+        internationalSwiftCode: {
+            type: String,
+            default: '',
+        },
+
+        // Crypto Transfer USDT
+        usdtNetwork: {
+            type: String,
+            default: '',
+        },
+
+        usdtWalletAddress: {
+            type: String,
+            default: '',
         },
 
         supportEmail: {

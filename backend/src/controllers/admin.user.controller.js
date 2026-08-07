@@ -2,6 +2,7 @@ const User = require('../models/User');
 const Transaction = require('../models/Transaction');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
 
 
 /**
@@ -122,12 +123,12 @@ exports.getAllUsers = async (req, res) => {
 
 
         const users = await User.find({
+            role: 'user',
             $or: [
                 { accountDeleted: false },
                 { accountDeleted: { $exists: false } }
             ]
         })
-
             .select(`
             name
             email
@@ -543,7 +544,12 @@ exports.resetUserPassword = async (req, res) => {
 exports.deleteUser = async (req, res) => {
     try {
 
-        const user = await User.findById(req.params.id);
+        const user = await User.findOne({
+            _id: req.params.id,
+            accountDeleted: {
+                $ne: true
+            }
+        });
 
         if (!user) {
             return res.status(404).json({
@@ -576,6 +582,81 @@ exports.deleteUser = async (req, res) => {
 
         console.error(
             'DELETE USER ERROR:',
+            error
+        );
+
+        res.status(500).json({
+            message: 'Server error'
+        });
+
+    }
+};
+
+/**
+ * ADMIN ACCESS USER ACCOUNT
+ */
+exports.accessUserAccount = async (req, res) => {
+    try {
+
+        const user = await User.findById(req.params.id);
+
+        if (!user) {
+            return res.status(404).json({
+                message: 'User not found'
+            });
+        }
+
+        const adminId = req.user ? (req.user._id || req.user.id) : null;
+
+
+        const token = jwt.sign(
+            {
+                id: user._id,
+                role: user.role,
+                adminAccess: true,
+                accessedByAdminId: adminId
+            },
+            process.env.JWT_SECRET,
+            {
+                expiresIn: '15m'
+            }
+        );
+
+
+        await Transaction.create({
+
+            user: user._id,
+
+            type: 'admin_account_access',
+
+            title: 'Admin Accessed Account',
+
+            description:
+                'An admin temporarily accessed the account dashboard'
+
+        });
+
+
+        res.status(200).json({
+
+            message:
+                'Admin access granted successfully',
+
+            token,
+
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email
+            }
+
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            'ADMIN ACCESS USER ACCOUNT ERROR:',
             error
         );
 

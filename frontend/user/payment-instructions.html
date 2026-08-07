@@ -269,35 +269,35 @@
 
         <!-- PAYMENT INSTRUCTION NOTICES FLOW (3 CARDS) -->
         <section class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <!-- 1. PENDING VERIFICATION -->
+            <!-- 1. CHOOSE PAYMENT METHOD -->
             <div class="p-4 rounded-2xl glass-card border-l-4 border-l-amber-500 flex flex-col justify-between">
                 <div class="flex items-center gap-3 mb-2">
                     <div
                         class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-sm shrink-0">
-                        <i class="fa-solid fa-clock"></i>
+                        <i class="fa-solid fa-hand-pointer"></i>
                     </div>
-                    <h3 class="font-bold text-sm text-white">1. Verification Pending</h3>
+                    <h3 class="font-bold text-sm text-white">1. Choose Payment Method</h3>
                 </div>
                 <p class="text-xs text-gray-300 leading-relaxed">
-                    User payment is marked as pending verification until processing is confirmed.
+                    Select your preferred deposit method below.
                 </p>
             </div>
 
-            <!-- 2. ADMIN ACTIVATION -->
+            <!-- 2. COMPLETE TRANSFER -->
             <div class="p-4 rounded-2xl glass-card border-l-4 border-l-blue-500 flex flex-col justify-between">
                 <div class="flex items-center gap-3 mb-2">
                     <div
                         class="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-400 flex items-center justify-center text-sm shrink-0">
-                        <i class="fa-solid fa-shield-check"></i>
+                        <i class="fa-solid fa-money-bill-transfer"></i>
                     </div>
-                    <h3 class="font-bold text-sm text-white">2. Admin Activation</h3>
+                    <h3 class="font-bold text-sm text-white">2. Complete Transfer</h3>
                 </div>
                 <p class="text-xs text-gray-300 leading-relaxed">
-                    Contract activation happens only after an admin confirms payment receipt.
+                    Send the required amount using the provided payment details.
                 </p>
             </div>
 
-            <!-- 3. SEND PROOF -->
+            <!-- 3. SEND PAYMENT PROOF -->
             <div class="p-4 rounded-2xl glass-card border-l-4 border-l-profit flex flex-col justify-between">
                 <div class="flex items-center gap-3 mb-2">
                     <div
@@ -307,12 +307,12 @@
                     <h3 class="font-bold text-sm text-white">3. Send Payment Proof</h3>
                 </div>
                 <p class="text-xs text-gray-300 leading-relaxed">
-                    Users should send payment proof to official support to expedite verification.
+                    Send your payment receipt to the support email for verification.
                 </p>
             </div>
         </section>
 
-        <!-- PAYMENT METHODS SECTION CONTAINER (EXPANDABLE) -->
+        <!-- PAYMENT METHODS SECTION CONTAINER -->
         <section class="space-y-6">
 
             <div class="flex items-center justify-between">
@@ -322,74 +322,170 @@
                 <span class="text-xs text-gray-400">Select & Transfer</span>
             </div>
 
-            <!-- METHOD 1: PIX TRANSFER -->
-            <div class="p-6 sm:p-8 rounded-3xl glass-card border border-white/15 relative overflow-hidden">
+            <!-- PAYMENT METHOD SELECTOR (3 OPTIONS) -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <button type="button" id="btnMethodPix"
+                    class="method-btn p-4 rounded-2xl glass-card border border-white/10 hover:border-accent/50 text-left transition duration-200 flex items-center gap-3 cursor-pointer">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg shrink-0">
+                        <i class="fa-solid fa-pix"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold text-sm text-white">PIX Transfer</div>
+                        <div class="text-[11px] text-gray-400">Instant BRL</div>
+                    </div>
+                </button>
 
-                <div
-                    class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/10 mb-6">
-                    <div class="flex items-center gap-4">
+                <button type="button" id="btnMethodBank"
+                    class="method-btn p-4 rounded-2xl glass-card border border-white/10 hover:border-accent/50 text-left transition duration-200 flex items-center gap-3 cursor-pointer">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-lg shrink-0">
+                        <i class="fa-solid fa-building-columns"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold text-sm text-white">International Transfer</div>
+                        <div class="text-[11px] text-gray-400">Bank Wire (USD)</div>
+                    </div>
+                </button>
+
+                <button type="button" id="btnMethodCrypto"
+                    class="method-btn p-4 rounded-2xl glass-card border border-white/10 hover:border-accent/50 text-left transition duration-200 flex items-center gap-3 cursor-pointer">
+                    <div
+                        class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg shrink-0">
+                        <i class="fa-solid fa-coins"></i>
+                    </div>
+                    <div>
+                        <div class="font-bold text-sm text-white">Crypto Transfer</div>
+                        <div class="text-[11px] text-gray-400">USDT Token</div>
+                    </div>
+                </button>
+            </div>
+
+            <!-- DETAILS DISPLAY PANEL (HIDDEN BY DEFAULT) -->
+            <div id="paymentDetailsContainer"
+                class="hidden p-6 sm:p-8 rounded-3xl glass-card border border-white/15 relative overflow-hidden">
+
+                <!-- PIX DETAILS DISPLAY -->
+                <div id="detailsPix" class="hidden space-y-4">
+                    <div class="flex items-center gap-3 pb-4 border-b border-white/10">
                         <div
-                            class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-500/20 to-teal-500/20 border border-emerald-500/30 text-emerald-400 flex items-center justify-center text-2xl shrink-0">
+                            class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl shrink-0">
                             <i class="fa-solid fa-pix"></i>
                         </div>
                         <div>
-                            <div class="flex items-center gap-2">
-                                <h4 class="text-xl font-bold text-white tracking-tight">PIX Transfer</h4>
-                                <span
-                                    class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">Active
-                                    Method</span>
+                            <h4 class="text-lg font-bold text-white">PIX Deposit Details</h4>
+                            <p class="text-xs text-gray-400">Transfer using the provided PIX key</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 pt-2">
+                        <div class="bg-darkbg/90 p-3.5 rounded-xl border border-white/10">
+                            <span class="text-xs text-gray-400 block mb-0.5">Bank Name</span>
+                            <span id="pixBankNameVal" class="text-sm font-semibold text-white">—</span>
+                        </div>
+                        <div class="bg-darkbg/90 p-3.5 rounded-xl border border-white/10">
+                            <span class="text-xs text-gray-400 block mb-0.5">Account Name</span>
+                            <span id="pixAccountNameVal" class="text-sm font-semibold text-white">—</span>
+                        </div>
+                        <div
+                            class="bg-darkbg/90 p-3.5 rounded-xl border border-white/10 flex items-center justify-between gap-3">
+                            <div class="overflow-hidden">
+                                <span class="text-xs text-gray-400 block mb-0.5">PIX Key</span>
+                                <span id="pixKeyVal"
+                                    class="text-sm font-mono text-emerald-300 font-semibold break-all">—</span>
                             </div>
-                            <p class="text-xs text-gray-400 mt-0.5">Brazil instant bank transfer</p>
+                            <button type="button" data-copy-target="pixKeyVal"
+                                class="copy-btn shrink-0 px-3.5 py-2 rounded-lg bg-accent hover:bg-accentHover text-darkbg font-bold text-xs transition">
+                                <i class="fa-solid fa-copy"></i> <span>Copy</span>
+                            </button>
                         </div>
-                    </div>
-
-                    <div
-                        class="text-xs text-gray-400 bg-white/5 px-3 py-2 rounded-xl border border-white/5 self-start sm:self-center">
-                        <i class="fa-solid fa-bolt text-accent mr-1"></i> Fast Automated Processing
                     </div>
                 </div>
 
-                <!-- DYNAMIC STATUS & PAYMENT DETAILS -->
-                <div id="paymentStatusBox" class="space-y-4">
-                    <div class="flex items-center justify-between">
-                        <label id="statusTitle"
-                            class="block text-xs font-semibold uppercase tracking-wider text-amber-400">
-                            Loading Status...
-                        </label>
-                    </div>
-
-                    <div
-                        class="relative bg-darkbg/90 border border-white/15 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                        <div class="w-full overflow-hidden">
-                            <pre id="statusMessage"
-                                class="text-sm font-mono text-emerald-300 whitespace-pre-wrap break-all leading-relaxed">Loading payment details...</pre>
-                        </div>
-
-                        <button id="copyPaymentBtn"
-                            class="w-full sm:w-auto shrink-0 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-accent hover:bg-accentHover text-darkbg font-bold text-xs transition duration-200 active:scale-95 shadow-glow">
-                            <i class="fa-solid fa-copy"></i> <span id="copyBtnText">Copy Details</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- FUTURE PAYMENT METHODS (METHOD 2 & 3) CAN BE UNCOMMENTED HERE -->
-            <!--
-            <div class="p-6 rounded-3xl glass-card border border-white/5 opacity-50 relative overflow-hidden">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 rounded-xl bg-white/5 text-gray-400 flex items-center justify-center text-xl">
+                <!-- INTERNATIONAL WIRE DETAILS DISPLAY -->
+                <div id="detailsBank" class="hidden space-y-4">
+                    <div class="flex items-center gap-3 pb-4 border-b border-white/10">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-xl shrink-0">
                             <i class="fa-solid fa-building-columns"></i>
                         </div>
                         <div>
-                            <h4 class="font-bold text-white">Payment Method 2</h4>
-                            <p class="text-xs text-gray-400">Description here</p>
+                            <h4 class="text-lg font-bold text-white">International Transfer Details (USD)</h4>
+                            <p class="text-xs text-gray-400">Wire transfer to bank details below</p>
                         </div>
                     </div>
-                    <span class="text-xs text-gray-500 italic">Coming Soon</span>
+
+                    <div class="space-y-3 pt-2">
+                        <div class="bg-darkbg/90 p-3.5 rounded-xl border border-white/10">
+                            <span class="text-xs text-gray-400 block mb-0.5">Bank Name</span>
+                            <span id="intlBankNameVal" class="text-sm font-semibold text-white">—</span>
+                        </div>
+                        <div class="bg-darkbg/90 p-3.5 rounded-xl border border-white/10">
+                            <span class="text-xs text-gray-400 block mb-0.5">Account Name</span>
+                            <span id="intlAccountNameVal" class="text-sm font-semibold text-white">—</span>
+                        </div>
+                        <div
+                            class="bg-darkbg/90 p-3.5 rounded-xl border border-white/10 flex items-center justify-between gap-3">
+                            <div class="overflow-hidden">
+                                <span class="text-xs text-gray-400 block mb-0.5">Account Number</span>
+                                <span id="intlAccountNumberVal"
+                                    class="text-sm font-mono text-blue-300 font-semibold break-all">—</span>
+                            </div>
+                            <button type="button" data-copy-target="intlAccountNumberVal"
+                                class="copy-btn shrink-0 px-3.5 py-2 rounded-lg bg-accent hover:bg-accentHover text-darkbg font-bold text-xs transition">
+                                <i class="fa-solid fa-copy"></i> <span>Copy</span>
+                            </button>
+                        </div>
+                        <div
+                            class="bg-darkbg/90 p-3.5 rounded-xl border border-white/10 flex items-center justify-between gap-3">
+                            <div class="overflow-hidden">
+                                <span class="text-xs text-gray-400 block mb-0.5">SWIFT Code</span>
+                                <span id="intlSwiftCodeVal"
+                                    class="text-sm font-mono text-blue-300 font-semibold break-all">—</span>
+                            </div>
+                            <button type="button" data-copy-target="intlSwiftCodeVal"
+                                class="copy-btn shrink-0 px-3.5 py-2 rounded-lg bg-accent hover:bg-accentHover text-darkbg font-bold text-xs transition">
+                                <i class="fa-solid fa-copy"></i> <span>Copy</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- CRYPTO USDT DETAILS DISPLAY -->
+                <div id="detailsCrypto" class="hidden space-y-4">
+                    <div class="flex items-center gap-3 pb-4 border-b border-white/10">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-xl shrink-0">
+                            <i class="fa-solid fa-coins"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-white">Crypto Deposit Details (USDT)</h4>
+                            <p class="text-xs text-gray-400">Send USDT to the specific network address below</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 pt-2">
+                        <div class="bg-darkbg/90 p-3.5 rounded-xl border border-white/10">
+                            <span class="text-xs text-gray-400 block mb-0.5">Network</span>
+                            <span id="usdtNetworkVal"
+                                class="text-sm font-semibold text-amber-400 uppercase tracking-wider">—</span>
+                        </div>
+                        <div
+                            class="bg-darkbg/90 p-3.5 rounded-xl border border-white/10 flex items-center justify-between gap-3">
+                            <div class="overflow-hidden">
+                                <span class="text-xs text-gray-400 block mb-0.5">Wallet Address</span>
+                                <span id="usdtWalletAddressVal"
+                                    class="text-sm font-mono text-amber-300 font-semibold break-all">—</span>
+                            </div>
+                            <button type="button" data-copy-target="usdtWalletAddressVal"
+                                class="copy-btn shrink-0 px-3.5 py-2 rounded-lg bg-accent hover:bg-accentHover text-darkbg font-bold text-xs transition">
+                                <i class="fa-solid fa-copy"></i> <span>Copy</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-            -->
 
             <!-- SUPPORT & PROOF SUBMISSION CARD -->
             <div
@@ -447,10 +543,19 @@
             location.href = '../auth/login.html';
         }
 
-        const statusTitle = document.getElementById('statusTitle');
-        const statusMessage = document.getElementById('statusMessage');
+        let currentPaymentSettings = null;
+
         const supportEmail = document.getElementById('supportEmail');
         const supportEmailLink = document.getElementById('supportEmailLink');
+
+        const btnMethodPix = document.getElementById('btnMethodPix');
+        const btnMethodBank = document.getElementById('btnMethodBank');
+        const btnMethodCrypto = document.getElementById('btnMethodCrypto');
+
+        const detailsContainer = document.getElementById('paymentDetailsContainer');
+        const detailsPix = document.getElementById('detailsPix');
+        const detailsBank = document.getElementById('detailsBank');
+        const detailsCrypto = document.getElementById('detailsCrypto');
 
         // MOBILE MENU & OVERLAY TOGGLE
         const menuBtn = document.getElementById('menuBtn');
@@ -472,39 +577,72 @@
         closeMenu?.addEventListener('click', closeMobileNav);
         mobileOverlay?.addEventListener('click', closeMobileNav);
 
-        // COPY TO CLIPBOARD LOGIC
-        const copyBtn = document.getElementById('copyPaymentBtn');
-        const copyBtnText = document.getElementById('copyBtnText');
+        // METHOD SELECTION SWITCHER
+        function selectPaymentMethod(method) {
+            [btnMethodPix, btnMethodBank, btnMethodCrypto].forEach(btn => {
+                btn.classList.remove('border-accent', 'ring-2', 'ring-accent/50', 'bg-accent/10');
+            });
 
-        copyBtn?.addEventListener('click', async () => {
-            const textToCopy = statusMessage.textContent;
-            if (!textToCopy || textToCopy.includes('Loading')) return;
+            detailsPix.classList.add('hidden');
+            detailsBank.classList.add('hidden');
+            detailsCrypto.classList.add('hidden');
 
-            try {
-                await navigator.clipboard.writeText(textToCopy);
-                copyBtnText.textContent = 'Copied!';
-                copyBtn.classList.remove('bg-accent', 'hover:bg-accentHover');
-                copyBtn.classList.add('bg-emerald-500', 'text-white');
+            detailsContainer.classList.remove('hidden');
 
-                setTimeout(() => {
-                    copyBtnText.textContent = 'Copy Details';
-                    copyBtn.classList.remove('bg-emerald-500', 'text-white');
-                    copyBtn.classList.add('bg-accent', 'hover:bg-accentHover');
-                }, 2500);
-            } catch (err) {
-                // Fallback for older mobile browsers
-                const textArea = document.createElement('textarea');
-                textArea.value = textToCopy;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-
-                copyBtnText.textContent = 'Copied!';
-                setTimeout(() => {
-                    copyBtnText.textContent = 'Copy Details';
-                }, 2500);
+            if (method === 'pix') {
+                btnMethodPix.classList.add('border-accent', 'ring-2', 'ring-accent/50', 'bg-accent/10');
+                detailsPix.classList.remove('hidden');
+            } else if (method === 'bank') {
+                btnMethodBank.classList.add('border-accent', 'ring-2', 'ring-accent/50', 'bg-accent/10');
+                detailsBank.classList.remove('hidden');
+            } else if (method === 'crypto') {
+                btnMethodCrypto.classList.add('border-accent', 'ring-2', 'ring-accent/50', 'bg-accent/10');
+                detailsCrypto.classList.remove('hidden');
             }
+        }
+
+        btnMethodPix?.addEventListener('click', () => selectPaymentMethod('pix'));
+        btnMethodBank?.addEventListener('click', () => selectPaymentMethod('bank'));
+        btnMethodCrypto?.addEventListener('click', () => selectPaymentMethod('crypto'));
+
+        // COPY TO CLIPBOARD HANDLER FOR INDIVIDUAL FIELDS
+        document.querySelectorAll('.copy-btn').forEach(button => {
+            button.addEventListener('click', async () => {
+                const targetId = button.getAttribute('data-copy-target');
+                const targetEl = document.getElementById(targetId);
+                if (!targetEl) return;
+
+                const textToCopy = targetEl.textContent.trim();
+                if (!textToCopy || textToCopy === '—') return;
+
+                const labelSpan = button.querySelector('span');
+                const originalText = labelSpan ? labelSpan.textContent : 'Copy';
+
+                try {
+                    await navigator.clipboard.writeText(textToCopy);
+                    if (labelSpan) labelSpan.textContent = 'Copied!';
+                    button.classList.remove('bg-accent', 'hover:bg-accentHover');
+                    button.classList.add('bg-emerald-500', 'text-white');
+
+                    setTimeout(() => {
+                        if (labelSpan) labelSpan.textContent = originalText;
+                        button.classList.remove('bg-emerald-500', 'text-white');
+                        button.classList.add('bg-accent', 'hover:bg-accentHover');
+                    }, 2000);
+                } catch (err) {
+                    const textArea = document.createElement('textarea');
+                    textArea.value = textToCopy;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+
+                    if (labelSpan) labelSpan.textContent = 'Copied!';
+                    setTimeout(() => {
+                        if (labelSpan) labelSpan.textContent = originalText;
+                    }, 2000);
+                }
+            });
         });
 
         // FETCH PAYMENT SETTINGS & POPULATE DATA
@@ -514,33 +652,29 @@
                 if (!res.ok) throw new Error();
 
                 const { settings } = await res.json();
+                currentPaymentSettings = settings || {};
 
-                if (!settings.isActive) {
-                    statusTitle.textContent = 'Payment Temporarily Unavailable';
-                    statusTitle.className = 'block text-xs font-semibold uppercase tracking-wider text-red-400';
-                    statusMessage.textContent = 'Payment instructions are currently disabled. Please check back later.';
+                // Populate PIX
+                document.getElementById('pixBankNameVal').textContent = currentPaymentSettings.pixBankName || '—';
+                document.getElementById('pixAccountNameVal').textContent = currentPaymentSettings.pixAccountName || '—';
+                document.getElementById('pixKeyVal').textContent = currentPaymentSettings.pixKey || '—';
 
-                    const mail = settings.supportEmail || 'support@contractmarketinghub.com';
-                    supportEmail.textContent = mail;
-                    if (supportEmailLink) supportEmailLink.href = `mailto:${mail}`;
-                    return;
-                }
+                // Populate International Bank Transfer
+                document.getElementById('intlBankNameVal').textContent = currentPaymentSettings.internationalBankName || '—';
+                document.getElementById('intlAccountNameVal').textContent = currentPaymentSettings.internationalAccountName || '—';
+                document.getElementById('intlAccountNumberVal').textContent = currentPaymentSettings.internationalAccountNumber || '—';
+                document.getElementById('intlSwiftCodeVal').textContent = currentPaymentSettings.internationalSwiftCode || '—';
 
-                statusTitle.textContent = settings.statusTitle || 'PIX Payment Information';
-                statusTitle.className = 'block text-xs font-semibold uppercase tracking-wider text-amber-400';
+                // Populate Crypto USDT
+                document.getElementById('usdtNetworkVal').textContent = currentPaymentSettings.usdtNetwork || '—';
+                document.getElementById('usdtWalletAddressVal').textContent = currentPaymentSettings.usdtWalletAddress || '—';
 
-                // Display payment details (supports pixDetails or statusMessage from backend)
-                statusMessage.textContent = settings.pixDetails || settings.statusMessage || 'Please complete payment and send proof for verification.';
-
-                const mail = settings.supportEmail || 'support@contractmarketinghub.com';
+                // Support email handling
+                const mail = currentPaymentSettings.supportEmail || 'support@contractmarketinghub.com';
                 supportEmail.textContent = mail;
                 if (supportEmailLink) supportEmailLink.href = `mailto:${mail}`;
 
-            } catch {
-                statusTitle.textContent = 'Unable to load payment details';
-                statusTitle.className = 'block text-xs font-semibold uppercase tracking-wider text-red-400';
-                statusMessage.textContent = 'Please contact support for assistance.';
-
+            } catch (err) {
                 supportEmail.textContent = 'support@contractmarketinghub.com';
                 if (supportEmailLink) supportEmailLink.href = 'mailto:support@contractmarketinghub.com';
             }
