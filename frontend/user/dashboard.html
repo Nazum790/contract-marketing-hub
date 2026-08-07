@@ -129,6 +129,18 @@
 <body
     class="min-h-screen bg-[#061427] text-gray-100 flex flex-col justify-between selection:bg-accent selection:text-black">
 
+    <!-- ADMIN IMPERSONATION BANNER (Visible ONLY during Admin Access) -->
+    <div id="impersonationBanner"
+        class="hidden bg-red-600 text-white text-xs font-semibold py-2 px-4 fixed top-0 left-0 right-0 z-[60] flex items-center justify-between shadow-lg">
+        <div class="flex-1 text-center">
+            ⚠️ You are viewing this dashboard via <strong>Admin Temporary Access</strong>.
+        </div>
+        <button onclick="exitAdminAccess()"
+            class="bg-white text-red-600 px-3 py-1 rounded text-xs font-bold hover:bg-gray-100 transition ml-4 shrink-0">
+            Exit Access
+        </button>
+    </div>
+
     <!-- BACKGROUND GLOW EFFECTS -->
     <div class="fixed top-0 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
     <div class="fixed bottom-10 right-10 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none -z-10">
@@ -138,7 +150,7 @@
     <header class="fixed top-0 left-0 right-0 z-50 glass-panel border-b border-white/10">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between">
 
-            <!-- BRAND LOGO (Original Icon Preserved) -->
+            <!-- BRAND LOGO -->
             <div class="flex items-center gap-3">
                 <div
                     class="w-10 h-10 rounded-xl bg-gradient-to-tr from-accent to-amber-300 flex items-center justify-center text-darkbg font-extrabold shadow-glow text-lg">
@@ -362,7 +374,7 @@
                     </div>
                 </div>
 
-                <!-- PORTFOLIO BREAKDOWN GRID (ONLY REAL DATA: MY INVESTMENT & EXPECTED EARNINGS) -->
+                <!-- PORTFOLIO BREAKDOWN GRID -->
                 <div class="border-t border-white/10 pt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div class="p-4 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between">
                         <div>
@@ -459,10 +471,10 @@
 
         </section>
 
-        <!-- QUICK ACTIONS GRID (EXPANDED TO 4 CARDS) & PROFILE -->
+        <!-- QUICK ACTIONS GRID & PROFILE -->
         <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-            <!-- ACTIONS (2 COLS - 4 CARDS GRID) -->
+            <!-- ACTIONS -->
             <div class="lg:col-span-2 space-y-4">
                 <h3 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
                     <i class="fa-solid fa-bolt text-accent"></i> Quick Hub Actions
@@ -594,7 +606,7 @@
 
     </main>
 
-    <!-- FOOTER WITH UPDATED DIRECTORIES -->
+    <!-- FOOTER -->
     <footer class="border-t border-white/10 bg-darkbg/50 backdrop-blur-md py-6 text-center text-xs text-gray-400">
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
             <p>© <span id="year"></span> Contract Marketing Hub. All rights reserved.</p>
@@ -612,7 +624,7 @@
     <!-- TRANSLATION INITIALIZATION SCRIPT -->
     <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
-    <!-- DASHBOARD LOGIC (FULLY PRESERVED) -->
+    <!-- DASHBOARD LOGIC -->
     <script>
             // Header Greeting & Date Logic
             (function setupDynamicHeader() {
@@ -651,10 +663,36 @@
         document.getElementById('langSelectMobile')?.addEventListener('change', e => setLang(e.target.value));
 
         const API_BASE_URL = window.location.origin;
-        const token = localStorage.getItem('token');
+
+        // 1. CHECK FOR TEMPORARY ADMIN ACCESS TOKEN IN URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const adminTempToken = urlParams.get('token');
+
+        if (adminTempToken) {
+            sessionStorage.setItem('user_access_token', adminTempToken);
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+
+        // 2. SHOW IMPERSONATION BANNER ONLY IF TEMPORARY ACCESS IS ACTIVE
+        if (sessionStorage.getItem('user_access_token')) {
+            const banner = document.getElementById('impersonationBanner');
+            if (banner) {
+                banner.classList.remove('hidden');
+                document.querySelector('header')?.classList.add('mt-8'); // Offset navbar to fit banner
+            }
+        }
+
+        function exitAdminAccess() {
+            sessionStorage.removeItem('user_access_token');
+            location.href = '../admin/users.html';
+        }
+
+        // 3. RESOLVE TOKEN (PRIORITIZE TEMPORARY SESSION OVER REGULAR USER LOGIN)
+        const token = sessionStorage.getItem('user_access_token') || localStorage.getItem('token');
 
         if (!token) {
             localStorage.clear();
+            sessionStorage.clear();
             location.href = '../auth/login.html';
         }
 
@@ -706,6 +744,7 @@
         // LOGOUT LOGIC
         function logout() {
             localStorage.clear();
+            sessionStorage.clear();
             location.href = '../auth/login.html';
         }
 
